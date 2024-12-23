@@ -17,13 +17,17 @@ Follow these steps to get UNICORNER up and running on your local machine:
     cd UNICORNER
 
 3.  Create & Activate a Virtual Environment
+    ```bash
     python3.13 -m venv venv
     source venv/bin/activate  # For Linux/Mac
 
 4.  Install Dependencies
+    ```bash
     pip install -r requirements.txt
 
-5.  python manage.py runserver
+5.  Start the Django Development Server
+    ```bash
+    python manage.py runserver
 
 6.  Explore & Contribute
     Visit the project structure to see how apps are organized.
