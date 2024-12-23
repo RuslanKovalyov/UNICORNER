@@ -68,33 +68,33 @@ UNICORNER COFFEE is more than just a café—it's a **tech-infused coffee experi
 Follow these steps to get UNICORNER up and running on your local machine:
 
 1. **Check Your Python Version**  
-   \`\`\`bash
+   ```bash
    python3 --version
-   \`\`\`
+   ```
 
 2. **Clone the Repository**  
-   \`\`\`bash
+   ```bash
    git clone https://github.com/RuslanKovalyov/UNICORNER.git
    cd UNICORNER
-   \`\`\`
+   ```
 
 3. **Create & Activate a Virtual Environment**  
-   \`\`\`bash
+   ```bash
    python3.13 -m venv venv
    source venv/bin/activate  # For Linux/Mac
    # or
    venv\Scripts\activate     # For Windows
-   \`\`\`
+   ```
 
 4. **Install Dependencies**  
-   \`\`\`bash
+   ```bash
    pip install -r requirements.txt
-   \`\`\`
+   ```
 
 5. **Start the Django Development Server**  
-   \`\`\`bash
+   ```bash
    python manage.py runserver
-   \`\`\`
+   ```
 
 6. **Explore & Contribute**  
    - Visit the project structure to see how apps are organized.  
