@@ -13,6 +13,7 @@ Follow these steps to get UNICORNER up and running on your local machine:
     python3 --version
 
 2.  Clone the Repository
+    ```bash
     git clone https://github.com/RuslanKovalyov/UNICORNER.git
     cd UNICORNER
 
@@ -20,6 +21,8 @@ Follow these steps to get UNICORNER up and running on your local machine:
     ```bash
     python3.13 -m venv venv
     source venv/bin/activate  # For Linux/Mac
+    # or
+    venv\Scripts\activate     # For Windows
 
 4.  Install Dependencies
     ```bash
