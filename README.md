@@ -8,9 +8,9 @@ Where great coffee meets bright minds.
 UNICORNER COFFEE is more than just a café—it's a **tech-infused coffee experience** designed for engineers, developers, entrepreneurs, and anyone who appreciates excellent coffee in a forward-thinking atmosphere. Our first branch at **Tel Aviv, Yehudit Boulevard 29** sits right in the heart of a thriving tech hub, offering the perfect blend of **top-tier coffee** and **innovative community**.
 
 ### Why “UNICORNER”?
-- **Unicorn**: A nod to high-value startups and breakthrough innovations.  
-- **Corner**: A comfortable meeting spot where people come together to share ideas.  
-- **Unified**: Bringing coffee lovers and tech enthusiasts under one roof.
+- **Unicorn**:  A nod to high-value startups and breakthrough innovations.  
+- **Corner**:   A comfortable meeting spot where people come together to share ideas.  
+- **Unified**:  Bringing coffee lovers and tech enthusiasts under one roof.
 
 ---
 
@@ -33,8 +33,8 @@ UNICORNER COFFEE is more than just a café—it's a **tech-infused coffee experi
    - Maintain our “coffee + code” ethos, ensuring each location fosters a vibrant, collaborative environment.
 
 2. **Tech Ecosystem**  
-   - **Supplier & Inventory Management**: Streamline how we source raw materials and maintain stock.  
-   - **E-Commerce & Online Services**: Sell coffee beans, merchandise, and gift cards globally.  
+   - **Supplier & Inventory Management**:   Streamline how we source raw materials and maintain stock.  
+   - **E-Commerce & Online Services**:      Sell coffee beans, merchandise, and gift cards globally.  
    - **Bulletin Board & Networking Tools**: Provide a space where startups and coders can share opportunities, job posts, and announcements.
 
 3. **Investment & Startup Support**  
@@ -56,10 +56,10 @@ UNICORNER COFFEE is more than just a café—it's a **tech-infused coffee experi
 
 ## Tech Stack
 
-- **Python** + **Django**: Backend framework for building the application.
-- **HTML/CSS** + **JavaScript**: Frontend technologies for creating a clean and responsive user interface.
-- **PostgreSQL** + **Redis**: Database for reliable storage and caching of data;
-- **SSH**, **Nginx**, etc: Secure server management.
+- **Python** + **Django**:          Backend framework for building the application.
+- **HTML/CSS** + **JavaScript**:    Frontend technologies for creating a clean and responsive user interface.
+- **PostgreSQL** + **Redis**:       Database for reliable storage and caching of data;
+- **SSH**, **Nginx**, etc:          Secure server management.
 
 ---
 
