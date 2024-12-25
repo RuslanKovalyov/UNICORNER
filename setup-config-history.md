@@ -16,10 +16,7 @@ It keeps the README focused on getting started while this file tracks internal d
 ```
 
 ## **Setting Up Environment Variables**
-.env file to store sensitive data
+create a .env file to store sensitive data
 ```bash
-...
-...
-...
-
+    pip install python-decouple
 ```
