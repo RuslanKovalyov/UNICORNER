@@ -1,0 +1,65 @@
+:root {
+    /* Theme Colors */
+    --color-primary: rgb(30, 25, 15);
+    --color-secondary: #e6f0fa;
+    --color-accent: rgb(250, 150, 50);
+
+    /* Background Colors */
+    --color-bg-default: rgb(255, 255, 85);
+    --color-bg-navbar: rgba(27, 25, 23, 0.8);
+    --color-bg-sidebar: rgba(27, 25, 23, 0.7);
+    --color-bg-footer: rgb(30, 25, 15);
+
+    /* Text Colors */
+    --color-text-default: #141414;
+
+    /* Borders */
+    --color-border-default: grey;
+
+    /* Links */
+    --color-link-primary: rgb(250, 150, 50);  
+    --color-link-primary-hover: wheat;
+    --color-link-primary-active: red;
+
+    --color-link-secondary: #fff;   
+    --color-link-secondary-hover: wheat;
+    --color-link-secondary-active: yellow;
+}
+
+html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--color-text-default);
+    background-color: var(--color-bg-default);
+    margin: 0;
+    padding: 0;
+}
+
+main {
+    margin: 20px auto;
+    padding: 20px;
+    max-width: 1800px;
+    border: 1px solid var(--color-border-default);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.eng {
+    direction: ltr;
+}
+
+.heb {
+    direction: rtl;
+}
+
+.center {
+    text-align: center;
+}

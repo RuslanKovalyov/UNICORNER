@@ -1,31 +1,27 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
-    <title>Home Page</title>
-    {% comment %} This is Hello World page, only for testing {% endcomment %}
-    <style>
-        body {
-            background-color: black;
-            color: yellow;
-            font-family: Arial, sans-serif;
-        }
-        h1 {
-            text-align: center;
-            font-size: 50px;
-            margin-top: 20%;
-        }
-        h2 {
-            text-align: center;
-            font-size: 30px;
-        }
-    </style>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#000000">
+    
+    <title>UNICORNER</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="{% static 'main/css/main.css' %}" type="text/css">
 </head>
-<body>
+<body class="eng">
     {% include 'main/components/header.html' %}
     
-    <h1>Hello World!<small></h1>
-    <h2>UNICORNER - The Best Coffee Shop For Coders</h2>
-
+    <main>
+        <section>
+            <h1 class="center">This site is under development.</h1>
+            <h2 class="center">UNICORNER - The Best Coffee Shop For Coders</h2>
+        </section>
+    </main>
+    
     {% include 'main/components/footer.html' %}
 </body>
 </html>
