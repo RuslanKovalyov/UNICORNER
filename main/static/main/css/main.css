@@ -43,13 +43,25 @@ html {
 }
 
 body {
+    background-color: var(--color-bg-default);
+    margin: 0;
+    padding: 0;
+}
+
+.english {
+    direction: ltr;
     font-family: Arial, sans-serif;
     font-size: 16px;
     line-height: 1.5;
     color: var(--color-text-default);
-    background-color: var(--color-bg-default);
-    margin: 0;
-    padding: 0;
+}
+
+.hebrew {
+    direction: rtl;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--color-text-default);
 }
 
 main {
@@ -59,14 +71,6 @@ main {
     border: 1px solid var(--color-border-default);
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.eng {
-    direction: ltr;
-}
-
-.heb {
-    direction: rtl;
 }
 
 .center {
