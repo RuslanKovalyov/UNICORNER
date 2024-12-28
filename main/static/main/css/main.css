@@ -1,17 +1,18 @@
 :root {
     /* Theme Colors */
     --color-primary: rgb(30, 25, 15);
-    --color-secondary: #e6f0fa;
+    --color-secondary: rgb(230, 240, 250);
     --color-accent: rgb(250, 150, 50);
 
     /* Background Colors */
-    --color-bg-default: rgb(255, 255, 85);
+    --color-bg-default:black;
+    --color-bg-header: linear-gradient(0deg, rgba(255, 255, 0, 0.2), rgba(255, 255, 0, 0.05));
     --color-bg-navbar: rgba(27, 25, 23, 0.8);
     --color-bg-sidebar: rgba(27, 25, 23, 0.7);
     --color-bg-footer: rgb(30, 25, 15);
 
     /* Text Colors */
-    --color-text-default: #141414;
+    --color-text-default: rgb(255, 255, 255);
 
     /* Borders */
     --color-border-default: grey;
@@ -21,9 +22,17 @@
     --color-link-primary-hover: wheat;
     --color-link-primary-active: red;
 
-    --color-link-secondary: #fff;   
+    --color-link-secondary: rgb(255, 255, 255);   
     --color-link-secondary-hover: wheat;
     --color-link-secondary-active: yellow;
+
+    /* Sizes */
+    --padding-general: 20px;
+    --margin-general: 20px;
+    --size-header: 24vh; /* height */
+    --size-main-content: 1800px; /* width */
+
+
 }
 
 html {
@@ -44,9 +53,9 @@ body {
 }
 
 main {
-    margin: 20px auto;
-    padding: 20px;
-    max-width: 1800px;
+    margin: var(--margin-general) auto;
+    padding: var(--padding-general);
+    max-width: var(--size-main-content);
     border: 1px solid var(--color-border-default);
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -62,4 +71,20 @@ main {
 
 .center {
     text-align: center;
+}
+
+header {
+    height: calc(0px + var(--size-header));
+    background-image: var(--color-bg-header);
+    padding: var(--padding-general);
+}
+
+header img {
+    height: var(--size-header);
+    width: auto;
+    object-fit: cover;
+    position: fixed;
+    left: 50%;
+    transform: translate(-50%, 0);
+    filter: invert(1);  /* reverce logo color */
 }
