@@ -39,14 +39,21 @@
 html {
     scroll-behavior: smooth;
     overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-width: none;
     margin: 0;
     padding: 0;
+}
+
+html::-webkit-scrollbar {
+    display: none; /* Hide scrollbar in Chrome, Safari, and Opera */
 }
 
 body {
     background-color: var(--color-bg-default);
     margin: 0;
     padding: 0;
+    -ms-overflow-style: none;  /* Hide scrollbar in Internet Explorer and Edge */
 }
 
 .english {
