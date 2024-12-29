@@ -24,8 +24,8 @@
     --color-link-secondary-hover: wheat;
     --color-link-secondary-active: yellow;
     
-    /* Border Colors*/
-    --color-border-default: grey;
+    /* Borders*/
+    --border-stile: 1px solid grey;
 
     /* Sizes */
     --padding-general: 15px;
@@ -92,9 +92,17 @@ header img {
     z-index: -1;
 }
 
+.map {
+    overflow: hidden;
+    height: 250px;
+    margin: 0;
+    padding: 0;
+    border: var(--border-stile);
+}
+
 footer {
     background-color: var(--color-bg-footer);
-    border-top: 1px solid var(--color-border-default);
+    border-top: var(--border-stile);
     color: var(--color-text-default);
     width: 100%;
     padding: var(--padding-general) 0 0 0;
