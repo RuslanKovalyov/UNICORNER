@@ -98,6 +98,14 @@ header img {
     transform: translate(-50%, 0);
     filter: invert(1);  /* reverce logo color */
     z-index: -1;
+
+    /* Prevent logo from being selected */
+    pointer-events: none; /* Disable interaction with the image */
+    user-select: none;
+    -webkit-user-drag: none; /* Prevent drag-and-drop in WebKit browsers */
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 .map {
