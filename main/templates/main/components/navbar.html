@@ -1,0 +1,68 @@
+<script>
+    function openNav() {
+        const sidebar = document.getElementById("mySidebar");
+        const firstLink = sidebar.querySelector('a'); // First focusable element inside sidebar
+        sidebar.style.width = "270px";
+        sidebar.setAttribute("aria-hidden", "false");
+        firstLink.focus(); // Move focus to first link
+        document.querySelector('.menu_btn button').setAttribute('aria-expanded', 'true');
+    }
+    
+    function closeNav() {
+        const sidebar = document.getElementById("mySidebar");
+        sidebar.style.width = "0";
+        sidebar.setAttribute("aria-hidden", "true");
+        document.querySelector('.menu_btn button').focus(); // Return focus to menu button
+        document.querySelector('.menu_btn button').setAttribute('aria-expanded', 'false');
+    }
+
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape') {
+            closeNav();
+        }
+    });
+    
+    document.getElementById("mySidebar").addEventListener('click', (event) => {
+        event.stopPropagation();
+    });
+    
+</script>
+
+<nav class="navbar" id="navbar">
+
+    <span class="menu_btn">
+        <!--menu_btn-->
+        <button onclick="openNav()" aria-expanded="false" aria-controls="mySidebar" tabindex="0">תפריט&#9776;</button>
+    </span>
+
+    <span class="pc_navbar">
+        <!--home-->
+        {% if request.path == "/"%}
+            <a style="color:red"  href="{% url 'home' %}">ראשי</a>
+        {% else %}
+            <a href="{% url 'home' %}">ראשי</a>
+        {% endif %}
+        
+        <a href="https://g.page/r/CVZlErJ4LstcEB0/review" target="_blank">
+            Google reviews<span class="sr-only">(opens in a new tab)</span>
+        </a>
+        
+        
+    </span>
+
+    <span class="sidebar" id="mySidebar" aria-hidden="true">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()" tabindex="0" aria-label="Close menu">&times;</a>
+
+        {% if request.path == "/"%}
+            <a style="color:red" href="{% url 'home' %}" tabindex="0">ראשי</a>
+        {% else %}
+            <a href="{% url 'home' %}" tabindex="0">ראשי</a>
+        {% endif %}
+
+        <a href="https://g.page/r/CVZlErJ4LstcEB0/review" target="_blank" tabindex="0">
+            Google reviews<span class="sr-only">(opens in a new tab)</span>
+        </a>
+        
+    </span>
+
+</nav>

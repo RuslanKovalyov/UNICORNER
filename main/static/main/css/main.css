@@ -7,8 +7,8 @@
     /* Background Colors */
     --color-bg-default:black;
     --color-bg-header: linear-gradient(0deg, rgba(255, 255, 0, 0.2), rgba(255, 255, 0, 0.05));
-    --color-bg-navbar: rgba(27, 25, 23, 0.8);
-    --color-bg-sidebar: rgba(27, 25, 23, 0.7);
+    --color-bg-navbar: rgba(30, 30, 0, 0.9);
+    --color-bg-sidebar: rgba(20, 20, 0, 0.75);
     --color-bg-footer: var(--color-primary);
     --color-bg-footer-credits: black;
 
@@ -31,6 +31,7 @@
     --padding-general: 15px;
     --margin-general: 15px;
     --font-size-general: 16px;
+    --font-size-navbar: 22px;
     --size-header: 24vh; /* height */
     --size-main-content: 1800px; /* width */
 }
@@ -153,4 +154,107 @@ footer .credits a {
     clip: rect(0, 0, 0, 0);
     white-space: nowrap; /* Prevent text wrapping */
     border: 0;
+}
+
+.navbar {
+    background-color: var(--color-bg-navbar);
+    text-shadow: 3px 3px 5px rgb(20, 17, 17);
+    position: -webkit-sticky;
+    position: sticky;
+    position: -webkit-sticky; /* Fallback for older WebKit browsers */
+    top: 0;
+    bottom: 0;
+    -webkit-box-shadow: 0 0px 10px 5px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0px 10px 5px rgba(0, 0, 0, 0.3);
+    transition: top 0.5s;
+    -webkit-overflow-scrolling: touch;
+    font-size: var(--font-size-navbar);
+    margin: 0;
+    padding: 3px var(--padding-general);
+    height: min-content;
+    margin-top: 0;
+    display: flex;
+    overflow-x: scroll;
+    scrollbar-width: none;
+}
+
+.navbar a {
+    color: var(--color-link-primary);
+    text-decoration: none;
+    margin-inline: 10px;
+}
+
+.navbar a:hover {
+    color: var(--color-link-primary-hover);
+    cursor: pointer;
+}
+
+.navbar .menu_btn {
+    display: none;
+    visibility: hidden;
+    font-size: 0;
+}
+
+.navbar .menu_btn button {
+    background: none;
+    border: none;
+    color: var(--color-link-primary);
+    font-size: var(--font-size-navbar);
+    cursor: pointer;
+}
+
+.navbar .sidebar {
+    background-color: var(--color-bg-sidebar);
+    backdrop-filter: blur(7px);
+    text-align: right;
+    height: 100%;
+    width: 0;
+    position: fixed;
+    top: 0;
+    right: 0;
+    overflow-x: hidden;
+    padding-top: var(--padding-general);
+    transition: width 0.2s ease-in-out;
+    word-wrap: normal;
+    min-height: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -ms-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-overflow-scrolling: touch;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+}
+
+.navbar .sidebar a {
+    padding: 8px var(--padding-general) 8px 8px;
+    font-size: var(--font-size-navbar);
+    display: block;
+    transition: 0.1s;
+}
+
+.navbar .sidebar a:hover {
+    color: var(--color-link-primary-hover);
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.navbar .sidebar .closebtn {
+    font-size: 40px;
+    font-weight: bold;
+}
+
+@media screen and (max-width: 700px) {
+    .navbar .menu_btn{
+        display: block;
+        position: relative;
+        visibility: visible;
+        font-size: var(--font-size-navbar);
+    }
+    .navbar .pc_navbar a{
+        display: none;
+        visibility: hidden;
+        font-size: 0;
+    }
 }
