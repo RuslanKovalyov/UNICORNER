@@ -1,6 +1,24 @@
 <footer>
-    {% comment %} for test only {% endcomment %}
-    <p style="position: fixed; bottom: 0; width: 100%; background-color: green; color: white; text-align: center; padding: 10px 0;">
-        &copy; 2024 <small>www.</small>UNICORNER<small>.coffee</small>
+    {% load static %}
+    <p>
+        <a href="whatsapp://send?text={{ request.build_absolute_uri }}"target="_blank"> <img class="social-icon" src="{% static 'main/images/ico/whatsapp.png' %}"   alt="whatsapp"><span class="sr-only">(opens in a new tab)</span></a>
+        <a href="whatsapp://send?text={{ request.build_absolute_uri }}"target="_blank"> <img class="social-icon" src="{% static 'main/images/ico/facebook.png' %}"   alt="facebook"><span class="sr-only">(opens in a new tab)</span></a>
+        <a href="whatsapp://send?text={{ request.build_absolute_uri }}"target="_blank"> <img class="social-icon" src="{% static 'main/images/ico/twitter.png' %}"    alt="twitter"><span class="sr-only">(opens in a new tab)</span></a>
+        <a href="whatsapp://send?text={{ request.build_absolute_uri }}"target="_blank"> <img class="social-icon" src="{% static 'main/images/ico/linkedin.png' %}"   alt="linkedin"><span class="sr-only">(opens in a new tab)</span></a>
     </p>
+    <p><a href="{% url 'home' %}">צור קשר</a>
+        &nbsp;|&nbsp;
+        <a href="{% url 'home' %}">מדיניות פרטיות</a>
+        <br>
+        <a href="{% url 'home' %}">&copy;&nbsp;2024-{% now "Y" %}&nbsp;UNICORNER<small>.coffee</small></a>
+    </p>
+    <p class="credits">
+        Created & Supported by
+        <a class="" href="https://www.linkedin.com/in/ruslan-developer/" 
+           target="_blank" 
+           rel="noopener noreferrer">
+           @Ruslan K. <span class="sr-only">(opens in a new tab)</span>
+        </a>
+    </p>
+    
 </footer>
