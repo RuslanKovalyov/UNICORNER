@@ -397,6 +397,15 @@
         accessibilityMenuToggle.addEventListener('click', function (event) {
           event.preventDefault();
           accessibilityMenu.classList.toggle('open');
+
+            // Focus on the first focusable element when the menu is opened
+            if (accessibilityMenu.classList.contains('open')) {
+                const firstFocusable = accessibilityMenu.querySelector('input, button, a, select, textarea, [tabindex]:not([tabindex="-1"])');
+                if (firstFocusable) {
+                    firstFocusable.focus();
+                }
+            }
+            
         });
     
         closeAccessibilityMenu.addEventListener('click', function (event) {
