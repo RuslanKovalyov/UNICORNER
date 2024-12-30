@@ -1,0 +1,466 @@
+{% load static %}
+
+<div id="accessibility-menu" class="accessibility_menu">
+
+    
+    <button id="close-accessibility-menu" aria-label="Close accessibility menu - סגירת תפריט נגישות" >x</button>
+
+    <button id="reset-accessibility-settings">
+        &#x21bb;
+        איפוס
+    </button>
+
+
+    <br>
+
+    <!-- Accessible Focus Mode -->
+    <label tabindex="0">
+        <input id="toggle-accessible-focus-mode" type="checkbox">
+        <span>
+            {% comment %} Focus Mode {% endcomment %}
+            מצב פוקוס
+        </span>
+    </label>
+    <br>
+    <!-- Accessible Stop Animations -->
+    <label class="stop-animations" tabindex="0">
+        <input id="toggle-accessible-stop-animations" type="checkbox">
+        <span>
+            {% comment %} Stop Animations {% endcomment %}
+            עצירת אנימציות
+        </span>
+    </label>
+    <br>
+    <!-- Accessible Dark Mode -->
+    <label tabindex="0">
+        <input id="toggle-accessible-dark-mode" type="checkbox">
+        <span>
+            {% comment %} Dark Contrast {% endcomment %}
+            ניגודיות כהה
+        </span>
+    </label>
+    <br>
+    <!-- Accessible Bright Mode -->
+    <label tabindex="0">
+        <input id="toggle-accessible-bright-mode" type="checkbox">
+        <span>
+            {% comment %} Light Contrast {% endcomment %}
+            ניגודיות בהירה
+        </span>
+    </label>
+    <br>
+    <!-- Accessible Monochrome Mode -->
+    <label tabindex="0">
+        <input id="toggle-accessible-monochrome-mode" type="checkbox">
+        <span>
+            {% comment %} Monochrome Mode {% endcomment %}
+            מצב מונוכרום
+        </span>
+    </label>
+    <br>
+    <!-- Accessible Saturated Colors Mode -->
+    <label tabindex="0">
+        <input id="toggle-accessible-saturate-mode" type="checkbox">
+        <span>
+            {% comment %} Saturated Colors Mode {% endcomment %}
+            מצב צבעים רוויים
+        </span>
+    </label>
+    <br>
+    <!-- Accessible Readable Font -->
+    <label tabindex="0">
+        <input id="toggle-accessible-readable-font" type="checkbox">
+        <span>
+            {% comment %} Readable Font {% endcomment %}
+            גופן קריא
+        </span>
+    </label>
+    <br>
+    <!-- Accessible Big Font -->
+    <label tabindex="0">
+        <input id="toggle-accessible-big-font" type="checkbox">
+        <span>
+            {% comment %} Big Font {% endcomment %}
+            גופן גדול
+        </span>
+    </label>
+    <br>
+    <!-- Accessible Big Cursor White -->
+    <label tabindex="0">
+        <input id="toggle-accessible-big-cursor-white" type="checkbox">
+        <span>
+            {% comment %} Big Cursor White {% endcomment %}
+            סמן גדול לבן
+        </span>
+    </label>
+    <br>
+    <!-- Accessible Big Cursor Black -->
+    <label tabindex="0">
+        <input id="toggle-accessible-big-cursor-black" type="checkbox">
+        <span>
+            {% comment %} Big Cursor Black {% endcomment %}
+            סמן גדול שחור
+        </span>
+    </label>
+    <br>
+    <!-- Accessible Highlight Titles -->
+    <label tabindex="0">
+        <input id="toggle-accessible-highlight-titles" type="checkbox">
+        <span>
+            {% comment %} Highlight Titles {% endcomment %}
+            הדגשת כותרות
+        </span>
+    </label>
+    <br>
+    <!-- Accessible Highlight Links -->
+    <label tabindex="0">
+        <input id="toggle-accessible-highlight-links" type="checkbox">
+        <span>
+            {% comment %} Highlight Links {% endcomment %}
+            הדגשת קישורים
+        </span>
+    </label>
+    <br>
+    <!-- Accessible Image Description -->
+    <label tabindex="0">
+        <input id="toggle-accessible-image-description" type="checkbox">
+        <span>
+            {% comment %} Image Description {% endcomment %}
+            תיאור תמונה
+        </span>
+    </label>
+    <br>
+
+    <label for="toggle-callused-text">
+        <input id="toggle-callused-text" type="checkbox">
+        <span class="callused-text">קוראי מסך</span>
+    </label>
+    
+    <div class="collapsible-content" style="display: none;">
+    <p>
+        האתר שלנו עבר בדיקות נגישות מקיפות ועבר בהצלחה את המבחנים באמצעות VoiceOver, תוכנת קורא מסך פופולרית למערכת ההפעלה macOS. אנו מחויבים לוודא שאתרנו נגיש לכל המשתמשים, כולל משתמשים עם לקות ראיה.
+
+        אנא שימו לב שבדיקותינו בוצעו באמצעות VoiceOver על מערכת ההפעלה macOS, אך קיימות תוכנות קורא מסך נוספות עבור מערכות הפעלה שונות. אנו ממליצים למשתמשים לעיין במדריך המשתמש או בתיעוד העזרה של התקן שלהם כדי לקבל הוראות לגבי שימוש בתכונות נגישות המתאימות.
+
+        על ידי ספקת אתר נגיש, אנו שואפים להתייצב בדרישות החוק וליצור סביבה כוללנית עבור כל המבקרים שלנו.
+    </p>
+    </div>
+
+    <P>
+        <small>
+            <hr>
+            שים לב: הגדרות נגישות ישובו לברירת המחדל אם לא ישונו תוך 24 שעות.
+        </small>
+    </p>
+    
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var checkbox = document.getElementById("toggle-callused-text");
+        var content = document.querySelector(".collapsible-content");
+        
+        checkbox.addEventListener("change", function() {
+        if (this.checked) {
+            content.style.display = "block";
+        } else {
+            content.style.display = "none";
+        }
+        });
+    });
+    </script>
+      
+    
+
+</div>
+
+<button id="accessibility-menu-button" class="accessibility_menu_button" aria-label="Accessibility Menu - תפריט נגישות">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="100%" height="100%">
+        <!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+        <path fill="#fa9632" d="M423.9 255.8L411 413.1c-3.3 40.7-63.9 35.1-60.6-4.9l10-122.5-41.1 2.3c10.1 20.7 15.8 43.9 15.8 68.5 0 41.2-16.1 78.7-42.3 106.5l-39.3-39.3c57.9-63.7 13.1-167.2-74-167.2-25.9 0-49.5 9.9-67.2 26L73 243.2c22-20.7 50.1-35.1 81.4-40.2l75.3-85.7-42.6-24.8-51.6 46c-30 26.8-70.6-18.5-40.5-45.4l68-60.7c9.8-8.8 24.1-10.2 35.5-3.6 0 0 139.3 80.9 139.5 81.1 16.2 10.1 20.7 36 6.1 52.6L285.7 229l106.1-5.9c18.5-1.1 33.6 14.4 32.1 32.7zm-64.9-154c28.1 0 50.9-22.8 50.9-50.9C409.9 22.8 387.1 0 359 0c-28.1 0-50.9 22.8-50.9 50.9 0 28.1 22.8 50.9 50.9 50.9zM179.6 456.5c-80.6 0-127.4-90.6-82.7-156.1l-39.7-39.7C36.4 287 24 320.3 24 356.4c0 130.7 150.7 201.4 251.4 122.5l-39.7-39.7c-16 10.9-35.3 17.3-56.1 17.3z"/>
+    </svg>
+</button>
+
+<script>
+    //taggles hendler and storage state
+    const toggleAccessibleFocusMode = document.getElementById('toggle-accessible-focus-mode');
+    const toggleAccessibleStopAnimations = document.getElementById('toggle-accessible-stop-animations');
+    const toggleAccessibleDarkMode = document.getElementById('toggle-accessible-dark-mode');
+    const toggleAccessibleBrightMode = document.getElementById('toggle-accessible-bright-mode');
+    const toggleAccessibleMonochromeMode = document.getElementById('toggle-accessible-monochrome-mode');
+    const toggleAccessibleSaturateMode = document.getElementById('toggle-accessible-saturate-mode');
+    const toggleAccessibleBigFont = document.getElementById('toggle-accessible-big-font');
+    const toggleAccessibleBigCursorWhite = document.getElementById('toggle-accessible-big-cursor-white');
+    const toggleAccessibleBigCursorBlack = document.getElementById('toggle-accessible-big-cursor-black');
+    const toggleAccessibleReadableFont = document.getElementById('toggle-accessible-readable-font');
+    const toggleAccessibleHighlightTitles = document.getElementById('toggle-accessible-highlight-titles');
+    const toggleAccessibleHighlightLinks = document.getElementById('toggle-accessible-highlight-links');
+    const toggleAccessibleImageDescription = document.getElementById('toggle-accessible-image-description');
+    const bodyElement = document.querySelector('body');
+    
+    function saveAccessibilitySettings() {
+        const accessibilitySettings = {
+            accessibleFocusMode: toggleAccessibleFocusMode.checked,
+            accessibleStopAnimations: toggleAccessibleStopAnimations.checked,
+            accessibleDarkMode: toggleAccessibleDarkMode.checked,
+            accessibleBrightMode: toggleAccessibleBrightMode.checked,
+            accessibleMonochromeMode: toggleAccessibleMonochromeMode.checked,
+            accessibleSaturateMode: toggleAccessibleSaturateMode.checked,
+            accessibleBigFont: toggleAccessibleBigFont.checked,
+            accessibleReadableFont: toggleAccessibleReadableFont.checked,
+            accessibleHighlightTitles: toggleAccessibleHighlightTitles.checked,
+            accessibleHighlightLinks: toggleAccessibleHighlightLinks.checked,
+            accessibleImageDescription: toggleAccessibleImageDescription.checked,
+            accessibleBigCursorWhite: toggleAccessibleBigCursorWhite.checked,
+            accessibleBigCursorBlack: toggleAccessibleBigCursorBlack.checked
+        };
+        
+        localStorage.setItem("accessibilitySettings", JSON.stringify(accessibilitySettings));
+    }
+    
+    function loadAccessibilitySettings() {
+        const storedSettings = localStorage.getItem("accessibilitySettings");
+        
+        if (storedSettings) {
+            const accessibilitySettings = JSON.parse(storedSettings);
+        
+            toggleAccessibleFocusMode.checked = accessibilitySettings.accessibleFocusMode;
+            toggleAccessibleStopAnimations.checked = accessibilitySettings.accessibleStopAnimations;
+            toggleAccessibleDarkMode.checked = accessibilitySettings.accessibleDarkMode;
+            toggleAccessibleBrightMode.checked = accessibilitySettings.accessibleBrightMode;
+            toggleAccessibleMonochromeMode.checked = accessibilitySettings.accessibleMonochromeMode;
+            toggleAccessibleSaturateMode.checked = accessibilitySettings.accessibleSaturateMode;
+            toggleAccessibleBigFont.checked = accessibilitySettings.accessibleBigFont;
+            toggleAccessibleReadableFont.checked = accessibilitySettings.accessibleReadableFont;
+            toggleAccessibleHighlightTitles.checked = accessibilitySettings.accessibleHighlightTitles;
+            toggleAccessibleHighlightLinks.checked = accessibilitySettings.accessibleHighlightLinks;
+            toggleAccessibleImageDescription.checked = accessibilitySettings.accessibleImageDescription;
+            toggleAccessibleBigCursorWhite.checked = accessibilitySettings.accessibleBigCursorWhite;
+            toggleAccessibleBigCursorBlack.checked = accessibilitySettings.accessibleBigCursorBlack;
+        
+            applyAccessibilitySettings();
+        }
+    }
+
+    // check if user changed accessibility settings in the last 24 hours and if not - reset them
+    function checkAndDeleteAccessibilitySettings() {
+        const lastSettingsChange = localStorage.getItem("lastSettingsChange");
+        const oneDay = 24 * 60 * 60 * 1000;
+        
+        if (lastSettingsChange) {
+            const timeSinceLastChange = Date.now() - lastSettingsChange;
+            
+            if (timeSinceLastChange > oneDay) {
+                resetAccessibilitySettings();
+            }
+        }
+    }
+
+    function updateLastSettingsChange() {
+        localStorage.setItem("lastSettingsChange", Date.now());
+    }
+      
+    function applyAccessibilitySettings() {
+        bodyElement.classList.toggle('accessible-focus-mode', toggleAccessibleFocusMode.checked);
+        bodyElement.classList.toggle('accessible-stop-animations', toggleAccessibleStopAnimations.checked);
+        bodyElement.classList.toggle('accessible-dark-mode', toggleAccessibleDarkMode.checked);
+        bodyElement.classList.toggle('accessible-bright-mode', toggleAccessibleBrightMode.checked);
+        bodyElement.classList.toggle('accessible-monochrome-mode', toggleAccessibleMonochromeMode.checked);
+        bodyElement.classList.toggle('accessible-saturate-mode', toggleAccessibleSaturateMode.checked);
+        bodyElement.classList.toggle('accessible-big-font', toggleAccessibleBigFont.checked);
+        bodyElement.classList.toggle('accessible-readable-font', toggleAccessibleReadableFont.checked);
+        bodyElement.classList.toggle('accessible-highlight-titles', toggleAccessibleHighlightTitles.checked);
+        bodyElement.classList.toggle('accessible-highlight-links', toggleAccessibleHighlightLinks.checked);
+        bodyElement.classList.toggle('accessible-image-description', toggleAccessibleImageDescription.checked);
+        bodyElement.classList.toggle('accessible-big-cursor-white', toggleAccessibleBigCursorWhite.checked);
+        bodyElement.classList.toggle('accessible-big-cursor-black', toggleAccessibleBigCursorBlack.checked);
+
+        updateLastSettingsChange();
+    }
+
+    {% comment %} accessible mode taggles (by marked body with special class) {% endcomment %}
+    document.addEventListener('DOMContentLoaded', function () {
+        toggleAccessibleFocusMode.addEventListener('change', function () {
+            bodyElement.classList.toggle('accessible-focus-mode', this.checked);
+            saveAccessibilitySettings();
+        });
+
+        toggleAccessibleStopAnimations.addEventListener('change', function () {
+            bodyElement.classList.toggle('accessible-stop-animations', this.checked);
+            saveAccessibilitySettings();
+        });
+    
+        toggleAccessibleDarkMode.addEventListener('change', function () {
+            if (this.checked) {
+                bodyElement.classList.add('accessible-dark-mode');
+                bodyElement.classList.remove('accessible-bright-mode');
+                toggleAccessibleBrightMode.checked = false;
+            } else {
+                bodyElement.classList.remove('accessible-dark-mode');
+            }
+            saveAccessibilitySettings();
+        });
+    
+        toggleAccessibleBrightMode.addEventListener('change', function () {
+            if (this.checked) {
+                bodyElement.classList.add('accessible-bright-mode');
+                bodyElement.classList.remove('accessible-dark-mode');
+                toggleAccessibleDarkMode.checked = false;
+            } else {
+                bodyElement.classList.remove('accessible-bright-mode');
+            }
+            saveAccessibilitySettings();
+        });
+    
+        toggleAccessibleMonochromeMode.addEventListener('change', function () {
+            if (this.checked) {
+                bodyElement.classList.add('accessible-monochrome-mode');
+                bodyElement.classList.remove('accessible-saturate-mode');
+                toggleAccessibleSaturateMode.checked = false;
+            } else {
+                bodyElement.classList.remove('accessible-monochrome-mode');
+            }
+            saveAccessibilitySettings();
+        });
+    
+        toggleAccessibleSaturateMode.addEventListener('change', function () {
+            if (this.checked) {
+                bodyElement.classList.add('accessible-saturate-mode');
+                bodyElement.classList.remove('accessible-monochrome-mode');
+                toggleAccessibleMonochromeMode.checked = false;
+            } else {
+                bodyElement.classList.remove('accessible-saturate-mode');
+            }
+            saveAccessibilitySettings();
+        });
+
+        toggleAccessibleBigFont.addEventListener('change', function () {
+            bodyElement.classList.toggle('accessible-big-font', this.checked);
+            saveAccessibilitySettings();
+        });
+
+        toggleAccessibleReadableFont.addEventListener('change', function () {
+            bodyElement.classList.toggle('accessible-readable-font', this.checked);
+            saveAccessibilitySettings();
+        });
+
+        toggleAccessibleHighlightTitles.addEventListener('change', function () {
+            bodyElement.classList.toggle('accessible-highlight-titles', this.checked);
+            saveAccessibilitySettings();
+        });
+
+        toggleAccessibleHighlightLinks.addEventListener('change', function () {
+            bodyElement.classList.toggle('accessible-highlight-links', this.checked);
+            saveAccessibilitySettings();
+        });
+
+        toggleAccessibleImageDescription.addEventListener('change', function () {
+            bodyElement.classList.toggle('accessible-image-description', this.checked);
+            saveAccessibilitySettings();
+        });
+    
+        toggleAccessibleBigCursorWhite.addEventListener('change', function () {
+            if (this.checked) {
+            bodyElement.classList.add('accessible-big-cursor-white');
+            bodyElement.classList.remove('accessible-big-cursor-black');
+            toggleAccessibleBigCursorBlack.checked = false;
+            } else {
+            bodyElement.classList.remove('accessible-big-cursor-white');
+            }
+            saveAccessibilitySettings();
+        });
+    
+        toggleAccessibleBigCursorBlack.addEventListener('change', function () {
+            if (this.checked) {
+            bodyElement.classList.add('accessible-big-cursor-black');
+            bodyElement.classList.remove('accessible-big-cursor-white');
+            toggleAccessibleBigCursorWhite.checked = false;
+            } else {
+            bodyElement.classList.remove('accessible-big-cursor-black');
+            }
+            saveAccessibilitySettings();
+        });
+
+        //check if user changed accessibility settings in the last 24 hours and if not - reset them
+        checkAndDeleteAccessibilitySettings();
+        
+        loadAccessibilitySettings();
+        applyAccessibilitySettings();
+
+    });
+
+
+    {% comment %} JS of accessible menu button {% endcomment %}
+    document.addEventListener('DOMContentLoaded', function () {
+        const accessibilityMenuToggle = document.getElementById('accessibility-menu-button');
+        const accessibilityMenu = document.getElementById('accessibility-menu');
+        const closeAccessibilityMenu = document.getElementById('close-accessibility-menu');
+    
+        accessibilityMenuToggle.addEventListener('click', function (event) {
+          event.preventDefault();
+          accessibilityMenu.classList.toggle('open');
+        });
+    
+        closeAccessibilityMenu.addEventListener('click', function (event) {
+            event.preventDefault();
+            accessibilityMenu.classList.remove('open');
+        });
+    });
+    
+    {% comment %} reset-accessibility-settings button {% endcomment %}
+
+    function resetAccessibilitySettings() {
+        const toggles = [
+            toggleAccessibleFocusMode,
+            toggleAccessibleStopAnimations,
+            toggleAccessibleDarkMode,
+            toggleAccessibleBrightMode,
+            toggleAccessibleMonochromeMode,
+            toggleAccessibleSaturateMode,
+            toggleAccessibleBigFont,
+            toggleAccessibleReadableFont,
+            toggleAccessibleHighlightTitles,
+            toggleAccessibleHighlightLinks,
+            toggleAccessibleImageDescription,
+            toggleAccessibleBigCursorWhite,
+            toggleAccessibleBigCursorBlack
+        ];
+
+        toggles.forEach(toggle => {
+            toggle.checked = false;
+        });
+
+        localStorage.removeItem("accessibilitySettings");
+
+        applyAccessibilitySettings();
+    }
+
+
+    {% comment %} accessible mode toggles (by marking body with special class) {% endcomment %}
+    document.addEventListener('DOMContentLoaded', function () {
+        // Add event listener for reset button
+        const resetButton = document.getElementById('reset-accessibility-settings');
+        resetButton.addEventListener('click', resetAccessibilitySettings);
+    });
+</script>
+
+
+<script>
+    // Accessible focus lines for mouse (focus mode)
+    window.onload = function() {
+        const horizontal = document.createElement('div');
+        horizontal.className = 'focus-line-horizontal';
+        document.body.appendChild(horizontal);
+    
+        const vertical = document.createElement('div');
+        vertical.className = 'focus-line-vertical';
+        document.body.appendChild(vertical);
+    
+        window.addEventListener('mousemove', function(e) {
+            const mouseY = e.clientY;
+            const mouseX = e.clientX;
+            const focusLineSize = 36;
+    
+            horizontal.style.top = (mouseY - focusLineSize / 2) + 'px';
+            vertical.style.left = (mouseX - 0.5) + 'px';
+        });
+    };
+ </script>

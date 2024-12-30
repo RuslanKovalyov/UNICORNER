@@ -43,6 +43,7 @@
             <a href="{% url 'home' %}" tabindex="0" aria-current="page">ראשי</a>
         {% endif %}
         
+        <!--google reviews-->
         <a href="https://g.page/r/CVZlErJ4LstcEB0/review" target="_blank" tabindex="0" aria-label="Opens in a new tab">
             Google reviews<span class="sr-only">(opens in a new tab)</span>
         </a>
@@ -51,12 +52,14 @@
     <span class="sidebar" id="mySidebar" aria-hidden="true" role="navigation">
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()" tabindex="0" aria-label="Close sidebar">&times;</a>
 
+        <!--home-->
         {% if request.path == "/" %}
             <a style="color:red" href="{% url 'home' %}" tabindex="0" aria-current="page">ראשי</a>
         {% else %}
             <a href="{% url 'home' %}" tabindex="0" aria-current="page">ראשי</a>
         {% endif %}
 
+        <!--google reviews-->
         <a href="https://g.page/r/CVZlErJ4LstcEB0/review" target="_blank" tabindex="0" aria-label="Opens in a new tab">
             Google reviews<span class="sr-only">(opens in a new tab)</span>
         </a>

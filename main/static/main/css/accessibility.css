@@ -1,0 +1,337 @@
+/* menu button */
+.accessibility_menu_button {
+    width: 32px;
+    height: 32px;
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    border-radius: 0 5px 5px 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 0px;
+    margin: 0 0 20px 0;
+    position: fixed;
+    bottom: 10px;
+    left: 0;
+    z-index: 1;
+    cursor: pointer;
+}
+
+/* accessibility menu */
+.accessibility_menu {
+    transition: all 0.3s ease-in-out;
+    background-color: white !important;
+    color: black !important;
+    line-height: 1.6 !important;
+    font-weight: 600 !important;
+    font-size: 20px !important;
+    font-family: Arial, sans-serif !important;
+    -webkit-user-select: none !important;
+    /* Safari */
+    -ms-user-select: none !important;
+    /* IE 10 and IE 11 */
+    user-select: none !important;
+    /* Standard syntax */
+    text-align: right !important;
+    position: fixed !important;
+    bottom: 0px !important;
+    left: -325px !important;
+    width: 300px !important;
+    max-width: 90%;
+    padding: 10px !important;
+    border: 2px solid black !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+    z-index: 1000 !important;
+    max-height: 95vh !important;
+    overflow-y: scroll !important;
+}
+
+.accessibility_menu.open {
+    left: 0px !important;
+}
+
+.accessibility_menu button{
+    background-color: transparent !important;
+    border: 2px solid black !important;
+    cursor: pointer !important;
+    padding: 4px 16px!important;
+    margin: 0 0 16px 10px !important;
+    border-radius: 4px !important;
+    font-size: 24px !important;
+    font-weight: 600 !important;
+    font-family: Arial, sans-serif !important;
+    line-height: 1.6 !important;
+    color: black !important;
+    text-align: right !important;
+}
+
+/* accessibility menu - Hide the default browser checkboxes */
+.accessibility_menu label input[type='checkbox'] {
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    outline: none !important;
+    visibility: hidden;
+}
+
+.accessibility_menu label {
+    cursor: pointer !important;
+    width: 100% !important;
+    margin: 0px !important;
+    padding: 0px !important;
+}
+
+/* mark the current mode */
+.accessibility_menu input[type="checkbox"]:checked+span {
+    /* background-color: rgba(128, 128, 128, 0.5) !important;
+    border: 1px solid #000 !important; */
+    background-color: #ccf;
+    border: 1px solid #77f;
+    padding: 4px 10px !important;
+    border-radius: 4px;
+}
+
+/*------------------------------------*\
+            #FOCUS MODE
+\*------------------------------------*/
+body.accessible-focus-mode header *,
+body.accessible-focus-mode .main * {
+    filter: blur(4px) brightness(0.9);
+}
+
+body.accessible-focus-mode header *:hover,
+body.accessible-focus-mode header *:focus,
+body.accessible-focus-mode header *:active,
+body.accessible-focus-mode .main *:hover,
+body.accessible-focus-mode .main *:focus,
+body.accessible-focus-mode .main *:active {
+    filter: blur(0px) !important;
+}
+
+.focus-line-horizontal, .focus-line-vertical {
+    display: none;
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.2);
+    pointer-events: none; /* this makes the line unclickable and allows clicks to pass through to elements underneath */
+    z-index: 1; /* this places the line above other elements; adjust as necessary */
+}
+
+.focus-line-horizontal {
+    left: 0;
+    width: 100%;
+    height: 40px;
+}
+
+.focus-line-vertical {
+    top: 0;
+    width: 1px;
+    height: 100%;
+}
+
+body.accessible-focus-mode .focus-line-horizontal,
+body.accessible-focus-mode .focus-line-vertical {
+    display: block;
+}
+
+/*------------------------------------*\
+            #STOP ANIMATIONS
+\*------------------------------------*/
+body.accessible-stop-animations,
+body.accessible-stop-animations * {
+    animation: none !important;
+    transition: none !important;
+}
+
+body.accessible-stop-animations .slogan {
+    visibility: hidden !important;
+    display: none !important;
+}
+
+/*------------------------------------*\
+            #DARK MODE
+\*------------------------------------*/
+body.accessible-dark-mode,
+body.accessible-dark-mode * {
+    background-color: #000 !important;
+    color: rgb(185, 185, 185) !important;
+    border-color: gray !important;
+}
+body.accessible-dark-mode a:active,
+body.accessible-dark-mode a:focus,
+body.accessible-dark-mode a:hover {
+    color: gray !important;
+}
+
+body.accessible-dark-mode.accessible-focus-mode .focus-line-horizontal{
+    background-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+body.accessible-dark-mode .accessibility_menu_button img{
+    background-color: black !important;
+}
+
+/*------------------------------------*\
+            #BRIGHT MODE
+\*------------------------------------*/
+body.accessible-bright-mode,
+body.accessible-bright-mode * {
+    background-color: #fff !important;
+    color: rgb(0, 0, 0) !important;
+    border-color: gray !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+}
+
+body.accessible-bright-mode a:active,
+body.accessible-bright-mode a:focus,
+body.accessible-bright-mode a:hover {
+    color: gray !important;
+}
+
+body.accessible-bright-mode.accessible-focus-mode .focus-line-horizontal{
+    background-color: rgba(0, 0, 0, 0.2) !important;
+}
+
+body.accessible-bright-mode .accessibility_menu_button img{
+    background-color: gray !important;
+}
+
+/*------------------------------------*\
+            #MONOCHROME MODE
+\*------------------------------------*/
+body.accessible-monochrome-mode header,
+body.accessible-monochrome-mode header *,
+body.accessible-monochrome-mode nav,
+body.accessible-monochrome-mode nav *,
+body.accessible-monochrome-mode .main,
+body.accessible-monochrome-mode .main *,
+body.accessible-monochrome-mode .displaer,
+body.accessible-monochrome-mode .displaer *,
+body.accessible-monochrome-mode footer,
+body.accessible-monochrome-mode footer *
+body.accessible-monochrome-mode .accessibility_menu,
+body.accessible-monochrome-mode .accessibility_menu *
+body.accessible-monochrome-mode .accessibility_menu_button,
+body.accessible-monochrome-mode .accessibility_menu_button * {
+    filter: grayscale(100%) !important;
+}
+
+/*------------------------------------*\
+            #HIGH CONTRAST MODE
+\*------------------------------------*/
+body.accessible-saturate-mode header,
+body.accessible-saturate-mode header *,
+body.accessible-saturate-mode nav,
+body.accessible-saturate-mode nav *,
+body.accessible-saturate-mode .main,
+body.accessible-saturate-mode .main *,
+body.accessible-saturate-mode .displaer,
+body.accessible-saturate-mode .displaer *,
+body.accessible-saturate-mode footer,
+body.accessible-saturate-mode footer *
+body.accessible-saturate-mode .accessibility_menu,
+body.accessible-saturate-mode .accessibility_menu *
+body.accessible-saturate-mode .accessibility_menu_button,
+body.accessible-saturate-mode .accessibility_menu_button * {
+    filter: saturate(125%) !important;
+}
+
+/*------------------------------------*\
+            #READABLE FONT
+\*------------------------------------*/
+body.accessible-readable-font,
+body.accessible-readable-font * {
+    font-family: Arial, Helvetica, sans-serif !important;
+    font-size: large !important;
+    line-height: 1.6 !important;
+    text-shadow: none !important;
+}
+
+/*------------------------------------*\
+            #BIG FONT
+\*------------------------------------*/
+body.accessible-big-font,
+body.accessible-big-font * {
+    font-size: xx-large !important;
+}
+
+/*------------------------------------*\
+            #BIG CURSOR
+\*------------------------------------*/
+body.accessible-big-cursor-white,
+body.accessible-big-cursor-white * {
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" width="50px" height="50px"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="white" d="M0 55.2L0 426c0 12.2 9.9 22 22 22c6.3 0 12.4-2.7 16.6-7.5L121.2 346l58.1 116.3c7.9 15.8 27.1 22.2 42.9 14.3s22.2-27.1 14.3-42.9L179.8 320l118.1 0c12.2 0 22.1-9.9 22.1-22.1c0-6.3-2.7-12.3-7.4-16.5L38.6 37.9C34.3 34.1 28.9 32 23.2 32C10.4 32 0 42.4 0 55.2z"/></svg>'), auto !important;
+}
+body.accessible-big-cursor-black,
+body.accessible-big-cursor-black * {
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" width="50px" height="50px"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="black" d="M0 55.2L0 426c0 12.2 9.9 22 22 22c6.3 0 12.4-2.7 16.6-7.5L121.2 346l58.1 116.3c7.9 15.8 27.1 22.2 42.9 14.3s22.2-27.1 14.3-42.9L179.8 320l118.1 0c12.2 0 22.1-9.9 22.1-22.1c0-6.3-2.7-12.3-7.4-16.5L38.6 37.9C34.3 34.1 28.9 32 23.2 32C10.4 32 0 42.4 0 55.2z"/></svg>'), auto !important;
+}
+
+
+/*------------------------------------*\
+            #HIGHLIGHT TITLE
+\*------------------------------------*/
+body.accessible-highlight-titles h1,
+body.accessible-highlight-titles h2,
+body.accessible-highlight-titles h3,
+body.accessible-highlight-titles h4,
+body.accessible-highlight-titles h5,
+body.accessible-highlight-titles h6 {
+    text-shadow: none !important;
+    background-color: #ff0 !important;
+    color: darkblue !important;
+    border: 3px dotted darkblue !important;
+
+}
+
+/*------------------------------------*\
+            #HIGHLIGHT LINKS
+\*------------------------------------*/
+body.accessible-highlight-links a {
+    text-shadow: none !important;
+    background-color: #ff0 !important;
+    color: darkblue !important;
+    border: 3px dotted darkblue !important;
+}
+
+/*------------------------------------*\
+            #IMAGE DESCRIPTION
+\*------------------------------------*/
+body.accessible-image-description .img-wrap {
+    position: relative;
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+}
+body.accessible-image-description .img-wrap img:hover {
+    filter: brightness(0.7);
+}
+
+body.accessible-image-description .img-wrap:hover:after {
+    content: attr(data-description);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: max-content;
+    background-color: white;
+    color: black;
+    border: 1px solid orangered;
+    padding: 5px 10px;
+    font-size: 24px;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+
+@media screen and (max-width: 600px) {
+
+    /* Mobile focus focus */
+    body.accessible-focus-mode header *,
+    body.accessible-focus-mode .main * {
+        filter: none;
+    }
+
+    body.accessible-focus-mode .focus-line-vertical {
+        display: none;
+    }
+}
