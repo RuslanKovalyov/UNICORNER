@@ -393,7 +393,11 @@
         const accessibilityMenuToggle = document.getElementById('accessibility-menu-button');
         const accessibilityMenu = document.getElementById('accessibility-menu');
         const closeAccessibilityMenu = document.getElementById('close-accessibility-menu');
-    
+
+        // Ensure menu toggle is focusable via Tab
+        accessibilityMenuToggle.setAttribute('tabindex', '1');
+        
+        // Toggle menu open/close
         accessibilityMenuToggle.addEventListener('click', function (event) {
           event.preventDefault();
           accessibilityMenu.classList.toggle('open');
@@ -407,7 +411,7 @@
             }
             
         });
-    
+        
         closeAccessibilityMenu.addEventListener('click', function (event) {
             event.preventDefault();
             accessibilityMenu.classList.remove('open');
