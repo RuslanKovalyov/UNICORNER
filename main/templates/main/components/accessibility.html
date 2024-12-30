@@ -411,6 +411,20 @@
         closeAccessibilityMenu.addEventListener('click', function (event) {
             event.preventDefault();
             accessibilityMenu.classList.remove('open');
+            // Return focus to the toggle button
+            accessibilityMenuToggle.focus();
+        });
+
+        // Add `keydown` listener for `Enter` key
+        accessibilityMenu.addEventListener('keydown', function (event) {
+            if (event.key === 'Enter') {
+                const activeElement = document.activeElement;
+
+                // Simulate a click for buttons or custom elements
+                if (activeElement && (activeElement.tagName === 'BUTTON' || activeElement.tagName === 'INPUT' || activeElement.hasAttribute('tabindex'))) {
+                    activeElement.click();
+                }
+            }
         });
     });
     
