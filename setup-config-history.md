@@ -5,8 +5,11 @@ It keeps the README focused on getting started while this file tracks internal d
 
 ## **Create Django project and Main App**  
 ```bash
+    mkdir UNICORNER
     cd UNICORNER
+    python3.13 -m venv venv
     source venv/bin/activate
+    pip install Django==5.1.4
     django-admin startproject unicorner .
     python3 -m django startapp main
     # Apply initial database migrations to set up the default Django tables
