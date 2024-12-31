@@ -79,6 +79,37 @@ main {
     max-width: var(--size-main-content);
 }
 
+.gallery_feed {
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+}
+
+.gallery_feed .img-wrap {
+    padding: var(--padding-general) 0;
+    margin: 0;
+    width: 100%;
+    max-width: 600px;
+    height: auto;
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.gallery_feed img {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
 .center {
     text-align: center;
 }

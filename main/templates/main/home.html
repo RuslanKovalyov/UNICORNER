@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     {% include 'main/components/head-meta.html' %}
@@ -12,6 +13,26 @@
             <h1 class="center">This site is under development</h1>
             <h2 class="center">UNICORNER - The Best Coffee Shop For Coders</h2>
         </section>
+
+        <section class="content" >
+            <div class="gallery_feed">
+
+                <figure class="img-wrap" data-description="cup of coffee">
+                    <img class="displayer" alt="cup of coffee" src="{% static 'main/images/product/cup.png' %}" loading="lazy">
+                </figure>
+
+                <figure class="img-wrap" data-description="cup of coffee">
+                    <img class="displayer" alt="cup of coffee" src="{% static 'main/images/product/cup.png' %}" loading="lazy">
+                </figure>
+
+                <figure class="img-wrap" data-description="cup of coffee">
+                    <img class="displayer" alt="cup of coffee" src="{% static 'main/images/product/cup.png' %}" loading="lazy">
+                </figure>
+                
+            </div>
+
+        </section>
+        
     </main>
 
     {% include 'main/components/map.html' %}
