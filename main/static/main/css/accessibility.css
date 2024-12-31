@@ -210,7 +210,10 @@ body.accessible-monochrome-mode footer *
 body.accessible-monochrome-mode .accessibility_menu,
 body.accessible-monochrome-mode .accessibility_menu *
 body.accessible-monochrome-mode .accessibility_menu_button,
-body.accessible-monochrome-mode .accessibility_menu_button * {
+body.accessible-monochrome-mode .accessibility_menu_button *,
+body.accessible-monochrome-mode img,
+body.accessible-monochrome-mode .map {
+
     filter: grayscale(100%) !important;
 }
 
