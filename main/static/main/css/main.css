@@ -139,6 +139,60 @@ header img {
     -ms-user-select: none;
 }
 
+.horizontal_feed {
+    /* horizontal scrolling gallery */
+    display: flex;
+    flex-direction: row;
+    gap: calc(var(--margin-general) * 1.4);
+    padding: 0;
+    margin: 0;
+    overflow-x: scroll;
+    scrollbar-width: none;
+}
+
+.horizontal_product_feed{
+    padding: var(--padding-general);
+    margin: calc(var(--margin-general) * 1.8) 0;
+    line-height: 1.2;
+
+}
+
+.horizontal_product_feed h2 {
+    font-size: 1.2em;
+    margin: 0 0 calc(var(--margin-general) * 0.5) 0;
+    padding: 0;
+}
+
+.horizontal_feed .product_card {
+    height: min-content;
+    width: max-content;
+}
+
+.horizontal_feed .product_card img {
+    padding: 0;
+    margin: 0;
+    width: auto;
+    height: 170px;
+    border-radius: 7px;
+}
+
+.horizontal_feed .product_card img:hover {
+    filter: brightness(0.8);
+}
+
+.horizontal_feed .product_card h3 {
+    font-size: calc(var(--font-size-general) * 0.8);
+    margin: 0;
+    padding: 0;
+}
+
+.horizontal_feed .product_card p {
+    font-size: 0.8em;
+    margin: 0;
+    padding: 0;
+    color: grey;
+}
+
 .map {
     overflow: hidden;
     height: 250px;
