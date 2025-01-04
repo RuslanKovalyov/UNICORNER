@@ -5,15 +5,17 @@
     --color-accent: rgb(250, 150, 50);
 
     /* Background Colors */
-    --color-bg-default:black;
-    --color-bg-header: linear-gradient(0deg, rgba(255, 255, 0, 0.2), rgba(255, 255, 0, 0.05));
-    --color-bg-navbar: rgba(30, 30, 0, 0.9);
+    --color-bg-default: black;
+    --color-bg-header: linear-gradient(0deg, rgba(255, 255, 0, 0.1), rgba(255, 255, 0, 0.05));
+    --color-bg-navbar: rgba(20, 20, 0, 0.75);
     --color-bg-sidebar: rgba(20, 20, 0, 0.75);
     --color-bg-footer: var(--color-primary);
     --color-bg-footer-credits: black;
 
     /* Text Colors */
-    --color-text-default: rgb(255, 255, 255);
+    --color-text-accent: rgb(255, 255, 255);
+    --color-text-default: rgb(225, 225, 225);
+    --color-text-secondary: rgb(180, 180, 180);
 
     /* Links Colors */
     --color-link-primary: rgb(250, 150, 50);  
@@ -155,7 +157,7 @@ header img {
 }
 
 .horizontal_products_feed h2 {
-    font-size: calc(var(--font-size-general) * 1.8);
+    font-size: calc(var(--font-size-general) * 1.7);
     margin: 0 0 calc(var(--margin-general)) 0;
     padding: 0;
 }
@@ -174,6 +176,14 @@ header img {
 .horizontal_products_feed .horizontal_feed .product_card {
     height: min-content;
     width: max-content;
+    color: var(--color-text-secondary);
+}
+
+.horizontal_products_feed .horizontal_feed .product_card:hover {
+    filter: brightness(0.8);
+    cursor: pointer;
+    transition: 0.2s;
+    color : var(--color-text-accent);
 }
 
 .horizontal_products_feed .horizontal_feed .product_card img {
@@ -182,10 +192,6 @@ header img {
     width: auto;
     height: 200px;
     border-radius: var(--border-radius);
-}
-
-.horizontal_products_feed .horizontal_feed .product_card img:hover {
-    filter: brightness(0.8);
 }
 
 .horizontal_products_feed .horizontal_feed .product_card h3 {
@@ -198,7 +204,6 @@ header img {
     font-size: calc(var(--font-size-general) * 0.8);
     margin: 0;
     padding: 0;
-    color: grey;
 }
 
 .map {
