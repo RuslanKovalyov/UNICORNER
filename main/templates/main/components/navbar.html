@@ -2,18 +2,48 @@
     function openNav() {
         const sidebar = document.getElementById("mySidebar");
         const closeButton = sidebar.querySelector('.closebtn'); // First focusable element inside sidebar
+        const focusableElements = sidebar.querySelectorAll('a, button, input, select, textarea, [tabindex]:not([tabindex="-1"])');
+    
+        // Open sidebar
         sidebar.style.width = "270px";
         sidebar.setAttribute("aria-hidden", "false");
-        closeButton.focus(); // Move focus to close button
         document.querySelector('.menu_btn button').setAttribute('aria-expanded', 'true');
+    
+        // Set `tabindex="-1"` for all focusable elements initially
+        focusableElements.forEach((el) => el.setAttribute('tabindex', '-1'));
+    
+        // Wait for the user to press Tab before enabling focus
+        document.addEventListener('keydown', enableFocusOnTab);
+    }
+    
+    function enableFocusOnTab(event) {
+        if (event.key === 'Tab') {
+            const sidebar = document.getElementById("mySidebar");
+            const focusableElements = sidebar.querySelectorAll('a, button, input, select, textarea, [tabindex]:not([tabindex="-1"])');
+    
+            // Enable focus on all focusable elements inside the sidebar
+            focusableElements.forEach((el) => el.setAttribute('tabindex', '0'));
+    
+            // Remove this listener after enabling focus
+            document.removeEventListener('keydown', enableFocusOnTab);
+        }
     }
     
     function closeNav() {
         const sidebar = document.getElementById("mySidebar");
+        const focusableElements = sidebar.querySelectorAll('a, button, input, select, textarea, [tabindex]:not([tabindex="-1"])');
+        const menuButton = document.querySelector('.menu_btn button');
+    
+        // Close sidebar
         sidebar.style.width = "0";
         sidebar.setAttribute("aria-hidden", "true");
-        document.querySelector('.menu_btn button').focus(); // Return focus to menu button
-        document.querySelector('.menu_btn button').setAttribute('aria-expanded', 'false');
+        menuButton.setAttribute('aria-expanded', 'false');
+    
+        // Exclude sidebar elements from tab order
+        focusableElements.forEach((el) => el.setAttribute('tabindex', '-1'));
+    
+        // Remove focus from the menu button
+        menuButton.blur();
     }
     
     document.addEventListener('keydown', function (event) {
@@ -24,8 +54,7 @@
     
     document.getElementById("mySidebar").addEventListener('click', (event) => {
         event.stopPropagation();
-    });    
-    
+    });       
 </script>
 
 <nav class="navbar" id="navbar">
