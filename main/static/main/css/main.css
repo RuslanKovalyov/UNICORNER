@@ -290,6 +290,7 @@ footer .credits a {
     display: flex;
     overflow-x: scroll;
     scrollbar-width: none;
+    z-index: 1;
 }
 
 .navbar a {
