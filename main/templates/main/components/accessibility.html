@@ -503,4 +503,19 @@
             vertical.style.left = (mouseX - 0.5) + 'px';
         });
     };
- </script>
+</script>
+
+{% comment %} add shace to the accessibility button on loadin Page {% endcomment %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const accessibilityMenuButton = document.getElementById('accessibility-menu-button');
+    
+        // Add the shake animation class
+        accessibilityMenuButton.classList.add('shake');
+    
+        // Remove the animation class after it finishes (optional)
+        setTimeout(() => {
+            accessibilityMenuButton.classList.remove('shake');
+        }, 800); // Match the duration of the animation
+    });
+</script>
