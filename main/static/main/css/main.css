@@ -13,9 +13,9 @@
     --color-bg-footer-credits: black;
 
     /* Text Colors */
-    --color-text-accent: rgb(255, 255, 255);
-    --color-text-default: rgb(225, 225, 225);
+    --color-text-primary: rgb(225, 225, 225);
     --color-text-secondary: rgb(180, 180, 180);
+    --color-text-accent: rgb(255, 255, 255);
 
     /* Links Colors */
     --color-link-primary: rgb(250, 150, 50);  
@@ -65,7 +65,7 @@ body {
     font-family: Arial, sans-serif;
     font-size: var(--font-size-general);
     line-height: 1.5;
-    color: var(--color-text-default);
+    color: var(--color-text-primary);
 }
 
 .hebrew {
@@ -73,7 +73,7 @@ body {
     font-family: Arial, sans-serif;
     font-size: var(--font-size-general);
     line-height: 1.5;
-    color: var(--color-text-default);
+    color: var(--color-text-primary);
 }
 
 main {
@@ -218,7 +218,7 @@ header img {
 footer {
     background-color: var(--color-bg-footer);
     border-top: var(--border-stile);
-    color: var(--color-text-default);
+    color: var(--color-text-primary);
     width: 100%;
     padding: var(--padding-general) 0 0 0;
     margin: 0;
@@ -297,6 +297,17 @@ footer .credits a {
     color: var(--color-link-primary);
     text-decoration: none;
     margin-inline: 10px;
+}
+
+.navbar a:focus,
+.navbar .sidebar a:focus {
+    outline: 2px dashed var(--color-accent);
+    outline-offset: 4px;
+}
+
+button:focus {
+    outline: 2px solid var(--color-link-primary);
+    outline-offset: 2px;
 }
 
 .navbar a:hover {
