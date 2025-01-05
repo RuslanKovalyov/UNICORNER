@@ -23,3 +23,26 @@ create a .env file to store sensitive data
 ```bash
     pip install python-decouple
 ```
+
+## **Install Pillow to handle image-related functionality, such as processing and storing images in ImageField**
+```bash
+    python -m pip install pillow==11.1.0
+```
+
+## **Create Models of Products and Run the following commands to create the database tables**
+```bash
+    python manage.py makemigrations
+    python manage.py migrate
+```
+
+## **Update requirements.txt**
+```bash
+    python -m pip freeze > requirements.txt
+```
+
+## **Create a Superuser**
+```bash
+    python manage.py createsuperuser
+```
+
+
