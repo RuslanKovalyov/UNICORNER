@@ -1,4 +1,7 @@
 from django.shortcuts import render
+from .models import Category
+
 
 def home(request):
-    return render(request, 'main/home.html')
+    categories = Category.objects.prefetch_related('products').all()
+    return render(request, 'main/home.html', {'categories': categories})
