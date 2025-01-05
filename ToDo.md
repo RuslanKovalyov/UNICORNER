@@ -1,8 +1,3 @@
-# image processing:
-    - [ ] Convert all uploaded images to JPEG format.
-    - [ ] image rotation (correct display in landscape photography).
-    - [ ] remove image from media when deleting product.
-
 # To-Do List (Short-Term Development)
 
 ## **Image Processing**
