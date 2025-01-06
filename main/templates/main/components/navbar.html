@@ -76,6 +76,13 @@
         <a href="https://g.page/r/CVZlErJ4LstcEB0/review" target="_blank" tabindex="0" aria-label="Opens in a new tab">
             Google reviews<span class="sr-only">(opens in a new tab)</span>
         </a>
+
+        <!--contact us-->
+        {% if request.path == "/contacts" %}
+            <a style="color:red" href="{% url 'contacts' %}" tabindex="0" aria-current="page">צור קשר</a>
+        {% else %}
+            <a href="{% url 'contacts' %}" tabindex="0" aria-current="page">צור קשר</a>
+        {% endif %}
     </span>
 
     <span class="sidebar" id="mySidebar" aria-hidden="true" role="navigation">
@@ -92,6 +99,13 @@
         <a href="https://g.page/r/CVZlErJ4LstcEB0/review" target="_blank" tabindex="0" aria-label="Opens in a new tab">
             Google reviews<span class="sr-only">(opens in a new tab)</span>
         </a>
+
+        <!--contact us-->
+        {% if request.path == "/contacts" %}
+            <a style="color:red" href="{% url 'contacts' %}" tabindex="0" aria-current="page">צור קשר</a>
+        {% else %}
+            <a href="{% url 'contacts' %}" tabindex="0" aria-current="page">צור קשר</a>
+        {% endif %}
     </span>
 
 </nav>

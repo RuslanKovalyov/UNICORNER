@@ -206,6 +206,103 @@ header img {
     padding: 0;
 }
 
+.info_block_container {
+    justify-content: center;
+    align-items: center;
+    margin: var(--margin-general) 0;
+    padding: 0;
+    background-color: transparent;
+    border: var(--border-stile);
+    border-radius: var(--border-radius);
+    text-align: center;
+}
+
+.info_block {
+    display: grid;
+    gap: 20px;
+    margin: 0 auto;
+    padding: 0 0 var(--padding-general) 0;
+    width: max-content ;
+    background-color: transparent;
+    color: var(--color-text-default);
+    text-align: left;
+}
+
+.info_block p {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+}
+
+.info_block .info-icon {
+    width: 32px;
+    height: 32px;
+    fill: var(--color-secondary);
+    margin: var(--margin-general);
+}
+
+
+.info_block a {
+    color: var(--color-link-primary);
+    text-decoration: none;
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+.info_block a:hover {
+    color: var(--color-link-primary-hover);
+    text-shadow: 1px 1px 5px var(--color-link-primary);
+}
+
+.review-block {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: var(--margin-general) 0;
+    padding: var(--padding-general);
+    background-color: transparent;
+    border: var(--border-stile);
+    border-radius: var(--border-radius);
+    text-align: center;
+}
+
+.review-block p {
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--margin-general);
+}
+
+.review-block a {
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.review-block .stars {
+    display: flex;
+    gap: 8px; /* Slightly larger gap for better spacing */
+}
+
+.review-block .stars svg {
+    width: 28px;
+    height: 28px;
+    fill: #FFD43B;
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.review-block .stars svg:hover {
+    transform: scale(1.2);
+    filter: brightness(1.2);
+}
+
+.review-block a:hover p {
+    color: var(--color-accent); /* Highlight text on hover */
+    font-weight: bold;
+}
+
 .map {
     overflow: hidden;
     height: 250px;
@@ -398,6 +495,9 @@ button:focus {
 }
 
 @media screen and (max-width: 1000px) {
+    main {
+        margin: 0 5px;
+    }
     .navbar .menu_btn{
         display: block;
         position: relative;
@@ -429,10 +529,5 @@ button:focus {
     
     .horizontal_products_feed .horizontal_feed .product_card p {
         font-size: calc(var(--font-size-general) * 0.7);
-    }
-
-    footer {
-        /* top border radius 5px */
-        border-radius: var(--border-radius) var(--border-radius) 0 0;
     }
 }

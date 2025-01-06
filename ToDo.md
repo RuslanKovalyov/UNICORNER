@@ -12,3 +12,5 @@
 ## **footer**
 - [ ] Change color of GitHub ico to black, on bright mode
 
+## **accessibility**
+- [ ] issue with monochrome in contacts page on stars
