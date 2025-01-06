@@ -226,15 +226,37 @@ footer {
     line-height: 2;
 }
 
-footer img.social-icon {
-    width: 32px;
+footer svg.social-icon {
+    width: 36px;
     padding: 0;
     margin: 0 var(--margin-general);
+    transition: width 0.2s ease, margin 0.2s ease, fill 0.2s ease;
 }
 
-footer img.social-icon:hover {
-    width: 30px;
-    margin: 0 calc(var(--margin-general) + 1px);
+footer svg.social-icon.WhatsApp {
+    fill: #25d366;/
+}
+
+footer svg.social-icon.Instagram {
+    fill: #e440bb;
+}
+
+footer svg.social-icon.Facebook {
+    fill: #628ae1;
+}
+
+footer svg.social-icon.X-twitter {
+    fill: rgb(200, 200, 200);
+}
+
+footer svg.social-icon.LinkedIn {
+    fill: #22a3e8;
+}
+
+footer svg.social-icon:hover {
+    width: 40px; /* Slightly larger on hover */
+    margin: -4px calc(var(--margin-general) - 2px);
+    fill: var(--color-accent);
 }
 
 footer p {
