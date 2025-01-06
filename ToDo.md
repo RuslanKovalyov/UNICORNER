@@ -9,3 +9,6 @@
 - [ ] Validate uploaded images (file size, resolution, and format).
 - [ ] Add a preview for uploaded images in the admin panel.
 
+## **footer**
+- [ ] Change color of GitHub ico to black, on bright mode
+

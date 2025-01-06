@@ -234,12 +234,12 @@ footer svg.social-icon {
 }
 
 footer svg.social-icon.WhatsApp {
-    fill: #25d366;/
+    fill: #25d366;
 }
 
-footer svg.social-icon.Instagram {
-    fill: #e440bb;
-}
+/* footer svg.social-icon.Instagram {
+    svg internal gradient fill color
+} */
 
 footer svg.social-icon.Facebook {
     fill: #628ae1;
@@ -251,6 +251,10 @@ footer svg.social-icon.X-twitter {
 
 footer svg.social-icon.LinkedIn {
     fill: #22a3e8;
+}
+
+footer svg.social-icon.GitHub {
+    fill: white;
 }
 
 footer svg.social-icon:hover {
