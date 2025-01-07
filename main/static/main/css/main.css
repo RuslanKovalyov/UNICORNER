@@ -217,6 +217,14 @@ header img {
     text-align: center;
 }
 
+.terms_block_container {
+    margin: var(--margin-general) auto;
+    padding: var(--padding-general);
+    background-color: transparent;
+    border: var(--border-stile);
+    border-radius: var(--border-radius);
+}
+
 .info_block {
     display: grid;
     gap: 20px;
