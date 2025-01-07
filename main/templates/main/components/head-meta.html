@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#000000">
 
-<title>UNICORNER</title>
+<title>{% if title %}{{ title }}{% else %}UNICORNER{% endif %}</title>
 
 <!-- Stylesheets -->
 <link rel="stylesheet" href="{% static 'main/css/main.css' %}" type="text/css">
