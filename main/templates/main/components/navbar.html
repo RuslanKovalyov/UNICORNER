@@ -77,6 +77,13 @@
             Google reviews<span class="sr-only">(opens in a new tab)</span>
         </a>
 
+        <!--About-->
+        {% if request.path == "/about" %}
+            <a style="color:red" href="{% url 'about' %}" tabindex="0" aria-current="page">אודות</a>
+        {% else %}
+            <a href="{% url 'about' %}" tabindex="0" aria-current="page">אודות</a>
+        {% endif %}
+
         <!--contact us-->
         {% if request.path == "/contacts" %}
             <a style="color:red" href="{% url 'contacts' %}" tabindex="0" aria-current="page">צור קשר</a>
@@ -99,6 +106,13 @@
         <a href="https://g.page/r/CVZlErJ4LstcEB0/review" target="_blank" tabindex="0" aria-label="Opens in a new tab">
             Google reviews<span class="sr-only">(opens in a new tab)</span>
         </a>
+
+        <!--About-->
+        {% if request.path == "/about" %}
+            <a style="color:red" href="{% url 'about' %}" tabindex="0" aria-current="page">אודות</a>
+        {% else %}
+            <a href="{% url 'about' %}" tabindex="0" aria-current="page">אודות</a>
+        {% endif %}
 
         <!--contact us-->
         {% if request.path == "/contacts" %}

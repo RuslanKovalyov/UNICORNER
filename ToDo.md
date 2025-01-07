@@ -14,3 +14,6 @@
 
 ## **accessibility**
 - [ ] issue with monochrome in contacts page on stars
+
+## **About page**
+-[ ] Next sentence is about future things: exclusive access to community events, hackathons, and presentations.

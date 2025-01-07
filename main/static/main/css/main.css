@@ -221,8 +221,12 @@ header img {
     margin: var(--margin-general) auto;
     padding: var(--padding-general);
     background-color: transparent;
-    border: var(--border-stile);
-    border-radius: var(--border-radius);
+}
+
+.about_block_container {
+    margin: var(--margin-general) auto;
+    padding: var(--padding-general);
+    background-color: transparent;
 }
 
 .info_block {
