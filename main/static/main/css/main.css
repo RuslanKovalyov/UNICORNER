@@ -332,9 +332,9 @@ footer {
 }
 
 footer svg.social-icon {
-    width: 36px;
+    width: 34px;
     padding: 0;
-    margin: 0 var(--margin-general);
+    margin: 0 10px;
     transition: width 0.2s ease, margin 0.2s ease, fill 0.2s ease;
 }
 
@@ -364,7 +364,7 @@ footer svg.social-icon.GitHub {
 
 footer svg.social-icon:hover {
     width: 40px; /* Slightly larger on hover */
-    margin: -4px calc(var(--margin-general) - 2px);
+    margin: -4px calc(var(--margin-general) - 8px);
     fill: var(--color-accent);
 }
 
