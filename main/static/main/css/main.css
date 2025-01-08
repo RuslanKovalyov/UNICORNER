@@ -229,6 +229,13 @@ header img {
     background-color: transparent;
 }
 
+.p404_block_container {
+    margin: var(--margin-general) auto;
+    padding: var(--padding-general);
+    background-color: transparent;
+    text-align: center;
+}
+
 .info_block {
     display: grid;
     gap: 20px;

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+</head>
+<body class="hebrew">
+    {% include 'main/components/header.html' %}
+    {% include 'main/components/navbar.html' %}
+    <main>
+        <div class="content p404_block_container english">
+            <h1>404</h1>
+            <p>Page not found</p>
+            <p>Sorry, the page you are looking for does not exist, has been moved or is temporarily unavailable.</p>
+            <p>Try going back to the <a href="{% url 'home' %}">home page</a> or <a href="javascript:history.back()">go back</a> to the previous page.</p>
+        </div>
+    </main>
+    {% include 'main/components/footer.html' %}
+    {% include 'main/components/accessibility.html' %}
+</body>
+</html>

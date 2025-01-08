@@ -18,6 +18,9 @@ def terms_and_privacy(request):
     title = 'Terms and Privacy Policy'
     return render(request, 'main/terms_and_privacy.html', {'title': title})
 
+def p404(request, exception):
+    return render(request, 'main/p404.html')
+
 # def opensource_license(request):
 #     return render(request, 'main/opensource_license.html')
 
