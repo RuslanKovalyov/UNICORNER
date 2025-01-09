@@ -1,14 +1,14 @@
 :root {
     /* Theme Colors */
-    --color-primary: rgb(30, 25, 15);
+    --color-primary: rgb(20, 15, 10);
     --color-secondary: rgb(230, 240, 250);
     --color-accent: rgb(250, 150, 50);
 
     /* Background Colors */
     --color-bg-default: black;
     --color-bg-header: linear-gradient(0deg, rgba(255, 255, 0, 0.1), rgba(255, 255, 0, 0.05));
-    --color-bg-navbar: rgba(20, 20, 0, 0.75);
-    --color-bg-sidebar: rgba(20, 20, 0, 0.75);
+    --color-bg-navbar: rgba(20, 20, 0, 0.95);
+    --color-bg-sidebar: rgba(20, 20, 0, 0.95);
     --color-bg-footer: var(--color-primary);
     --color-bg-footer-credits: black;
 
@@ -226,7 +226,7 @@ header img {
 .about_block_container {
     margin: var(--margin-general) auto;
     padding: var(--padding-general);
-    background-color: transparent;
+    background-color: var(--color-bg-default);
 }
 
 .p404_block_container {
@@ -329,6 +329,7 @@ header img {
     padding: 0;
     border: var(--border-stile);
     border-radius: var(--border-radius);
+    filter: brightness(0.8);
 }
 
 footer {
@@ -473,7 +474,7 @@ button:focus {
 
 .navbar .sidebar {
     background-color: var(--color-bg-sidebar);
-    backdrop-filter: blur(7px);
+    backdrop-filter: blur(5px);
     text-align: right;
     height: 100%;
     width: 0;
@@ -515,7 +516,7 @@ button:focus {
 
 @media screen and (max-width: 1000px) {
     main {
-        margin: 0 5px;
+        margin: 0;
     }
     .navbar .menu_btn{
         display: block;
@@ -548,5 +549,9 @@ button:focus {
     
     .horizontal_products_feed .horizontal_feed .product_card p {
         font-size: calc(var(--font-size-general) * 0.7);
+    }
+
+    footer {
+        border-radius: var(--border-radius) var(--border-radius) 0 0;
     }
 }

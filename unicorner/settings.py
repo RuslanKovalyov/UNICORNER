@@ -10,7 +10,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = config('SECRET_KEY')
 
-DEBUG = config('DEBUG_', default=False, cast=bool)
+DEBUG = config('DEBUG', default=False, cast=bool)
+print('DEBUG______________________', DEBUG)
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='', cast=lambda v: v.split(','))
 CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED_ORIGINS', default='', cast=lambda v: v.split(','))
