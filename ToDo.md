@@ -17,4 +17,4 @@
 
 ## **Web pages**
 -[ ] Next sentence In 'About page' is about future things: exclusive access to community events, hackathons, and presentations.
--[ ] 404 Nginx states that it is not ready
+-[ ] 404: Nginx, css and Design issues

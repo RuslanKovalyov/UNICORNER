@@ -1,5 +1,9 @@
-#admin stuff
+# admin stuff
 SuperUser.md
+
+# server stuff
+# collected static files of root dir
+static/
 
 #Mac OS
 .DS_Store
