@@ -2,7 +2,7 @@ from django.db import models
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
 from django.core.files.base import ContentFile
-from PIL import Image
+from PIL import Image, ImageOps
 import os
 from io import BytesIO
 
@@ -40,6 +40,9 @@ class Product(models.Model):
         # Resize and save the image in JPEG format
         if self.image:
             img = Image.open(self.image)
+            
+            # Automatically fix orientation
+            img = ImageOps.exif_transpose(img)
 
             # Convert to RGB if necessary
             if img.mode in ("RGBA", "P"):
