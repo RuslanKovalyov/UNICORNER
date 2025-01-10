@@ -8,7 +8,7 @@ from django.conf.urls import handler404
 handler404 = 'main.views.p404'
 
 urlpatterns = [
-    path('admin', admin.site.urls),
+    path('admin/', admin.site.urls),
     path("", include("main.urls")),
 ]
 
