@@ -1,7 +1,8 @@
 from django.db import models
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
+import os
 
-# Create your models here.
-from django.db import models
 
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -20,4 +21,31 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):
-        return self.title
+        return self.name
+    
+    def save(self, *args, **kwargs):
+        # Delete the old image if a new image is being uploaded
+        if self.pk:
+            try:
+                old_image = Product.objects.get(pk=self.pk).image
+                if old_image and self.image != old_image:
+                    if os.path.isfile(old_image.path):
+                        os.remove(old_image.path)
+            except Product.DoesNotExist:
+                pass
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        # Delete the image file from storage before deleting the object
+        if self.image:
+            if os.path.isfile(self.image.path):
+                os.remove(self.image.path)
+        # Call the parent class delete method
+        super().delete(*args, **kwargs)
+
+# Signal to delete the image when a Product instance is deleted
+@receiver(post_delete, sender=Product)
+def delete_product_image(sender, instance, **kwargs):
+    if instance.image:
+        if os.path.isfile(instance.image.path):
+            os.remove(instance.image.path)
