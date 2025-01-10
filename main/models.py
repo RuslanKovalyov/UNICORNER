@@ -1,7 +1,10 @@
 from django.db import models
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
+from django.core.files.base import ContentFile
+from PIL import Image
 import os
+from io import BytesIO
 
 
 class Category(models.Model):
@@ -33,6 +36,25 @@ class Product(models.Model):
                         os.remove(old_image.path)
             except Product.DoesNotExist:
                 pass
+            
+        # Resize and save the image in JPEG format
+        if self.image:
+            img = Image.open(self.image)
+
+            # Convert to RGB if necessary
+            if img.mode in ("RGBA", "P"):
+                img = img.convert("RGB")
+
+            # Resize the image if larger than 1000x1000
+            max_size = (1000, 1000)
+            img.thumbnail(max_size, Image.Resampling.LANCZOS)
+
+            # Save the resized image back to the field
+            img_io = BytesIO()
+            img.save(img_io, format="JPEG", quality=90)
+            img_name = os.path.splitext(self.image.name)[0] + ".jpg"  # Ensure .jpg extension
+            self.image = ContentFile(img_io.getvalue(), name=img_name)
+        
         super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
