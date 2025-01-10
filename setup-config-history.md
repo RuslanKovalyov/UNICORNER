@@ -92,23 +92,103 @@ create a .env file to store sensitive data
 
 ## **Set Permissions**
 ```bash
-    sudo chown -R www-data:www-data /home/ruslan/Desktop/UNICORNER/static
-    sudo chown -R www-data:www-data /home/ruslan/Desktop/UNICORNER/media
-    sudo chown -R ruslan:ruslan /home/ruslan/Desktop/UNICORNER/static
-    sudo chmod -R 755 /home/ruslan/Desktop/UNICORNER/static
-    sudo chmod -R 755 /home/ruslan/Desktop/UNICORNER/media
-    #sudo systemctl reload nginx
+    sudo chown -R ruslan:www-data /home/ruslan/Desktop/UNICORNER/media
+    sudo chmod -R 775 /home/ruslan/Desktop/UNICORNER/media
+    sudo chown -R ruslan:www-data /home/ruslan/Desktop/UNICORNER/static
+    sudo chmod -R 775 /home/ruslan/Desktop/UNICORNER/static
+
+    # sudo systemctl daemon-reload
+    # sudo systemctl restart unicorner_django_app.service
+    # sudo systemctl reload nginx
 ```
 
 ## **NGINX**
 ```bash
-    ...
-    ...
+    # sudo nano /etc/nginx/sites-available/unicorner
+
+    # Upstream to Gunicorn
+    upstream server_django {
+        server 127.0.0.1:8080;
+    }
+
+    server {
+        listen 443 ssl http2; # managed by Certbot
+        server_name unicorner.coffee www.unicorner.coffee;
+
+        ssl_certificate /etc/letsencrypt/live/unicorner.coffee/fullchain.pem; # managed by Certbot
+        ssl_certificate_key /etc/letsencrypt/live/unicorner.coffee/privkey.pem; # managed by Certbot
+        include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+        ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+        # Serve Static Files
+        location /static/ {
+            alias /home/ruslan/Desktop/UNICORNER/static/;
+            autoindex off;
+            access_log off;
+            expires max;
+        }
+
+        # Serve Media Files
+        location /media/ {
+            alias /home/ruslan/Desktop/UNICORNER/media/;
+            autoindex off;
+            access_log off;
+            expires max;
+        }
+
+        # Proxy Pass to Django
+        location / {
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header Host $host;
+            proxy_redirect off;
+            client_max_body_size 50M;
+            proxy_pass http://server_django;
+        }
+    }
+
+    # Redirect www to non-www with HTTPS
+    server {
+        listen 80;
+        server_name www.unicorner.coffee;
+        return 301 https://unicorner.coffee$request_uri;
+    }
+
+    # Redirect HTTP to HTTPS
+    server {
+        listen 80;
+        server_name unicorner.coffee www.unicorner.coffee;
+        return 301 https://unicorner.coffee$request_uri;
+    }
+
+    # sudo nginx -t
+    # sudo systemctl reload nginx
+
 ```
 
 ## **Gunicorn**
 ```bash
-    ...
-    ...
+    # sudo nano /etc/systemd/system/unicorner_django_app.service
+
+    [Unit]
+    Description=Gunicorn daemon for unicorner_django_app
+    After=network.target
+
+    [Service]
+    PermissionsStartOnly=true
+    User=ruslan
+    Group=www-data
+    WorkingDirectory=/home/ruslan/Desktop/UNICORNER
+    ExecStart=/home/ruslan/Desktop/UNICORNER/venv/bin/python3 -m gunicorn --workers 8 --bind 0.0.0.0:8080 unicorner.wsgi:application
+    ExecReload=/bin/kill -s HUP $MAINPID
+    KillMode=mixed
+    TimeoutStopSec=5
+    PrivateTmp=true
+    Restart=on-failure
+
+    [Install]
+    WantedBy=multi-user.target
+
+    # sudo systemctl restart unicorner_django_app.service
+
 ```
 
