@@ -3,6 +3,7 @@ from django.db.models.signals import post_delete
 from django.dispatch import receiver
 from django.core.files.base import ContentFile
 from PIL import Image, ImageOps
+from colorthief import ColorThief
 import os
 from io import BytesIO
 
@@ -21,10 +22,15 @@ class Product(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
     image = models.ImageField(upload_to="products/images/")
+    background_color = models.CharField(max_length=7, blank=True, null=True)  # Store as HEX background color for the product card
     price = models.DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):
         return self.name
+    
+    # sort by latest
+    class Meta:
+        ordering = ["-id"]
     
     def save(self, *args, **kwargs):
         # Delete the old image if a new image is being uploaded
@@ -59,6 +65,40 @@ class Product(models.Model):
             self.image = ContentFile(img_io.getvalue(), name=img_name)
         
         super().save(*args, **kwargs)
+        
+        # Calculate the dominant color of background from the image after saving
+        if self.image and os.path.isfile(self.image.path):
+            color_thief = ColorThief(self.image.path)
+            dominant_color = color_thief.get_color(quality=1)  # Returns RGB tuple
+            
+            # Ensure the background color is dark
+            saturated_color = self._enhance_saturation(dominant_color)
+            adjusted_color = self._ensure_darker_color(saturated_color)
+            self.background_color = "#{:02x}{:02x}{:02x}".format(*adjusted_color)
+            
+            # Save the model again to store the dominant color
+            super().save(update_fields=["background_color"])  # Avoid full save
+    
+    def _enhance_saturation(self, color, factor=10):
+        """
+        Enhance the saturation of an RGB color.
+        """
+        avg = sum(color) / 3
+        enhanced_color = tuple(
+            max(min(int(avg + (c - avg) * factor), 255), 0) for c in color
+        )
+        return enhanced_color
+     
+    def _ensure_darker_color(self, color):
+        """
+        Adjust the color to ensure it's darker than a given brightness threshold.
+        """
+        threshold = 150  # Brightness threshold
+        brightness = sum(color) / 3  # Calculate brightness as average of RGB
+        if brightness > threshold:
+            # Darken the color
+            color = tuple(max(int(c * 0.6), 0) for c in color)  # Reduce brightness by 40%
+        return color
 
     def delete(self, *args, **kwargs):
         # Delete the image file from storage before deleting the object

@@ -9,11 +9,6 @@
     {% include 'main/components/navbar.html' %}
     
     <main>
-        
-        <section>
-            <h1 class="center">This site is under development</h1>
-            <h2 class="center">UNICORNER - The Best Coffee Shop For Coders</h2>
-        </section>
 
         <section class="content english">
 
@@ -22,13 +17,17 @@
                 <h2>{{ category.name }}</h2>
                 <div class="horizontal_feed">
                     {% for product in category.products.all %}
-                    <div class="product_card">
+                    <div class="product_card" style="background-color: {{ product.background_color }};">
                         <img class="product_img" src="{{ product.image.url }}" alt="{{ product.name }}" loading="lazy">
-                        <h3 class="product_title">{{ product.name }}</h3>
-                        <p class="product_description">{{ product.title }}</p>
-                        {% comment %} <div class="product_description_hover"> show description when hovering over image
-                            <p>{{ product.description }}</p>
-                        </div> {% endcomment %}
+                        <div class="product_footer">
+                            <h3>{{ product.name }}</h3>
+                            <p>{{ product.title }}</p>
+                            {% comment %} show description when hovering over image 
+                            <div class="product_description">
+                                <p>{{ product.description }}</p>
+                            </div>
+                            {% endcomment %}
+                        </div>
                     </div>
                     {% endfor %}
                 </div>
@@ -37,7 +36,7 @@
             
             {% include 'main/components/map.html' %}
         </section>
-
+    
     </main>
 
     {% include 'main/components/footer.html' %}
