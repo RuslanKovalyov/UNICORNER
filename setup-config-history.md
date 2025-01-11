@@ -32,6 +32,7 @@ create a .env file to store sensitive data
 ## **Create Models of Products and Run the following commands to create the database tables**
 ```bash
     python manage.py makemigrations
+    #python manage.py makemigrations main
     python manage.py migrate
 ```
 
@@ -146,13 +147,6 @@ create a .env file to store sensitive data
         }
     }
 
-    # Redirect www to non-www with HTTPS
-    server {
-        listen 80;
-        server_name www.unicorner.coffee;
-        return 301 https://unicorner.coffee$request_uri;
-    }
-
     # Redirect HTTP to HTTPS
     server {
         listen 80;
@@ -162,6 +156,7 @@ create a .env file to store sensitive data
 
     # sudo nginx -t
     # sudo systemctl reload nginx
+    # sudo systemctl status nginx
 
 ```
 
@@ -188,7 +183,9 @@ create a .env file to store sensitive data
     [Install]
     WantedBy=multi-user.target
 
+    # sudo systemctl daemon-reload
     # sudo systemctl restart unicorner_django_app.service
+    # sudo systemctl status unicorner_django_app.service
 
 ```
 
