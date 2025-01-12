@@ -67,17 +67,19 @@ class Product(models.Model):
         super().save(*args, **kwargs)
         
         # Calculate the dominant color of background from the image after saving
-        if self.image and os.path.isfile(self.image.path):
-            color_thief = ColorThief(self.image.path)
-            dominant_color = color_thief.get_color(quality=1)  # Returns RGB tuple
-            
-            # Ensure the background color is dark
-            saturated_color = self._enhance_saturation(dominant_color)
-            adjusted_color = self._ensure_darker_color(saturated_color)
-            self.background_color = "#{:02x}{:02x}{:02x}".format(*adjusted_color)
-            
-            # Save the model again to store the dominant color
-            super().save(update_fields=["background_color"])  # Avoid full save
+        # if color is not already exist
+        if not self.background_color:
+            if self.image and os.path.isfile(self.image.path):
+                color_thief = ColorThief(self.image.path)
+                dominant_color = color_thief.get_color(quality=1)  # Returns RGB tuple
+                
+                # Ensure the background color is dark
+                saturated_color = self._enhance_saturation(dominant_color)
+                adjusted_color = self._ensure_darker_color(saturated_color)
+                self.background_color = "#{:02x}{:02x}{:02x}".format(*adjusted_color)
+                
+                # Save the model again to store the dominant color
+                super().save(update_fields=["background_color"])  # Avoid full save
     
     def _enhance_saturation(self, color, factor=10):
         """
