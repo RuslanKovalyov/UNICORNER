@@ -176,7 +176,6 @@ header img {
 }
 
 .horizontal_products_feed .horizontal_feed .product_card {
-    height: 255px;
     width: min-content;
     border-radius: var(--border-radius);
 }
@@ -192,7 +191,6 @@ header img {
     padding: 0;
     margin: 0;
     width: auto;
-    height: 200px;
     border-radius: var(--border-radius) var(--border-radius) 0 0;
 }
 
@@ -545,14 +543,6 @@ button:focus {
     .horizontal_products_feed h2 {
         font-size: calc(var(--font-size-general) * 1.4);
         margin: 0 0 calc(var(--margin-general)*0.7) 0;
-    }
-
-    .horizontal_products_feed .horizontal_feed .product_card {
-        height: 210px;
-    }
-
-    .horizontal_products_feed .horizontal_feed .product_card img {
-        height: 150px;
     }
 
     .horizontal_products_feed .horizontal_feed .product_card h3 {

@@ -19,11 +19,11 @@
                     {% for product in category.products.all %}
 
                         {% if category.product_card_style == 'small_card' %}
-                            <div class="product_card" style="text-align: left;   background-color: transparent;">
-                                <img class="product_img" style="border-radius: 8px;" src="{{ product.image.url }}" alt="{{ product.name }}" loading="lazy">
+                            <div class="product_card" style="height: 210px; text-align: left;   background-color: transparent;">
+                                <img class="product_img" style=" height: 150px; border-radius: 8px;" src="{{ product.image.url }}" alt="{{ product.name }}" loading="lazy">
                         {% else %}
-                            <div class="product_card" style="text-align: center; background-color: {{ product.background_color }};">
-                                <img class="product_img" src="{{ product.image.url }}" alt="{{ product.name }}" loading="lazy">
+                            <div class="product_card" style="height: 270px; text-align: center; background-color: {{ product.background_color }};">
+                                <img class="product_img" style="height: 215px;" src="{{ product.image.url }}" alt="{{ product.name }}" loading="lazy">
                         {% endif %}
 
                                 <div class="product_footer">
