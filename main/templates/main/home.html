@@ -17,18 +17,30 @@
                 <h2>{{ category.name }}</h2>
                 <div class="horizontal_feed">
                     {% for product in category.products.all %}
-                    <div class="product_card" style="background-color: {{ product.background_color }};">
-                        <img class="product_img" src="{{ product.image.url }}" alt="{{ product.name }}" loading="lazy">
-                        <div class="product_footer">
-                            <h3>{{ product.name }}</h3>
-                            <p>{{ product.title }}</p>
-                            {% comment %} show description when hovering over image 
-                            <div class="product_description">
-                                <p>{{ product.description }}</p>
+
+                        {% if category.product_card_style == 'small_card' %}
+                            <div class="product_card" style="text-align: left;   background-color: transparent;">
+                                <img class="product_img" style="border-radius: 8px;" src="{{ product.image.url }}" alt="{{ product.name }}" loading="lazy">
+                        {% else %}
+                            <div class="product_card" style="text-align: center; background-color: {{ product.background_color }};">
+                                <img class="product_img" src="{{ product.image.url }}" alt="{{ product.name }}" loading="lazy">
+                        {% endif %}
+
+                                <div class="product_footer">
+
+                                    <h3>{{ product.name }}</h3>
+
+                                    {% if product.title %}
+                                        <p>{{ product.title }}</p>
+                                    {% endif %}
+
+                                    {% comment %} show description when hovering over image 
+                                    <div class="product_description">
+                                        <p>{{ product.description }}</p>
+                                    </div>
+                                    {% endcomment %}
+                                </div>
                             </div>
-                            {% endcomment %}
-                        </div>
-                    </div>
                     {% endfor %}
                 </div>
             </div>

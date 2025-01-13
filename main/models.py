@@ -11,6 +11,7 @@ from io import BytesIO
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField(blank=True, null=True)
+    product_card_style = models.CharField(max_length=20, default="small_card")
 
     def __str__(self):
         return self.name
@@ -19,7 +20,7 @@ class Category(models.Model):
 class Product(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="products")
     name = models.CharField(max_length=100)
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=100, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     image = models.ImageField(upload_to="products/images/")
     background_color = models.CharField(max_length=7, blank=True, null=True)  # Store as HEX background color for the product card
