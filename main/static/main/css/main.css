@@ -541,7 +541,7 @@ button:focus {
     }
 
     .horizontal_products_feed h2 {
-        font-size: calc(var(--font-size-general) * 1.4);
+        font-size: calc(var(--font-size-general) * 1.7);
         margin: 0 0 calc(var(--margin-general)*0.7) 0;
     }
 
