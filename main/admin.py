@@ -13,3 +13,5 @@ class ProductAdmin(admin.ModelAdmin):
     search_fields = ('name', 'category__name')
     list_filter = ('category',)
 
+# change the admin site header from Django Administration to UNICORNER CLUB
+admin.site.site_header = 'UNICORNER CLUB'
