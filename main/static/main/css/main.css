@@ -421,19 +421,16 @@ footer .credits a {
 
 .navbar {
     background-color: var(--color-bg-navbar);
-    text-shadow: 3px 3px 5px rgb(20, 17, 17);
     position: -webkit-sticky;
     position: sticky;
     position: -webkit-sticky; /* Fallback for older WebKit browsers */
     top: 0;
     bottom: 0;
-    -webkit-box-shadow: 0 0px 10px 5px rgba(0, 0, 0, 0.3);
-    box-shadow: 0 0px 10px 5px rgba(0, 0, 0, 0.3);
     transition: top 0.5s;
     -webkit-overflow-scrolling: touch;
     font-size: var(--font-size-navbar);
     margin: 0;
-    padding: 3px var(--padding-general);
+    padding: 3px 5px;
     height: min-content;
     margin-top: 0;
     display: flex;
@@ -481,7 +478,6 @@ button:focus {
 .navbar .sidebar {
     background-color: var(--color-bg-sidebar);
     backdrop-filter: blur(5px);
-    text-align: right;
     height: 100%;
     width: 0;
     position: fixed;
