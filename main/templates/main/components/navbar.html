@@ -5,7 +5,7 @@
         const focusableElements = sidebar.querySelectorAll('a, button, input, select, textarea, [tabindex]:not([tabindex="-1"])');
     
         // Open sidebar
-        sidebar.style.width = "370px";
+        sidebar.style.width = "100%";
         sidebar.setAttribute("aria-hidden", "false");
         document.querySelector('.menu_btn button').setAttribute('aria-expanded', 'true');
     
@@ -61,7 +61,9 @@
 
     <span class="menu_btn">
         <!--menu_btn-->
-        <button onclick="openNav()" aria-expanded="false" aria-controls="mySidebar" tabindex="0"><big>&#9776;</big></button>
+        <a onclick="openNav()" aria-expanded="false" aria-controls="mySidebar" tabindex="0">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M0 96C0 78.3 14.3 64 32 64l384 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 128C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32l384 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 288c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32L32 448c-17.7 0-32-14.3-32-32s14.3-32 32-32l384 0c17.7 0 32 14.3 32 32z"/></svg>
+        </a>
     </span>
 
     <span class="pc_navbar">
@@ -88,6 +90,8 @@
         {% endif %}
     </span>
 
+    <a class="login" href="/admin/" tabindex="0" aria-current="page">Log in</a>
+
     <span class="sidebar english" id="mySidebar" aria-hidden="true" role="navigation">
         <a href="javascript:void(0)" class="closebtn hebrew" onclick="closeNav()" tabindex="0" aria-label="Close sidebar">&times;</a>
 
@@ -98,5 +102,4 @@
         <a href="{% url 'about' %}" tabindex="0" aria-current="page">About</a>
         <a href="{% url 'contacts' %}" tabindex="0" aria-current="page">Contact us</a>
     </span>
-
 </nav>

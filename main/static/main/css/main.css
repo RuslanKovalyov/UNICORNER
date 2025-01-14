@@ -430,7 +430,7 @@ footer .credits a {
     -webkit-overflow-scrolling: touch;
     font-size: var(--font-size-navbar);
     margin: 0;
-    padding: 3px 5px;
+    padding: 0px 5px;
     height: min-content;
     margin-top: 0;
     display: flex;
@@ -464,15 +464,25 @@ button:focus {
 .navbar .menu_btn {
     display: none;
     visibility: hidden;
-    font-size: 0;
+    margin-left: auto;
+    margin-right: var(--margin-general);
 }
 
-.navbar .menu_btn button {
+.navbar .menu_btn a {
     background: none;
     border: none;
-    color: var(--color-link-primary);
-    font-size: var(--font-size-navbar);
+    font-size: 32px;
     cursor: pointer;
+    padding: 0;
+}
+
+.navbar svg {
+    fill: var(--color-link-primary);
+}
+
+.navbar .login {
+    margin-left: auto;
+    margin-right: var(--padding-general);
 }
 
 .navbar .sidebar {
@@ -502,8 +512,10 @@ button:focus {
 .navbar .sidebar a {
     padding: 8px var(--padding-general) 8px 8px;
     font-size: var(--font-size-navbar);
+    letter-spacing: 5px;
     display: block;
     transition: 0.1s;
+    margin-left: 40px;
 }
 
 .navbar .sidebar a:hover {
@@ -530,6 +542,14 @@ button:focus {
         display: none;
         visibility: hidden;
         font-size: 0;
+    }
+
+    .navbar .login {
+        /* left sight */
+        position: absolute;
+        left: 0px;
+        margin: 5px;
+        margin-left: var(--margin-general);
     }
 
     .horizontal_products_feed{
