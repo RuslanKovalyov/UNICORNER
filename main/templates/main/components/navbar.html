@@ -68,7 +68,7 @@
 
     <span class="pc_navbar">
         {% if request.path == "/" %}
-            <a style="color:red" href="{% url 'home' %}" tabindex="0" aria-current="page">Home</a>
+            <a style="text-decoration: underline;" href="{% url 'home' %}" tabindex="0" aria-current="page">Home</a>
         {% else %}
             <a href="{% url 'home' %}" tabindex="0" aria-current="page">Home</a>
         {% endif %}
@@ -78,13 +78,13 @@
         </a>
 
         {% if request.path == "/about" %}
-            <a style="color:red" href="{% url 'about' %}" tabindex="0" aria-current="page">About</a>
+            <a style="text-decoration: underline;" href="{% url 'about' %}" tabindex="0" aria-current="page">About</a>
         {% else %}
             <a href="{% url 'about' %}" tabindex="0" aria-current="page">About</a>
         {% endif %}
 
         {% if request.path == "/contacts" %}
-            <a style="color:red" href="{% url 'contacts' %}" tabindex="0" aria-current="page">Contact us</a>
+            <a style="text-decoration: underline;" href="{% url 'contacts' %}" tabindex="0" aria-current="page">Contact us</a>
         {% else %}
             <a href="{% url 'contacts' %}" tabindex="0" aria-current="page">Contact us</a>
         {% endif %}

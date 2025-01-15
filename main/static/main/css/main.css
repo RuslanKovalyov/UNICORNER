@@ -445,15 +445,12 @@ footer .credits a {
     margin-inline: 10px;
 }
 
-.navbar a:focus,
-.navbar .sidebar a:focus {
-    outline: 2px dashed var(--color-accent);
-    outline-offset: 4px;
+.navbar a:focus {
+    text-decoration: underline;
 }
 
-button:focus {
-    outline: 2px solid var(--color-link-primary);
-    outline-offset: 2px;
+.navbar .sidebar a:focus {
+    text-decoration: none;
 }
 
 .navbar a:hover {
