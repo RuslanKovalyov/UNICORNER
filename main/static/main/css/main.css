@@ -492,7 +492,7 @@ footer .credits a {
     right: 0;
     overflow-x: hidden;
     padding-top: var(--padding-general);
-    transition: width 0.2s ease-in-out;
+    transition: width 0.3s ease-out;
     word-wrap: normal;
     min-height: 100%;
     -webkit-font-smoothing: antialiased;
