@@ -1,30 +1,30 @@
-<div id="img_display" class="img_display">
-    <span class="img_display_close_btn">&times;</span>
-    <img class="img_display-content" id="img_display_bigimage">
-    <div id="img_display_bigimage_caption"></div>
+<div id="display_image" class="display_image">
+    <span class="display_image_close_btn">&times;</span>
+    <img class="display_image-content" id="display_image_bigimage">
+    <div id="display_image_bigimage_caption"></div>
 </div>
 
 <script>
-    var img_display = document.getElementById('img_display');
-    var images = document.getElementsByClassName('display-img');
-    var img_display_Img = document.getElementById("img_display_bigimage");
-    var captionText = document.getElementById("img_display_bigimage_caption");
+    var display_image = document.getElementById('display_image');
+    var images = document.getElementsByClassName('displayer');
+    var display_image_Img = document.getElementById("display_image_bigimage");
+    var captionText = document.getElementById("display_image_bigimage_caption");
     
     
     for (var i = 0; i < images.length; i++) {
     var img = images[i];
     img.onclick = function(evt) {
         console.log(evt);
-        img_display.style.display = "block";
-        img_display_Img.src = this.src;
+        display_image.style.display = "block";
+        display_image_Img.src = this.src;
         captionText.innerHTML = this.alt;
     }
     }
     
-    {% comment %} var span = document.getElementsByClassName("img_display_close_btn")[0]; {% endcomment %}
-    var span = document.getElementsByClassName("img_display")[0];
+    {% comment %} var span = document.getElementsByClassName("display_image_close_btn")[0]; {% endcomment %}
+    var span = document.getElementsByClassName("display_image")[0];
 
     span.onclick = function() {
-        img_display.style.display = "none";
+        display_image.style.display = "none";
     }
 </script>

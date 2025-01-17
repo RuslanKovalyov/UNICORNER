@@ -1,4 +1,4 @@
-.img_display {
+.display_image {
     display: none;
     position: fixed;
     z-index: 3;
@@ -10,7 +10,7 @@
     background-color: rgba(0, 0, 0, 0.95);
 }
 
-.img_display-content {
+.display_image-content {
     margin: auto;
     margin-top: 150px;
     display: block;
@@ -18,15 +18,15 @@
     max-height: calc(100vh - 100px);
 }
 
-.img_display-content,
-#img_display_bigimage_caption {
+.display_image-content,
+#display_image_bigimage_caption {
     -webkit-animation-name: zoom;
     -webkit-animation-duration: 0.3s;
     animation-name: zoom;
     animation-duration: 0.3s;
 }
 
-#img_display_bigimage_caption {
+#display_image_bigimage_caption {
     margin: auto;
     display: block;
     width: 100%;
@@ -35,10 +35,9 @@
     color: #ccc;
     padding: 10px 0%;
     height: 150px;
-    font-size: larger;
 }
 
-.img_display_close_btn {
+.display_image_close_btn {
     position: fixed;
     top: 5%;
     right: 2.5%;
@@ -48,8 +47,8 @@
     transition: 0.3s;
 }
 
-.img_display_close_btn:hover,
-.img_display_close_btn:focus {
+.display_image_close_btn:hover,
+.display_image_close_btn:focus {
     color: rgb(255, 50, 50);
     text-decoration: none;
     cursor: pointer;
