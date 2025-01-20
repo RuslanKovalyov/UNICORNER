@@ -16,6 +16,10 @@
             <div class="horizontal_products_feed">
                 <h2>{{ category.name }}</h2>
                 <div class="horizontal_feed">
+
+                    {% comment %} “fake” padding element at the start of the horizontal scroll {% endcomment %}
+                    <div class="invisible-padding"></div>
+                    
                     {% for product in category.products.all %}
 
                         {% if category.product_card_style == 'small_card' %}

@@ -158,15 +158,20 @@ header img {
 
 .horizontal_products_feed h2 {
     font-size: calc(var(--font-size-general) * 1.7);
-    margin: 0 0 calc(var(--margin-general)) 0;
+    margin: var(--margin-general) 0;
     padding: 0;
+}
+
+/* invisible "fake" div to create left padding */
+.invisible-padding {
+    display: block;
 }
 
 .horizontal_products_feed .horizontal_feed {
     /* horizontal scrolling gallery */
     display: flex;
     flex-direction: row;
-    gap: calc(var(--margin-general) * 1.4);
+    gap: var(--margin-general);
     padding: 0;
     margin: 0;
     overflow-x: scroll;
@@ -549,13 +554,8 @@ footer .credits a {
         margin-left: var(--margin-general);
     }
 
-    .horizontal_products_feed{
-        padding-left: var(--padding-general);
-    }
-
     .horizontal_products_feed h2 {
-        font-size: calc(var(--font-size-general) * 1.7);
-        margin: 0 0 calc(var(--margin-general)*0.7) 0;
+        margin-left: var(--margin-general);
     }
 
     .horizontal_products_feed .horizontal_feed .product_card h3 {
