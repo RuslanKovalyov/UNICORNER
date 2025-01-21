@@ -8,6 +8,7 @@
 ## **Admin Features**
 - [ ] Validate uploaded images (file size, resolution, and format).
 - [x] Add a preview for uploaded images in the admin panel.
+- [ ] Fix saving path of product with existing img
 
 ## **footer**
 - [ ] Change color of GitHub ico to black, on bright mode
