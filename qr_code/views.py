@@ -5,7 +5,7 @@ from qrcode.image.pil import PilImage
 from io import BytesIO
 import base64
 from urllib.parse import urlparse
-
+from PIL import Image, ImageDraw
 
 class QRCodeForm(forms.Form):
     url = forms.CharField(
@@ -19,6 +19,12 @@ class QRCodeForm(forms.Form):
     fill_color = forms.CharField(
         label="Fill Color",
         widget=forms.TextInput(attrs={'type': 'color', 'value': '#000000'})
+    )
+    border_radius = forms.IntegerField(
+        label="Border Radius (pixels)",
+        initial=20,
+        min_value=0,
+        max_value=100
     )
 
     def clean_url(self):
@@ -35,6 +41,7 @@ class QRCodeForm(forms.Form):
         url = self.cleaned_data["url"]
         bg_color = self.cleaned_data["bg_color"]
         fill_color = self.cleaned_data["fill_color"]
+        border_radius = self.cleaned_data["border_radius"]
 
         qr = qrcode.QRCode(
             version=1,
@@ -45,7 +52,16 @@ class QRCodeForm(forms.Form):
         qr.add_data(url)
         qr.make(fit=True)
 
-        img = qr.make_image(fill_color=fill_color, back_color=bg_color)
+        # Generate the QR code image
+        img = qr.make_image(fill_color=fill_color, back_color=bg_color).convert("RGBA")
+
+        # Add rounded corners
+        width, height = img.size
+        mask = Image.new("L", (width, height), 0)
+        draw = ImageDraw.Draw(mask)
+        draw.rounded_rectangle((0, 0, width, height), radius=border_radius, fill=255)
+        img.putalpha(mask)
+
         return img
 
 
