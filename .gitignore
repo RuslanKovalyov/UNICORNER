@@ -3,7 +3,7 @@ SuperUser.md
 
 # server stuff
 # collected static files of root dir
-static/
+/static
 
 #Mac OS
 .DS_Store
