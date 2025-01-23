@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'main.apps.MainConfig',
     'qr_code.apps.QrCodeConfig',
+    'typing_test.apps.TypingTestConfig',
 ]
 
 MIDDLEWARE = [

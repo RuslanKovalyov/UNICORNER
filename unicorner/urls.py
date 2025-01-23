@@ -10,7 +10,8 @@ handler404 = 'main.views.p404'
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("", include("main.urls")),
-    path("", include('qr_code.urls')),
+    path("qr-code-generator", include('qr_code.urls')),
+    path("typing-test", include('typing_test.urls')),
 ]
 
 if settings.DEBUG:

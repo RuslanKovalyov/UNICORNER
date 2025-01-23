@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Typing Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .typing-area-wrapper {
+            position: relative;
+        }
+
+        #live-typed-text {
+            font-family: monospace;
+            font-size: 18px;
+            background: transparent;
+            padding: 10px;
+            white-space: pre-wrap;
+            min-height: 50px;
+            position: absolute;
+            top: 10px;
+            left: 0;
+            right: 0;
+            pointer-events: none; /* Prevent interaction with the feedback layer */
+        }
+
+        #typing-area {
+            font-family: monospace;
+            font-size: 18px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-top: 10px;
+            width: 100%;
+            box-sizing: border-box;
+            color: transparent; /* Hide text color */
+            background-color: transparent; /* Transparent background */
+            caret-color: black; /* Keep caret visible */
+        }
+
+        #result {
+            margin-top: 15px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .correct {
+            color: green;
+        }
+
+        .incorrect {
+            color: red;
+        }
+
+        .remaining {
+            color: gray;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Typing Test</h1>
+        <div class="typing-area-wrapper">
+            <div id="live-typed-text"></div> <!-- Colored feedback -->
+            <textarea id="typing-area" rows="4" cols="50" placeholder=""></textarea> <!-- Input underneath -->
+        </div>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const testText = "The quick brown fox jumps over the lazy dog."; // Reference text
+            const typingArea = document.getElementById("typing-area"); // Typing area
+            const liveTypedText = document.getElementById("live-typed-text"); // Live typing feedback
+            const result = document.getElementById("result"); // Result display
+
+            let startTime = null;
+
+            // Initialize live-typed-text with gray testText
+            liveTypedText.innerHTML = `<span class="remaining">${testText}</span>`;
+
+            typingArea.addEventListener("input", () => {
+                const typedText = typingArea.value;
+                let formattedText = "";
+                let errors = 0;
+
+                // Start the timer on first input
+                if (startTime === null && typedText.length > 0) {
+                    startTime = new Date();
+                }
+
+                // Compare typed text with the reference text
+                for (let i = 0; i < testText.length; i++) {
+                    if (i < typedText.length) {
+                        if (typedText[i] === testText[i]) {
+                            formattedText += `<span class="correct">${typedText[i]}</span>`;
+                        } else {
+                            formattedText += `<span class="incorrect">${typedText[i]}</span>`;
+                            errors++;
+                        }
+                    } else {
+                        formattedText += `<span class="remaining">${testText[i]}</span>`;
+                    }
+                }
+
+                // Update the live typing area
+                liveTypedText.innerHTML = formattedText;
+
+                // Check if typing is complete
+                if (typedText.length === testText.length) {
+                    const endTime = new Date();
+                    const timeTaken = ((endTime - startTime) / 1000).toFixed(2); // Time in seconds
+                    const accuracy = Math.max(
+                        0,
+                        Math.round(((testText.length - errors) / testText.length) * 100)
+                    );
+
+                    result.innerHTML = `
+                        <p>Typing completed!</p>
+                        <p>Time Taken: ${timeTaken} seconds</p>
+                        <p>Accuracy: ${accuracy}%</p>
+                    `;
+                    typingArea.disabled = true; // Disable further input
+                } else {
+                    result.innerHTML = ""; // Clear result if typing isn't complete
+                }
+            });
+
+            // Focus the typing area on page load
+            typingArea.focus();
+        });
+    </script>
+</body>
+</html>
