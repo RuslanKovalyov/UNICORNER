@@ -14,11 +14,11 @@ class QRCodeForm(forms.Form):
     )
     bg_color = forms.CharField(
         label="Background Color",
-        widget=forms.TextInput(attrs={'type': 'color', 'value': '#ffffff'})
+        widget=forms.TextInput(attrs={'type': 'color', 'value': '#ffff00'})
     )
     fill_color = forms.CharField(
         label="Fill Color",
-        widget=forms.TextInput(attrs={'type': 'color', 'value': '#000000'})
+        widget=forms.TextInput(attrs={'type': 'color', 'value': '#300030'})
     )
     border_radius = forms.IntegerField(
         label="Border Radius (pixels)",

@@ -1,9 +1,11 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QR Code Generator</title>
+    <link rel="stylesheet" href="{% static 'qr_code/css/qr_code.css' %}">
 </head>
 <body>
     <h1>QR Code Generator</h1>
@@ -15,7 +17,11 @@
     
     {% if qr_image_base64 %}
         <div>
-            <h2>Your QR Code:</h2>
+            <br>
+            <a href="data:image/png;base64,{{ qr_image_base64 }}" download="qr_code.png">
+                <button type="button">Download QR Code</button>
+            </a>
+            <br>
             <img src="data:image/png;base64,{{ qr_image_base64 }}" alt="QR Code">
         </div>
     {% endif %}
