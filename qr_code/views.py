@@ -4,7 +4,10 @@ import qrcode
 from qrcode.image.pil import PilImage
 from io import BytesIO
 import base64
+from django.core.exceptions import ValidationError
+from django.core.validators import URLValidator
 from urllib.parse import urlparse
+import re
 from PIL import Image, ImageDraw
 
 class QRCodeForm(forms.Form):
@@ -31,9 +34,20 @@ class QRCodeForm(forms.Form):
         url = self.cleaned_data["url"].strip()
         parsed_url = urlparse(url)
 
-        # If no scheme (http or https), prepend http://
+        # If no scheme, prepend http://
         if not parsed_url.scheme:
             url = f"http://{url}"
+
+        # Validate URL
+        validator = URLValidator(schemes=["http", "https"])
+        try:
+            validator(url)
+        except ValidationError:
+            raise ValidationError("Invalid URL. Please enter a valid URL starting with http:// or https://.")
+
+        # Optional: Disallow dangerous characters
+        if re.search(r'[\'";]', url):
+            raise ValidationError("Invalid URL. It contains potentially dangerous characters.")
 
         return url
 
