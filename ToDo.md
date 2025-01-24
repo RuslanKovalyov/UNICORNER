@@ -18,6 +18,6 @@
 
 ## **Web pages**
 - [ ] Next sentence In 'About page' is about future things: exclusive access to community events, hackathons, and presentations.
-- [ ] 404: Nginx, css and Design issues
+- [x] 404: Nginx, css and Design issues
 - [ ] product feed: add scrollbar or arrow. On large screen
 
