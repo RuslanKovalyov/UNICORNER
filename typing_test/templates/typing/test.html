@@ -7,7 +7,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background: #303030;
             margin: 0;
             padding: 0;
             display: flex;
@@ -19,10 +19,7 @@
         .container {
             max-width: 800px;
             width: 100%;
-            background: white;
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             position: relative;
         }
 
@@ -37,7 +34,7 @@
 
         #live-typed-text {
             font-family: monospace;
-            font-size: 18px;
+            font-size: 28px;
             background: transparent;
             padding: 10px;
             white-space: pre-wrap;
@@ -51,16 +48,23 @@
 
         #typing-area {
             font-family: monospace;
-            font-size: 18px;
+            font-size: 28px;
             padding: 10px;
-            border: 1px solid #ddd;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 1);
+            border: 0px solid #ddd;
             border-radius: 5px;
             margin-top: 10px;
             width: 100%;
             box-sizing: border-box;
-            color: transparent; /* Hide text color */
+            color: black;
             background-color: transparent; /* Transparent background */
-            caret-color: black; /* Keep caret visible */
+            caret-color: white;
+            resize: none;
+        }
+
+        #typing-area:focus {
+            outline: none;
+            border-color: transparent;
         }
 
         #result {
@@ -94,7 +98,7 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            const testText = "The quick brown fox jumps over the lazy dog."; // Reference text
+            const testText = "Python is a clear and powerful object-oriented programming language, comparable to Perl, Ruby, Scheme, or Java."; // Reference text
             const typingArea = document.getElementById("typing-area"); // Typing area
             const liveTypedText = document.getElementById("live-typed-text"); // Live typing feedback
             const result = document.getElementById("result"); // Result display
