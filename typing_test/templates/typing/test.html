@@ -8,69 +8,64 @@
         body {
             font-family: Arial, sans-serif;
             background: #303030;
+            color: white;
             margin: 0;
-            padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
+            height: 100vh;
+            overflow: hidden;
         }
 
         .container {
-            max-width: 800px;
-            width: 100%;
-            padding: 20px;
-            position: relative;
+            width: 90%;
+            max-width: 1200px;
+            overflow: hidden;
         }
 
-        h1 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .typing-area-wrapper {
-            position: relative;
-        }
-
-        #live-typed-text {
+        .text-display {
             font-family: monospace;
             font-size: 28px;
-            background: transparent;
-            padding: 10px;
-            white-space: pre-wrap;
-            min-height: 50px;
+            padding: 20px 0;
+            text-shadow: 0 0 2px rgba(0, 0, 0, 0.7);
+            white-space: nowrap;
+            position: relative;
+            display: flex;
+            align-items: center;
+            transition: transform 1s ease;
+        }
+
+        .text {
+            display: inline-block;
+            white-space: pre;
+            position: relative;
+        }
+
+        .caret {
+            display: inline-block;
+            width: 2px;
+            height: 1.2em;
+            background: white;
             position: absolute;
-            top: 10px;
-            left: 0;
-            right: 0;
-            pointer-events: none; /* Prevent interaction with the feedback layer */
+            animation: blink 1s steps(50) infinite;
         }
 
-        #typing-area {
-            font-family: monospace;
-            font-size: 28px;
-            padding: 10px;
-            text-shadow: 0 0 5px rgba(0, 0, 0, 1);
-            border: 0px solid #ddd;
-            border-radius: 5px;
-            margin-top: 10px;
-            width: 100%;
-            box-sizing: border-box;
-            color: black;
-            background-color: transparent; /* Transparent background */
-            caret-color: white;
-            resize: none;
+        @keyframes blink {
+            50% {
+                opacity: 0;
+            }
         }
 
-        #typing-area:focus {
-            outline: none;
-            border-color: transparent;
+        #hidden-input {
+            position: absolute;
+            top: -100px;
+            opacity: 1;
+            pointer-events: none;
         }
 
         #result {
-            margin-top: 15px;
-            font-size: 18px;
-            font-weight: bold;
+            margin-top: 20px;
+            text-align: center;
         }
 
         .correct {
@@ -88,75 +83,131 @@
 </head>
 <body>
     <div class="container">
-        <h1>Typing Test</h1>
-        <div class="typing-area-wrapper">
-            <div id="live-typed-text"></div> <!-- Colored feedback -->
-            <textarea id="typing-area" rows="4" cols="50" placeholder=""></textarea> <!-- Input underneath -->
+        <div class="text-display" id="text-display">
+            <div id="text-container" class="text"></div>
+            <div id="caret" class="caret"></div>
         </div>
         <div id="result"></div>
+        <input type="text" id="hidden-input" autofocus>
     </div>
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            const testText = "Python is a clear and powerful object-oriented programming language, comparable to Perl, Ruby, Scheme, or Java."; // Reference text
-            const typingArea = document.getElementById("typing-area"); // Typing area
-            const liveTypedText = document.getElementById("live-typed-text"); // Live typing feedback
-            const result = document.getElementById("result"); // Result display
+            const referenceText = "Python is a clear and powerful object-oriented programming language."; // Reference text
+            const textContainer = document.getElementById("text-container");
+            const hiddenInput = document.getElementById("hidden-input");
+            const caret = document.getElementById("caret");
+            const result = document.getElementById("result");
+            const textDisplay = document.getElementById("text-display");
 
+            let typedText = ""; // Track user input
             let startTime = null;
 
-            // Initialize live-typed-text with gray testText
-            liveTypedText.innerHTML = `<span class="remaining">${testText}</span>`;
+            // Initialize text display
+            function initText() {
+                textContainer.innerHTML = referenceText
+                    .split("")
+                    .map(char => `<span class="remaining">${char}</span>`)
+                    .join("");
+                positionCaret();
+            }
 
-            typingArea.addEventListener("input", () => {
-                const typedText = typingArea.value;
-                let formattedText = "";
-                let errors = 0;
+            // Position caret
+            function positionCaret() {
+                const spans = textContainer.querySelectorAll("span");
+                const caretSpan = spans[typedText.length];
+                const containerRect = textContainer.getBoundingClientRect();
 
-                // Start the timer on first input
-                if (startTime === null && typedText.length > 0) {
-                    startTime = new Date();
+                if (caretSpan) {
+                    const spanRect = caretSpan.getBoundingClientRect();
+                    caret.style.left = `${spanRect.left - containerRect.left}px`;
+                } else {
+                    // Move caret to the end of the text
+                    caret.style.left = `${textContainer.scrollWidth}px`;
                 }
 
-                // Compare typed text with the reference text
-                for (let i = 0; i < testText.length; i++) {
-                    if (i < typedText.length) {
-                        if (typedText[i] === testText[i]) {
-                            formattedText += `<span class="correct">${typedText[i]}</span>`;
+                // Smoothly scroll text to keep caret centered
+                const caretOffset = caret.offsetLeft;
+                const containerWidth = textDisplay.offsetWidth;
+                const scrollOffset = Math.max(0, caretOffset - containerWidth / 2);
+                textDisplay.style.transform = `translateX(-${scrollOffset}px)`;
+            }
+
+            // Update text display
+            function updateTextDisplay() {
+                const spans = textContainer.querySelectorAll("span");
+                spans.forEach((span, index) => {
+                    if (index < typedText.length) {
+                        const char = typedText[index];
+                        if (char === referenceText[index]) {
+                            span.className = "correct";
                         } else {
-                            formattedText += `<span class="incorrect">${typedText[i]}</span>`;
-                            errors++;
+                            span.className = "incorrect";
                         }
+                        span.textContent = char;
                     } else {
-                        formattedText += `<span class="remaining">${testText[i]}</span>`;
+                        span.className = "remaining";
+                        span.textContent = referenceText[index];
                     }
+                });
+                positionCaret();
+            }
+
+            // Handle input
+            hiddenInput.addEventListener("input", () => {
+                if (startTime === null) startTime = Date.now();
+
+                typedText = hiddenInput.value;
+
+                if (typedText.length > referenceText.length) {
+                    typedText = typedText.slice(0, referenceText.length); // Prevent over-typing
                 }
 
-                // Update the live typing area
-                liveTypedText.innerHTML = formattedText;
+                updateTextDisplay();
 
-                // Check if typing is complete
-                if (typedText.length === testText.length) {
+                // Check for completion
+                if (typedText.length === referenceText.length) {
                     const endTime = new Date();
-                    const timeTaken = ((endTime - startTime) / 1000).toFixed(2); // Time in seconds
-                    const accuracy = Math.max(
-                        0,
-                        Math.round(((testText.length - errors) / testText.length) * 100)
+                    const timeTaken = ((endTime - startTime) / 1000).toFixed(2);
+                    const accuracy = Math.round(
+                        (referenceText.length - [...typedText].filter((c, i) => c !== referenceText[i]).length) /
+                        referenceText.length * 100
                     );
-
                     result.innerHTML = `
-                        <p>Typing completed!</p>
-                        <p>Time Taken: ${timeTaken} seconds</p>
+                        <p>Test Completed!</p>
+                        <p>Time: ${timeTaken}s</p>
                         <p>Accuracy: ${accuracy}%</p>
                     `;
-                    typingArea.disabled = true; // Disable further input
+                    hiddenInput.disabled = true;
                 } else {
-                    result.innerHTML = ""; // Clear result if typing isn't complete
+                    result.innerHTML = ""; // Clear result if incomplete
                 }
             });
 
-            // Focus the typing area on page load
-            typingArea.focus();
+            // Add click event to bring focus back to the input field
+            textDisplay.addEventListener("click", () => {
+                hiddenInput.focus();
+                // Set caret position to the end of the input field
+                const value = hiddenInput.value;
+                hiddenInput.value = ""; // Clear temporarily
+                hiddenInput.value = value; // Reset to original value
+
+                // update caret animation
+                caret.style.animation = "blink 1s steps(50) infinite";
+                textDisplay.style.filter = "none";
+            });
+
+            // click outside of the text display to stop the caret animation and make text bloor
+            document.addEventListener("click", (e) => {
+                if (!textDisplay.contains(e.target)) {
+                    caret.style.animation = "none";
+                    textDisplay.style.filter = "blur(8px)";
+                }
+            });
+
+            // Initialize
+            initText();
+            hiddenInput.focus();
         });
     </script>
 </body>
