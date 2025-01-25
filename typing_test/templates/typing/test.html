@@ -165,23 +165,31 @@
 
                 updateTextDisplay();
 
+                // Calculate elapsed time
+                const currentTime = new Date();
+                const elapsedTime = (currentTime - startTime) / 1000; // Time in seconds
+
+                // Calculate correct characters and accuracy
+                const correctChars = [...typedText].filter((char, index) => char === referenceText[index]).length;
+                const accuracy = Math.round((correctChars / referenceText.length) * 100);
+
+                // Calculate WPM
+                const wpm = Math.round(correctChars / 5 / (elapsedTime / 60)); // Correct characters / 5 (word average length) per minute
+
+                // Display live stats while typing
+                result.innerHTML = `
+                    <p>Elapsed time: ${elapsedTime.toFixed(1)} seconds</p>
+                    <p>Words per minute (WPM): ${wpm}</p>
+                    <p>Characters typed: ${typedText.length}</p>
+                    <p>Accuracy: ${accuracy}%</p>
+                `;
+
                 // Check for completion
                 if (typedText.length === referenceText.length) {
-                    const endTime = new Date();
-                    const elapsedTime = (endTime - startTime) / 60000; // Time in minutes
-                    const wordCount = referenceText.split(" ").length; // Count words
-                    const wpm = Math.round(wordCount / elapsedTime); // Words per minute
-                    const accuracy = Math.round(
-                        (referenceText.length - [...typedText].filter((c, i) => c !== referenceText[i]).length) /
-                        referenceText.length * 100
-                    );
-                    result.innerHTML = `
-                        <p>Well done! Words per minute: ${wpm} WPM</p>
-                        <p>Accuracy: ${accuracy}%</p>
+                    result.innerHTML += `
+                        <p><strong>Typing completed!</strong></p>
                     `;
                     hiddenInput.disabled = true;
-                } else {
-                    result.innerHTML = ""; // Clear result if incomplete
                 }
             });
 
