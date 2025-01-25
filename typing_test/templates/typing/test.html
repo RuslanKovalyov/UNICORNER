@@ -168,14 +168,15 @@
                 // Check for completion
                 if (typedText.length === referenceText.length) {
                     const endTime = new Date();
-                    const timeTaken = ((endTime - startTime) / 1000).toFixed(2);
+                    const elapsedTime = (endTime - startTime) / 60000; // Time in minutes
+                    const wordCount = referenceText.split(" ").length; // Count words
+                    const wpm = Math.round(wordCount / elapsedTime); // Words per minute
                     const accuracy = Math.round(
                         (referenceText.length - [...typedText].filter((c, i) => c !== referenceText[i]).length) /
                         referenceText.length * 100
                     );
                     result.innerHTML = `
-                        <p>Test Completed!</p>
-                        <p>Time: ${timeTaken}s</p>
+                        <p>Well done! Words per minute: ${wpm} WPM</p>
                         <p>Accuracy: ${accuracy}%</p>
                     `;
                     hiddenInput.disabled = true;
