@@ -193,6 +193,15 @@
                 }
             });
 
+            // Initialize statistics before typing
+            result.innerHTML = `
+                <p>Elapsed time: 0.0 seconds</p>
+                <p>Words per minute (WPM): 0</p>
+                <p>Characters typed: 0</p>
+                <p>Accuracy: 0%</p>
+            `;
+
+
             // Add click event to bring focus back to the input field
             textDisplay.addEventListener("click", () => {
                 hiddenInput.focus();
