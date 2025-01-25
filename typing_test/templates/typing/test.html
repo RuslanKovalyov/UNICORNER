@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Typing Test</title>
     <style>
         body {
@@ -14,6 +14,7 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
+            scroll-behavior: smooth;
             overflow: hidden;
         }
 
@@ -26,12 +27,11 @@
         .text-display {
             font-family: monospace;
             font-size: 28px;
-            padding: 20px 0;
+            padding: 20px 0 300px 0;
             text-shadow: 0 0 2px rgba(0, 0, 0, 0.7);
             white-space: nowrap;
             position: relative;
             display: flex;
-            align-items: center;
             transition: transform 1s ease;
         }
 
@@ -65,7 +65,9 @@
 
         #result {
             margin-top: 20px;
-            text-align: center;
+            text-align: left;
+            position: absolute;
+            bottom: 0;
         }
 
         .correct {
