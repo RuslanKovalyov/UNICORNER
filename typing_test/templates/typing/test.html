@@ -205,6 +205,13 @@
                 }
             });
 
+            // Prevent caret movement by arrow keys
+            hiddenInput.addEventListener("keydown", (event) => {
+                if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(event.key)) {
+                    event.preventDefault(); // Prevent default behavior
+                }
+            });
+
             // Initialize
             initText();
             hiddenInput.focus();
