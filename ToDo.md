@@ -21,3 +21,6 @@
 - [x] 404: Nginx, css and Design issues
 - [ ] product feed: add scrollbar or arrow. On large screen
 
+## Typing test
+- [ ] Add a book model and a paragraph randomizer
+
