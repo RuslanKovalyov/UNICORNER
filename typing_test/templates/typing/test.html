@@ -1,87 +1,11 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Typing Test</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #303030;
-            color: white;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            scroll-behavior: smooth;
-            overflow: hidden;
-        }
-
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            overflow: hidden;
-        }
-
-        .text-display {
-            font-family: monospace;
-            font-size: 28px;
-            padding: 20px 0 300px 0;
-            text-shadow: 0 0 2px rgba(0, 0, 0, 0.7);
-            white-space: nowrap;
-            position: relative;
-            display: flex;
-            transition: transform 1s ease;
-        }
-
-        .text {
-            display: inline-block;
-            white-space: pre;
-            position: relative;
-        }
-
-        .caret {
-            display: inline-block;
-            width: 2px;
-            height: 1.2em;
-            background: white;
-            position: absolute;
-            animation: blink 1s steps(50) infinite;
-        }
-
-        @keyframes blink {
-            50% {
-                opacity: 0;
-            }
-        }
-
-        #hidden-input {
-            position: absolute;
-            top: -100px;
-            opacity: 1;
-            pointer-events: none;
-        }
-
-        #result {
-            margin-top: 20px;
-            text-align: left;
-            position: absolute;
-            bottom: 0;
-        }
-
-        .correct {
-            color: green;
-        }
-
-        .incorrect {
-            color: red;
-        }
-
-        .remaining {
-            color: gray;
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'typing_test/css/typing-test.css' %}">
 </head>
 <body>
     <div class="container">
