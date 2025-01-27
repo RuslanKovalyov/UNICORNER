@@ -24,3 +24,5 @@
 ## Typing test
 - [ ] Add a book model and a paragraph randomizer
 
+## qr code
+- [ ] Add img option to the code
