@@ -1,14 +1,23 @@
-from django.shortcuts import render
-from django import forms
-import qrcode
-from qrcode.image.pil import PilImage
-from io import BytesIO
 import base64
+import re
+from io import BytesIO
+from urllib.parse import urlparse
+
+import qrcode
+from PIL import Image, ImageDraw, ImageColor
+from django import forms
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import URLValidator
-from urllib.parse import urlparse
-import re
-from PIL import Image, ImageDraw
+from django.shortcuts import render
+from qrcode.image.pil import PilImage
+from qrcode.image.styledpil import StyledPilImage
+from qrcode.image.styles.colormasks import SolidFillColorMask
+from qrcode.image.styles.moduledrawers import SquareModuleDrawer
+
+# TODO: Use a better logo and the correct path for production
+_BASE_IMAGE_PATH = f'{settings.BASE_DIR}/main/images/logo/logo-dark.png'
+
 
 class QRCodeForm(forms.Form):
     url = forms.CharField(
@@ -29,6 +38,10 @@ class QRCodeForm(forms.Form):
         min_value=0,
         max_value=100
     )
+    unuse_image = forms.BooleanField(
+        label='Do not use the Unicorner logo',
+        required=False
+    )
 
     def clean_url(self):
         url = self.cleaned_data["url"].strip()
@@ -36,7 +49,7 @@ class QRCodeForm(forms.Form):
 
         # If no scheme, prepend http://
         if not parsed_url.scheme:
-            url = f"http://{url}"
+            url = f"https://{url}"
 
         # Validate URL
         validator = URLValidator(schemes=["http", "https"])
@@ -56,18 +69,27 @@ class QRCodeForm(forms.Form):
         bg_color = self.cleaned_data["bg_color"]
         fill_color = self.cleaned_data["fill_color"]
         border_radius = self.cleaned_data["border_radius"]
+        unuse_image = self.cleaned_data["unuse_image"]
 
         qr = qrcode.QRCode(
             version=1,
-            error_correction=qrcode.constants.ERROR_CORRECT_L,
+            error_correction=qrcode.constants.ERROR_CORRECT_H,
             box_size=10,
             border=4,
         )
         qr.add_data(url)
         qr.make(fit=True)
 
+        if unuse_image:
+            kwargs = {'image_factory': PilImage, 'fill_color': fill_color, 'back_color': bg_color}
+        else:
+            bg_rgb = ImageColor.getrgb(bg_color)
+            fill_rgb = ImageColor.getrgb(fill_color)
+            color_mask = SolidFillColorMask(back_color=bg_rgb, front_color=fill_rgb)
+            kwargs = {'image_factory': StyledPilImage, 'embedded_image_path': _BASE_IMAGE_PATH,
+                      'module_drawer': SquareModuleDrawer(), 'color_mask': color_mask}
         # Generate the QR code image
-        img = qr.make_image(fill_color=fill_color, back_color=bg_color).convert("RGBA")
+        img = qr.make_image(**kwargs).convert("RGBA")
 
         # Add rounded corners
         width, height = img.size
