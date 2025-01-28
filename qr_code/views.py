@@ -16,7 +16,7 @@ from qrcode.image.styles.colormasks import SolidFillColorMask
 from qrcode.image.styles.moduledrawers import SquareModuleDrawer
 
 # TODO: Use a better logo and the correct path for production
-_BASE_IMAGE_PATH = f'{settings.BASE_DIR}/main/images/logo/logo-dark.png'
+IMAGE_PATH = f'{settings.STATIC_ROOT}/main/images/logo/logo-dark.png'
 
 
 class QRCodeForm(forms.Form):
@@ -86,7 +86,7 @@ class QRCodeForm(forms.Form):
             bg_rgb = ImageColor.getrgb(bg_color)
             fill_rgb = ImageColor.getrgb(fill_color)
             color_mask = SolidFillColorMask(back_color=bg_rgb, front_color=fill_rgb)
-            kwargs = {'image_factory': StyledPilImage, 'embedded_image_path': _BASE_IMAGE_PATH,
+            kwargs = {'image_factory': StyledPilImage, 'embeded_image_path': IMAGE_PATH,
                       'module_drawer': SquareModuleDrawer(), 'color_mask': color_mask}
         # Generate the QR code image
         img = qr.make_image(**kwargs).convert("RGBA")
