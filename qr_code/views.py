@@ -37,7 +37,7 @@ class QRCodeForm(forms.Form):
         max_value=100
     )
     unuse_image = forms.BooleanField(
-        label='Do not use the Unicorner logo',
+        label='Remove Logo',
         required=False
     )
 
@@ -47,14 +47,14 @@ class QRCodeForm(forms.Form):
 
         # If no scheme, prepend http://
         if not parsed_url.scheme:
-            url = f"https://{url}"
+            url = f"http://{url}"
 
         # Validate URL
         validator = URLValidator(schemes=["http", "https"])
         try:
             validator(url)
         except ValidationError:
-            raise ValidationError("Invalid URL. Please enter a valid URL starting with http:// or https://.")
+            raise ValidationError("Invalid URL. Please enter a valid URL. Example: https://example.com")
 
         # Optional: Disallow suspicious characters
         if re.search(r'[\'";]', url):
