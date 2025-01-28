@@ -35,9 +35,15 @@ form label {
     color: #555;
 }
 
+form p {
+    margin: 10px 0;
+
+}
+
 form input[type="text"],
 form input[type="color"] {
-    padding: 0.5em;
+    padding: 0.3em;
+    margin: 0;
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 1em;
