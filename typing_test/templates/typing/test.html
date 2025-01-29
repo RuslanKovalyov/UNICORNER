@@ -19,7 +19,7 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            const referenceText = "{{ test_text }}"; // Get text from views.py
+            const referenceText = "{{ test_text|safe }}"; // Get text from views.py
             const textContainer = document.getElementById("text-container");
             const hiddenInput = document.getElementById("hidden-input");
             const caret = document.getElementById("caret");
