@@ -27,5 +27,4 @@ def typing_test(request):
     else:
         test_text = "No books available. Please add books in the admin panel."
 
-    print(test_text)
     return render(request, 'typing/test.html', {'test_text': test_text})
