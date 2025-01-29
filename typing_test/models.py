@@ -29,19 +29,22 @@ class Book(models.Model):
         # Randomly select a paragraph
         paragraph = random.choice(paragraphs)
 
-        # 1️⃣ **Decode HTML entities** (Fix `&quot;` issue)
+        # Decode HTML entities** (Fix `&quot;` issue)
         paragraph = html.unescape(paragraph)
 
-        # 2️⃣ **Convert non-English characters to closest English equivalent**
+        # Convert non-English characters to closest English equivalent**
         paragraph = unidecode(paragraph)
 
-        # 3️⃣ **Remove unwanted symbols, allowing only English letters, numbers, spaces & common punctuation**
+        # Remove unwanted symbols, allowing only English letters, numbers, spaces & common punctuation**
         paragraph = re.sub(r"[^a-zA-Z0-9\s.!?;:,'\"-]", "", paragraph)
 
-        # 4️⃣ **Replace double quotes with escaped double quotes
+        # Replace double quotes with escaped double quotes
         paragraph = paragraph.replace('"', "'")
+        
+        # Replace multiple spaces with a single space
+        paragraph = re.sub(r"\s+", " ", paragraph)
 
-        # 5️⃣ **Trim paragraph to required word count**
+        # Trim paragraph to required word count**
         words = re.findall(r'\S+', paragraph)
         if len(words) > word_limit:
             paragraph = " ".join(words[:word_limit]) + "..."
@@ -57,17 +60,20 @@ class Book(models.Model):
         # convert newlines to spaces & remove empty lines
         text = " ".join([line.strip() for line in text.split("\n") if line.strip()])
         
-        # 1️⃣ **Decode HTML entities** (Fix `&quot;` issue)
+        # Decode HTML entities** (Fix `&quot;` issue)
         text = html.unescape(text)
         
-        # 2️⃣ **Convert non-English characters to closest English equivalent**
+        # Convert non-English characters to closest English equivalent**
         text = unidecode(text)
         
-        # 3️⃣ **Remove unwanted symbols, allowing only English letters, numbers, spaces & common punctuation**
+        # Remove unwanted symbols, allowing only English letters, numbers, spaces & common punctuation**
         text = re.sub(r"[^a-zA-Z0-9\s.!?;:,'\"-]", "", text)
         
-        # 4️⃣ **Replace double quotes with escaped double quotes
+        # Replace double quotes with escaped double quotes
         text = text.replace('"', "'")
+        
+        # Replace multiple spaces with a single space
+        text = re.sub(r"\s+", " ", text)
         
         return text
         
