@@ -70,10 +70,13 @@ class Book(models.Model):
         text = re.sub(r"[^a-zA-Z0-9\s.!?;:,'\"-]", "", text)
         
         # Replace double quotes with escaped double quotes
-        text = text.replace('"', "'")
+        text = text.replace('"', "")
         
         # Replace multiple spaces with a single space
         text = re.sub(r"\s+", " ", text)
+        
+        # Replace -- with a ""
+        text = text.replace("--", "")
         
         return text
         
