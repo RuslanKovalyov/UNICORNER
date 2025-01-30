@@ -22,7 +22,8 @@
 - [ ] product feed: add scrollbar or arrow. On large screen
 
 ## Typing test
-- [ ] Add a book model and a paragraph randomizer
+- [X] Add a book model and a paragraph randomizer
+- [ ] fix the timer to not add pause time to the typing time before the first press and Fix background input on pause
 
 ## qr code
 - [ ] Add img option to the code
