@@ -32,7 +32,10 @@
             const pauseMessage = document.getElementById("pause-message");
 
             let typedText = ""; // Track user input
-            let startTime = null;
+            let startTime = null; // Track start time of typing
+            let pauseStartTime = null; // Stores when the pause started
+            let totalPausedTime = 0; // Total accumulated pause duration
+            let isPaused = false; // Track pause state
 
             // Initialize text display
             function initText() {
@@ -86,7 +89,7 @@
 
             // Handle input
             hiddenInput.addEventListener("input", () => {
-                if (startTime === null) startTime = Date.now();
+                if (startTime === null) startTime = Date.now(); // Start timer on first keypress
 
                 typedText = hiddenInput.value;
 
@@ -96,15 +99,15 @@
 
                 updateTextDisplay();
 
-                // Calculate elapsed time
-                const currentTime = new Date();
-                const elapsedTime = (currentTime - startTime) / 1000; // Time in seconds
+                // Calculate elapsed time excluding pause duration
+                const currentTime = Date.now();
+                const elapsedTime = (currentTime - startTime - totalPausedTime) / 1000; // Time in seconds
 
                 // Calculate correct characters and accuracy
                 const correctChars = [...typedText].filter((char, index) => char === referenceText[index]).length;
                 const accuracy = Math.round((correctChars / referenceText.length) * 100);
 
-                // Calculate WPM
+                // Calculate WPM (Words Per Minute)
                 const wpm = Math.round(correctChars / 5 / (elapsedTime / 60)); // Correct characters / 5 (word average length) per minute
 
                 // Display live stats while typing
@@ -120,7 +123,7 @@
                     result.innerHTML += `
                         <p><strong>Typing completed!</strong></p>
                     `;
-                    hiddenInput.disabled = true;
+                    hiddenInput.disabled = true; // Disable input after test completion
                 }
             });
 
@@ -132,33 +135,47 @@
                 <p>Accuracy: 0%</p>
             `;
 
+            // Pause typing (blur effect, stop timer)
             function pauseTyping() {
+                if (isPaused) return; // Prevent multiple pause events
+
                 caret.style.animation = "none"; // Stop blinking caret
                 textDisplay.style.filter = "blur(8px)"; // Blur text for pause effect
                 pauseMessage.style.display = "block"; // Show pause message with fade-in effect
+
+                pauseStartTime = Date.now(); // Store when the pause started
+                isPaused = true; // Mark as paused
             }
-            
+
+            // Resume typing (restore focus, adjust timer)
             function restoreTyping() {
+                if (!isPaused) return; // Prevent resuming if not paused
+
                 hiddenInput.focus();
                 // Set caret position to the end of the input field
                 const value = hiddenInput.value;
                 hiddenInput.value = ""; // Clear temporarily
                 hiddenInput.value = value; // Reset to original value
-            
+
                 // Update caret animation
                 caret.style.animation = "blink 1s steps(50) infinite";
                 textDisplay.style.filter = "none";
                 pauseMessage.style.display = "none";
+
+                // Adjust total paused time
+                totalPausedTime += Date.now() - pauseStartTime;
+                pauseStartTime = null; // Reset pause timer
+                isPaused = false; // Mark as active
             }
 
-            // Hide the message when the user clicks back
+            // Resume typing on text click
             textDisplay.addEventListener("click", restoreTyping);
             pauseMessage.addEventListener("click", (e) => {
                 e.stopPropagation(); // Prevent event from propagating up to document
                 restoreTyping();
             });
 
-            // click outside of the text display to stop the caret animation and make text bloor
+            // Pause typing when clicking outside the text
             document.addEventListener("click", (e) => {
                 if (!textDisplay.contains(e.target)) {
                     pauseTyping();
