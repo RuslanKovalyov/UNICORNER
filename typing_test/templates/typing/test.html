@@ -36,6 +36,7 @@
             let pauseStartTime = null; // Stores when the pause started
             let totalPausedTime = 0; // Total accumulated pause duration
             let isPaused = false; // Track pause state
+            let hasStartedTyping = false;
 
             // ---- NEW LINES: Define possible time limits and pick one (for countdown).
             //     If the user picks a time that is not in validTimeLimits, we default to 60.
@@ -211,6 +212,7 @@
             // Start test on first key press
             hiddenInput.addEventListener("input", () => {
                 if (startTime === null) {
+                    hasStartedTyping = true;
                     startTime = Date.now();
                     // Interval to refresh stats ~10x/sec
                     const intervalDelay = 100;
@@ -252,13 +254,14 @@
                 caret.style.animation = "none";
                 textDisplay.style.filter = "blur(8px)";
                 pauseMessage.style.display = "block";
-                pauseStartTime = Date.now();
                 isPaused = true;
+                if (!hasStartedTyping) return; // ignore pause if no typing yet
+                pauseStartTime = Date.now();
             }
 
             // Resume typing (restore focus, adjust timer)
             function restoreTyping() {
-                if (!isPaused) return;
+                hiddenInput.disabled = false;
                 hiddenInput.focus();
                 const value = hiddenInput.value;
                 hiddenInput.value = "";
@@ -266,8 +269,10 @@
                 caret.style.animation = "blink 1s steps(50) infinite";
                 textDisplay.style.filter = "none";
                 pauseMessage.style.display = "none";
-                totalPausedTime += Date.now() - pauseStartTime;
-                pauseStartTime = null;
+                if (pauseStartTime) {
+                    totalPausedTime += Date.now() - pauseStartTime;
+                    pauseStartTime = null;
+                }
                 isPaused = false;
             }
 
