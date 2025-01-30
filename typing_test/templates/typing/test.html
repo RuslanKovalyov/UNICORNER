@@ -15,7 +15,7 @@
         </div>
         <!-- Display pause message -->
         <div id="pause-message">
-            Paused. Click to resume typing.
+            Click here or press SPACE to resume typing.
         </div>
         <div id="result"></div>
         <input type="text" id="hidden-input" autofocus>
@@ -204,6 +204,19 @@
             hiddenInput.addEventListener("keydown", (event) => {
                 if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(event.key)) {
                     event.preventDefault(); // Prevent default behavior
+                }
+            });
+
+            document.addEventListener("keydown", (event) => {
+                // Add space key restore logic:
+                if (isPaused && event.key === " ") {
+                    event.preventDefault();
+                    restoreTyping();
+                }
+                // Add escape key pause logic:
+                if (!isPaused && event.key === "Escape") {
+                    event.preventDefault();
+                    pauseTyping();
                 }
             });
 
