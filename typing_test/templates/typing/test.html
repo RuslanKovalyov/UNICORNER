@@ -13,6 +13,10 @@
             <div id="text-container" class="text"></div>
             <div id="caret" class="caret"></div>
         </div>
+        <!-- Display pause message -->
+        <div id="pause-message">
+            Click to continue!
+        </div>
         <div id="result"></div>
         <input type="text" id="hidden-input" autofocus>
     </div>
@@ -25,6 +29,7 @@
             const caret = document.getElementById("caret");
             const result = document.getElementById("result");
             const textDisplay = document.getElementById("text-display");
+            const pauseMessage = document.getElementById("pause-message");
 
             let typedText = ""; // Track user input
             let startTime = null;
@@ -127,25 +132,36 @@
                 <p>Accuracy: 0%</p>
             `;
 
-
-            // Add click event to bring focus back to the input field
-            textDisplay.addEventListener("click", () => {
+            function pauseTyping() {
+                caret.style.animation = "none"; // Stop blinking caret
+                textDisplay.style.filter = "blur(8px)"; // Blur text for pause effect
+                pauseMessage.style.display = "block"; // Show pause message with fade-in effect
+            }
+            
+            function restoreTyping() {
                 hiddenInput.focus();
                 // Set caret position to the end of the input field
                 const value = hiddenInput.value;
                 hiddenInput.value = ""; // Clear temporarily
                 hiddenInput.value = value; // Reset to original value
-
-                // update caret animation
+            
+                // Update caret animation
                 caret.style.animation = "blink 1s steps(50) infinite";
                 textDisplay.style.filter = "none";
+                pauseMessage.style.display = "none";
+            }
+
+            // Hide the message when the user clicks back
+            textDisplay.addEventListener("click", restoreTyping);
+            pauseMessage.addEventListener("click", (e) => {
+                e.stopPropagation(); // Prevent event from propagating up to document
+                restoreTyping();
             });
 
             // click outside of the text display to stop the caret animation and make text bloor
             document.addEventListener("click", (e) => {
                 if (!textDisplay.contains(e.target)) {
-                    caret.style.animation = "none";
-                    textDisplay.style.filter = "blur(8px)";
+                    pauseTyping();
                 }
             });
 

@@ -67,7 +67,7 @@ class Book(models.Model):
         text = unidecode(text)
         
         # Remove unwanted symbols, allowing only English letters, numbers, spaces & common punctuation**
-        text = re.sub(r"[^a-zA-Z0-9\s.!?;:,'()#$%&*+-\/~±`{}]", " ", text)
+        text = re.sub(r"[^a-zA-Z0-9\s.!?;:,'()#$%&*+-\/~±{}]", " ", text)
                 
         # Replace multiple spaces with a single space
         text = re.sub(r"\s+", " ", text)
