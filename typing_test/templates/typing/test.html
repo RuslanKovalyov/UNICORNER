@@ -103,18 +103,23 @@
                 const currentTime = Date.now();
                 const elapsedTime = (currentTime - startTime - totalPausedTime) / 1000; // Time in seconds
 
-                // Calculate correct characters so far
+                // Count correct characters
                 let correctChars = 0;
+                let errors = 0;
                 for (let i = 0; i < typedText.length; i++) {
                     if (typedText[i] === referenceText[i]) {
                         correctChars++;
+                    } else {
+                        errors++;
                     }
                 }
 
-                // Calculate real-time accuracy (only considering typed characters)
-                const accuracy = typedText.length > 0 
-                    ? Math.round((correctChars / typedText.length) * 100) 
-                    : 0;
+                // **Fix Accuracy Calculation**
+                let accuracy = 0;
+                if (typedText.length > 0) {
+                    accuracy = ((correctChars / typedText.length) * 100);
+                    accuracy = accuracy < 100 ? accuracy.toFixed(1) : 100; // Allow decimals but cap at 100%
+                }
 
                 // Calculate WPM (Words Per Minute)
                 const wpm = elapsedTime > 0 
@@ -126,6 +131,7 @@
                     <p>Elapsed time: ${elapsedTime.toFixed(1)} seconds</p>
                     <p>Words per minute (WPM): ${wpm}</p>
                     <p>Characters typed: ${typedText.length}</p>
+                    <p>Errors: ${errors}</p>
                     <p>Accuracy: ${accuracy}%</p>
                 `;
 
@@ -143,6 +149,7 @@
                 <p>Elapsed time: 0.0 seconds</p>
                 <p>Words per minute (WPM): 0</p>
                 <p>Characters typed: 0</p>
+                <p>Errors: 0</p>
                 <p>Accuracy: 0%</p>
             `;
 
