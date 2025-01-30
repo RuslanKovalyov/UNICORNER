@@ -37,6 +37,23 @@
             let totalPausedTime = 0; // Total accumulated pause duration
             let isPaused = false; // Track pause state
 
+            // ---- NEW LINES: Define possible time limits and pick one (for countdown).
+            //     If the user picks a time that is not in validTimeLimits, we default to 60.
+            const validTimeLimits = [15, 30, 60, 120]; // Allowed timers in seconds
+            let selectedTimeLimit = 0; // 0 => infinite if within array, else fallback 60
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const requestedLimit = parseInt(urlParams.get("timer"), 10) || 0;
+            if (validTimeLimits.includes(requestedLimit)) {
+                selectedTimeLimit = requestedLimit;
+            } else if (requestedLimit > 0) {
+                // Fallback if user picks something unexpected like 1s or 999
+                selectedTimeLimit = 60; 
+            }
+            // ---- END NEW LINES ----
+
+            let timerInterval = null; // We'll use an interval to continuously update stats
+
             // Initialize text display
             function initText() {
                 textContainer.innerHTML = referenceText
@@ -87,23 +104,25 @@
                 positionCaret();
             }
 
-            // Handle input
-            hiddenInput.addEventListener("input", () => {
-                if (startTime === null) startTime = Date.now(); // Start timer on first keypress
+            // Compute and display stats live
+            function updateStats() {
+                if (!startTime || hiddenInput.disabled) return; // If not started or ended, do nothing
+                if (isPaused) return; // If paused, skip updating
 
-                typedText = hiddenInput.value;
+                const currentTime = Date.now();
+                const elapsedTime = (currentTime - startTime - totalPausedTime) / 1000;
 
-                if (typedText.length > referenceText.length) {
-                    typedText = typedText.slice(0, referenceText.length); // Prevent over-typing
+                let remainTime = 0;
+                if (selectedTimeLimit > 0) {
+                    remainTime = selectedTimeLimit - elapsedTime;
+                    if (remainTime <= 0) {
+                        hiddenInput.disabled = true;
+                        finalizeStats(0);
+                        result.innerHTML += `<p><strong>Time is up!</strong></p>`;
+                        return;
+                    }
                 }
 
-                updateTextDisplay();
-
-                // Calculate elapsed time excluding pause duration
-                const currentTime = Date.now();
-                const elapsedTime = (currentTime - startTime - totalPausedTime) / 1000; // Time in seconds
-
-                // Count correct characters
                 let correctChars = 0;
                 let errors = 0;
                 for (let i = 0; i < typedText.length; i++) {
@@ -114,33 +133,107 @@
                     }
                 }
 
-                // **Fix Accuracy Calculation**
                 let accuracy = 0;
                 if (typedText.length > 0) {
                     accuracy = ((correctChars / typedText.length) * 100);
-                    accuracy = accuracy < 100 ? accuracy.toFixed(1) : 100; // Allow decimals but cap at 100%
+                    accuracy = accuracy < 100 ? accuracy.toFixed(1) : 100;
                 }
 
-                // Calculate WPM (Words Per Minute)
-                const wpm = elapsedTime > 0 
-                    ? Math.round(correctChars / 5 / (elapsedTime / 60)) 
-                    : 0; // Prevent divide by zero
+                const wpm = elapsedTime > 0
+                    ? Math.round(correctChars / 5 / (elapsedTime / 60))
+                    : 0;
 
-                // Display live stats while typing
+                const timeLeftDisplay = (selectedTimeLimit > 0)
+                    ? `<p>Time left: ${remainTime.toFixed(1)} seconds</p>`
+                    : `<p>Elapsed time: ${elapsedTime.toFixed(1)} seconds</p>`;
+
                 result.innerHTML = `
-                    <p>Elapsed time: ${elapsedTime.toFixed(1)} seconds</p>
+                    ${timeLeftDisplay}
                     <p>Words per minute (WPM): ${wpm}</p>
                     <p>Characters typed: ${typedText.length}</p>
                     <p>Errors: ${errors}</p>
                     <p>Accuracy: ${accuracy}%</p>
                 `;
+            }
 
-                // Check for completion
-                if (typedText.length === referenceText.length) {
-                    result.innerHTML += `
+            // Final stats at end of test
+            function finalizeStats(remainTime) {
+                const currentTime = Date.now();
+                const elapsedTime = (currentTime - startTime - totalPausedTime) / 1000;
+
+                let finalRemainTime = remainTime;
+                if (selectedTimeLimit > 0 && finalRemainTime < 0) {
+                    finalRemainTime = 0;
+                }
+
+                let correctChars = 0;
+                let errors = 0;
+                for (let i = 0; i < typedText.length; i++) {
+                    if (typedText[i] === referenceText[i]) {
+                        correctChars++;
+                    } else {
+                        errors++;
+                    }
+                }
+
+                let accuracy = 0;
+                if (typedText.length > 0) {
+                    accuracy = ((correctChars / typedText.length) * 100);
+                    accuracy = accuracy < 100 ? accuracy.toFixed(1) : 100;
+                }
+
+                const wpm = elapsedTime > 0
+                    ? Math.round(correctChars / 5 / (elapsedTime / 60))
+                    : 0;
+
+                if (selectedTimeLimit > 0) {
+                    const finalTimeLeft = finalRemainTime.toFixed(1);
+                    result.innerHTML = `
+                        <p>Time left: ${finalTimeLeft} seconds</p>
+                        <p>Words per minute (WPM): ${wpm}</p>
+                        <p>Characters typed: ${typedText.length}</p>
+                        <p>Errors: ${errors}</p>
+                        <p>Accuracy: ${accuracy}%</p>
                         <p><strong>Typing completed!</strong></p>
                     `;
-                    hiddenInput.disabled = true; // Disable input after test completion
+                } else {
+                    result.innerHTML = `
+                        <p>Elapsed time: ${elapsedTime.toFixed(1)} seconds</p>
+                        <p>Words per minute (WPM): ${wpm}</p>
+                        <p>Characters typed: ${typedText.length}</p>
+                        <p>Errors: ${errors}</p>
+                        <p>Accuracy: ${accuracy}%</p>
+                        <p><strong>Typing completed!</strong></p>
+                    `;
+                }
+            }
+
+            // Start test on first key press
+            hiddenInput.addEventListener("input", () => {
+                if (startTime === null) {
+                    startTime = Date.now();
+                    // Interval to refresh stats ~10x/sec
+                    const intervalDelay = 100;
+                    timerInterval = setInterval(() => {
+                        if (hiddenInput.disabled) {
+                            clearInterval(timerInterval);
+                        } else {
+                            updateStats();
+                        }
+                    }, intervalDelay);
+                }
+
+                typedText = hiddenInput.value;
+                if (typedText.length > referenceText.length) {
+                    typedText = typedText.slice(0, referenceText.length);
+                }
+
+                updateTextDisplay();
+                updateStats(); // Recheck stats on each input
+
+                if (typedText.length === referenceText.length) {
+                    hiddenInput.disabled = true;
+                    finalizeStats(selectedTimeLimit > 0 ? selectedTimeLimit - 99999 : 0);
                 }
             });
 
@@ -155,41 +248,33 @@
 
             // Pause typing (blur effect, stop timer)
             function pauseTyping() {
-                if (isPaused) return; // Prevent multiple pause events
-
-                caret.style.animation = "none"; // Stop blinking caret
-                textDisplay.style.filter = "blur(8px)"; // Blur text for pause effect
-                pauseMessage.style.display = "block"; // Show pause message with fade-in effect
-
-                pauseStartTime = Date.now(); // Store when the pause started
-                isPaused = true; // Mark as paused
+                if (isPaused) return; 
+                caret.style.animation = "none";
+                textDisplay.style.filter = "blur(8px)";
+                pauseMessage.style.display = "block";
+                pauseStartTime = Date.now();
+                isPaused = true;
             }
 
             // Resume typing (restore focus, adjust timer)
             function restoreTyping() {
-                if (!isPaused) return; // Prevent resuming if not paused
-
+                if (!isPaused) return;
                 hiddenInput.focus();
-                // Set caret position to the end of the input field
                 const value = hiddenInput.value;
-                hiddenInput.value = ""; // Clear temporarily
-                hiddenInput.value = value; // Reset to original value
-
-                // Update caret animation
+                hiddenInput.value = "";
+                hiddenInput.value = value;
                 caret.style.animation = "blink 1s steps(50) infinite";
                 textDisplay.style.filter = "none";
                 pauseMessage.style.display = "none";
-
-                // Adjust total paused time
                 totalPausedTime += Date.now() - pauseStartTime;
-                pauseStartTime = null; // Reset pause timer
-                isPaused = false; // Mark as active
+                pauseStartTime = null;
+                isPaused = false;
             }
 
             // Resume typing on text click
             textDisplay.addEventListener("click", restoreTyping);
             pauseMessage.addEventListener("click", (e) => {
-                e.stopPropagation(); // Prevent event from propagating up to document
+                e.stopPropagation();
                 restoreTyping();
             });
 
@@ -203,17 +288,17 @@
             // Prevent caret movement by arrow keys
             hiddenInput.addEventListener("keydown", (event) => {
                 if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(event.key)) {
-                    event.preventDefault(); // Prevent default behavior
+                    event.preventDefault();
                 }
             });
 
             document.addEventListener("keydown", (event) => {
-                // Add space key restore logic:
+                // SPACE key to resume
                 if (isPaused && event.key === " ") {
                     event.preventDefault();
                     restoreTyping();
                 }
-                // Add escape key pause logic:
+                // ESC to pause
                 if (!isPaused && event.key === "Escape") {
                     event.preventDefault();
                     pauseTyping();
