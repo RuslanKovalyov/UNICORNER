@@ -13,13 +13,12 @@
             <div id="text-container" class="text"></div>
             <div id="caret" class="caret"></div>
         </div>
-        <!-- Display pause message -->
-        <div id="pause-message">
-            Click here or press SPACE to resume typing.
-        </div>
-        <div id="result"></div>
-        <input type="text" id="hidden-input" autofocus>
     </div>
+    <div id="pause-message">
+        Click here or press SPACE to resume typing.
+    </div>
+    <div id="result"></div>
+    <input type="text" id="hidden-input" autofocus>
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
@@ -38,7 +37,6 @@
             let isPaused = false; // Track pause state
             let hasStartedTyping = false;
 
-            // ---- NEW LINES: Define possible time limits and pick one (for countdown).
             //     If the user picks a time that is not in validTimeLimits, we default to 60.
             const validTimeLimits = [15, 30, 60, 120]; // Allowed timers in seconds
             let selectedTimeLimit = 0; // 0 => infinite if within array, else fallback 60
@@ -51,7 +49,6 @@
                 // Fallback if user picks something unexpected like 1s or 999
                 selectedTimeLimit = 60; 
             }
-            // ---- END NEW LINES ----
 
             let timerInterval = null; // We'll use an interval to continuously update stats
 
