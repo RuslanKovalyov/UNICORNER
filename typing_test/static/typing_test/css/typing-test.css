@@ -20,12 +20,12 @@ body {
     display: block;
     font-family: monospace;
     font-size: 28px;
-    white-space: nowrap;
     transition: transform 1s ease-out;
 }
 
 .text {
     display: inline-block;
+    white-space: pre;
     position: relative;
     padding: 10px;
     background: rgba(0, 0, 0, 0.05);
