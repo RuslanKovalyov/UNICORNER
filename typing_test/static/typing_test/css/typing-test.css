@@ -6,6 +6,41 @@ body {
     scroll-behavior: smooth;
 }
 
+/* Timer Links (Styled as Buttons) */
+.timers {
+    text-align: center;
+    margin: 20px;
+}
+
+.timers a {
+    display: inline-block;
+    padding: 10px 15px;
+    margin: 5px;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    background: #505050;
+    border-radius: 5px;
+    transition: background 0.3s ease-in-out;
+}
+
+.timers a:hover {
+    background: #707070;
+}
+
+.timers a:active {
+    background: #909090;
+}
+
+/* Text Display */
+.text-display {
+    display: block;
+    font-family: monospace;
+    font-size: 28px;
+    transition: transform 1s ease-out;
+}
+
 .container {
     width: 90%;
     max-width: 1200px;
