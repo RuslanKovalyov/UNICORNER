@@ -27,6 +27,7 @@
 
 ## qr code
 - [x] Add img option to the code
+- [ ] Add option to upload imag for User
 
 ## AI chat
 - [ ] UI and User Login
