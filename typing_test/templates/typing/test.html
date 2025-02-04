@@ -15,6 +15,7 @@
         <a href="?timer=120">120s</a>
         <a href="?timer=0">Infinite</a>
     </div>
+    <div id="wpm_stats"></div>
     <div class="container">
         <div class="text-display" id="text-display">
             <div id="text-container" class="text"></div>
@@ -34,6 +35,7 @@
             const hiddenInput = document.getElementById("hidden-input");
             const caret = document.getElementById("caret");
             const result = document.getElementById("result");
+            const wpmStatus = document.getElementById("wpm_stats");
             const textDisplay = document.getElementById("text-display");
             const pauseMessage = document.getElementById("pause-message");
 
@@ -159,6 +161,10 @@
                     <p>Errors: ${errors}</p>
                     <p>Accuracy: ${accuracy}%</p>
                 `;
+
+                wpmStatus.innerHTML = `
+                    <p>WPM: ${wpm}%</p>
+                `;
             }
 
             // Final stats at end of test
@@ -201,6 +207,9 @@
                         <p>Accuracy: ${accuracy}%</p>
                         <p><strong>Typing completed!</strong></p>
                     `;
+                    wpmStatus.innerHTML = `
+                        <p>WPM: ${wpm}%</p>
+                    `;
                 } else {
                     result.innerHTML = `
                         <p>Elapsed time: ${elapsedTime.toFixed(1)} seconds</p>
@@ -209,6 +218,9 @@
                         <p>Errors: ${errors}</p>
                         <p>Accuracy: ${accuracy}%</p>
                         <p><strong>Typing completed!</strong></p>
+                    `;
+                    wpmStatus.innerHTML = `
+                        <p>WPM: ${wpm}%</p>
                     `;
                 }
             }
@@ -250,6 +262,9 @@
                 <p>Characters typed: 0</p>
                 <p>Errors: 0</p>
                 <p>Accuracy: 0%</p>
+            `;
+            wpmStatus.innerHTML = `
+                <p>WPM: 0%</p>
             `;
 
             // Pause typing (blur effect, stop timer)
