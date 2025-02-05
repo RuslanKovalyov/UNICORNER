@@ -175,8 +175,12 @@ header img {
     padding: 0;
     margin: 0;
     overflow-x: scroll;
-    scrollbar-width: none;
-    /* block movemet of the gallery vertically */
+    /* make scrollbar visible but styled */
+    scrollbar-width: thin;
+    overflow-y: hidden;
+    scrollbar-color: var(--color-text-primary) transparent;
+    /* add padding top to scrollbar */
+    padding-bottom: 10px;
     white-space: nowrap;
 }
 
@@ -556,6 +560,11 @@ footer .credits a {
 
     .horizontal_products_feed h2 {
         margin-left: var(--margin-general);
+    }
+
+    .horizontal_products_feed .horizontal_feed {
+        /* scrollbar is hidden */
+        scrollbar-width: none;
     }
 
     .horizontal_products_feed .horizontal_feed .product_card h3 {
