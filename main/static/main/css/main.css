@@ -221,6 +221,32 @@ header img {
     padding: 0;
 }
 
+.scroll_arrow {
+    /* make arrow in the meddle of feed */
+    position: sticky;
+    right: 0;
+    height: auto;
+    /* transform: translateY(-150px); */
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 10px 15px;
+    margin: 0;
+    font-size: 24px;
+    transition: background 0.3s;
+    display: block;
+}
+
+.scroll_arrow:hover {
+    background: rgba(0, 0, 0, 0.8);
+}
+
+.right_arrow {
+    right: 0;
+    margin-right: 5px;
+}
+
 .info_block_container {
     justify-content: center;
     align-items: center;
@@ -368,10 +394,6 @@ footer svg.social-icon {
 footer svg.social-icon.WhatsApp {
     fill: rgb(50, 220, 100);
 }
-
-/* footer svg.social-icon.Instagram {
-    svg internal gradient fill color
-} */
 
 footer svg.social-icon.Facebook {
     fill: #6d9cff;
@@ -573,6 +595,10 @@ footer .credits a {
     
     .horizontal_products_feed .horizontal_feed .product_card p {
         font-size: calc(var(--font-size-general) * 0.9);
+    }
+
+    .scroll_arrow {
+        display: none;
     }
 
     footer {

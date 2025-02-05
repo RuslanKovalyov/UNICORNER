@@ -15,8 +15,7 @@
             {% for category in categories %}
             <div class="horizontal_products_feed">
                 <h2>{{ category.name }}</h2>
-                <div class="horizontal_feed">
-
+                <div class="horizontal_feed" id="feed-container-{{ category.id }}">
                     {% comment %} “fake” padding element at the start of the horizontal scroll {% endcomment %}
                     <div class="invisible-padding"></div>
                     
@@ -45,7 +44,8 @@
                                     {% endcomment %}
                                 </div>
                             </div>
-                    {% endfor %}
+                            {% endfor %}
+                            <button class="scroll_arrow right_arrow" onclick="scrollRight('{{ category.id }}')">&gt;</button>
                 </div>
             </div>
             {% endfor %}
@@ -58,5 +58,18 @@
     {% include 'main/components/footer.html' %}
     {% include 'main/components/accessibility.html' %}
     {% include 'main/components/display-img.html' %}
+
+    <!-- Scroll Button for Horizontal Feeds -->
+    <script>
+        function scrollRight(categoryId) {
+            let container = document.getElementById(`feed-container-${categoryId}`);
+            if (container) {
+                console.log(`Scrolling Right for category: ${categoryId}`);
+                container.scrollBy({ left: 300, behavior: 'smooth' });
+            }
+        }        
+        // Hide arrows on touch devices
+        document.addEventListener                
+    </script>
 </body>
 </html>
