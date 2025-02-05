@@ -95,6 +95,14 @@ body {
     color: transparent;
 }
 
+#wpm_stats {
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: tomato;
+}
+
 #result {
     text-align: left;
     position: absolute;
