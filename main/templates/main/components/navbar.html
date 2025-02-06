@@ -88,6 +88,10 @@
         {% else %}
             <a href="{% url 'contacts' %}" tabindex="0" aria-current="page">Contact us</a>
         {% endif %}
+        
+        <a href="{% url 'generate_qr_code' %}" tabindex="0">QR-Code-Generator</a>
+
+        <a href="{% url 'typing_test' %}" tabindex="0">Fast-Typing</a>
     </span>
 
     <a class="login" href="/admin/" tabindex="0" aria-current="page">Log in</a>
@@ -101,5 +105,8 @@
         </a>
         <a href="{% url 'about' %}" tabindex="0" aria-current="page">About</a>
         <a href="{% url 'contacts' %}" tabindex="0" aria-current="page">Contact us</a>
+        <a href="{% url 'generate_qr_code' %}" tabindex="0">QR Code Generator</a>
+        <a href="{% url 'typing_test' %}" tabindex="0">Fast-Typing</a>
+
     </span>
 </nav>
