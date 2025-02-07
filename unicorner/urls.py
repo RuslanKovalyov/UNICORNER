@@ -12,6 +12,7 @@ urlpatterns = [
     path("", include("main.urls")),
     path("qr-code-generator", include('qr_code.urls')),
     path("typing-test", include('typing_test.urls')),
+    path("visual-translate", include('visualtranslate.urls')),
 ]
 
 if settings.DEBUG:

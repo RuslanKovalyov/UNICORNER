@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'main.apps.MainConfig',
     'qr_code.apps.QrCodeConfig',
     'typing_test.apps.TypingTestConfig',
+    'visualtranslate.apps.VisualtranslateConfig',
 ]
 
 MIDDLEWARE = [
