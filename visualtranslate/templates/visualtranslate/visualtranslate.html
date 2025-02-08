@@ -1,8 +1,28 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Visual Translate</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VisualTranslate</title>
+    <link rel="stylesheet" href="{% static 'visualtranslate/css/visualtranslate.css' %}">
 </head>
 <body>
-    <h1>Visual Translate</h1>
+    <div class="container">
+        <h1>VisualTranslate</h1>
+        <p>Enter a word to see its visual representation.</p>
+
+        <form method="GET">
+            <input type="text" name="word" placeholder="Type a word..." value="{{ word }}">
+            <button type="submit">Search</button>
+        </form>
+
+        {% if word %}
+            <h2>Results for: <strong>{{ word }}</strong></h2>
+            <div id="image-container">
+                <!-- Future images will be added here -->
+            </div>
+        {% endif %}
+    </div>
 </body>
+</html>
