@@ -4,12 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VisualTranslate</title>
+    <title>Visual Translate</title>
     <link rel="stylesheet" href="{% static 'visualtranslate/css/visualtranslate.css' %}">
 </head>
 <body>
     <div class="container">
-        <h1>VisualTranslate</h1>
+        <h1>Visual Translate</h1>
         <p>Enter a word to see its visual representation.</p>
 
         <form method="GET">
@@ -17,12 +17,22 @@
             <button type="submit">Search</button>
         </form>
 
-        {% if word %}
+        {% if word_data %}
             <h2>Results for: <strong>{{ word }}</strong></h2>
+            <p>
+                {% for item in word_data %}
+                    {% for key, value in item.items %}
+                        <img src="{{ value }}" alt="{{ key }}">
+                    {% endfor %}
+                {% endfor %}
+            </p>
             <div id="image-container">
-                <!-- Future images will be added here -->
+                <!-- Future slideshow will be added here -->
             </div>
+        {% else %}
+            <p>No results found for <strong>{{ word }}</strong></p>
         {% endif %}
+
     </div>
 </body>
 </html>
