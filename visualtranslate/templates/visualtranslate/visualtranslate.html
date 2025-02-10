@@ -6,6 +6,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Visual Translate</title>
     <link rel="stylesheet" href="{% static 'visualtranslate/css/visualtranslate.css' %}">
+    <style>
+        /* Slideshow container */
+        #image-container {
+            position: relative;
+            width: 500px; /* Adjust size */
+            height: 300px;
+            margin: 20px auto;
+            overflow: hidden;
+        }
+
+        /* Image fade effect */
+        .slideshow-image {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+        }
+
+        .active {
+            opacity: 1;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -19,20 +43,35 @@
 
         {% if word_data %}
             <h2>Results for: <strong>{{ word }}</strong></h2>
-            <p>
+            <div id="image-container">
                 {% for item in word_data %}
                     {% for key, value in item.items %}
-                        <img src="{{ value }}" alt="{{ key }}">
+                        <img class="slideshow-image" src="{{ value }}" alt="{{ key }}">
                     {% endfor %}
                 {% endfor %}
-            </p>
-            <div id="image-container">
-                <!-- Future slideshow will be added here -->
             </div>
         {% else %}
             <p>No results found for <strong>{{ word }}</strong></p>
         {% endif %}
-
     </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const images = document.querySelectorAll(".slideshow-image");
+            let currentIndex = 0;
+
+            function showNextImage() {
+                images[currentIndex].classList.remove("active");
+                currentIndex = (currentIndex + 1) % images.length;
+                images[currentIndex].classList.add("active");
+            }
+
+            // Show first image
+            if (images.length > 0) {
+                images[0].classList.add("active");
+                setInterval(showNextImage, 3000); // Change image every 3 seconds
+            }
+        });
+    </script>
 </body>
 </html>
