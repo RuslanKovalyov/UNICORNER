@@ -19,7 +19,7 @@
 ## **Web pages**
 - [ ] Next sentence In 'About page' is about future things: exclusive access to community events, hackathons, and presentations.
 - [x] 404: Nginx, css and Design issues
-- [ ] product feed: add scrollbar or arrow. On large screen
+- [x] product feed: add scrollbar or arrow. On large screen
 
 ## Typing test
 - [X] Add a book model and a paragraph randomizer
@@ -31,3 +31,6 @@
 
 ## AI chat
 - [ ] UI and User Login
+
+## Visual translate
+- [ ] association slider
