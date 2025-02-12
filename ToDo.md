@@ -34,3 +34,4 @@
 
 ## Visual translate
 - [ ] association slider
+- [ ] gen AI related to the word text examples
