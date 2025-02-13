@@ -28,6 +28,7 @@
 ## qr code
 - [x] Add img option to the code
 - [ ] Add option to upload imag for User
+- [ ] Add oprion to create micro webpages for users with qr as url
 
 ## AI chat
 - [ ] UI and User Login
