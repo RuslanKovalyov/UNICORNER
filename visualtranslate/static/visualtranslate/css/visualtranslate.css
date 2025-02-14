@@ -40,8 +40,21 @@ button:hover {
     background-color: #0056b3;
 }
 
+/* Slideshow container */
+.slideshow-image {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 1.5s ease-in-out;
+}
+
+.active {
+    opacity: 1;
+}
+
 #image-container {
-    margin-top: 20px;
     width: 100%;
     height: 300px;
     background: #ddd;
@@ -51,4 +64,7 @@ button:hover {
     justify-content: center;
     font-size: 18px;
     color: #555;
+    position: relative;
+    margin: 20px auto;
+    overflow: hidden;
 }
