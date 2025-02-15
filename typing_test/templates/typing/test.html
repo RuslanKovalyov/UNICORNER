@@ -9,24 +9,27 @@
 </head>
 <body>
     <div class="timers">
-        <a href="?timer=15&remove_punctuation={{ remove_punctuation|default:"false" }}&remove_numbers={{ remove_numbers|default:"false" }}&lowercase={{ lowercase|default:"false" }}">15s</a>
-        <a href="?timer=30&remove_punctuation={{ remove_punctuation|default:"false" }}&remove_numbers={{ remove_numbers|default:"false" }}&lowercase={{ lowercase|default:"false" }}">30s</a>
-        <a href="?timer=60&remove_punctuation={{ remove_punctuation|default:"false" }}&remove_numbers={{ remove_numbers|default:"false" }}&lowercase={{ lowercase|default:"false" }}">60s</a>
-        <a href="?timer=120&remove_punctuation={{ remove_punctuation|default:"false" }}&remove_numbers={{ remove_numbers|default:"false" }}&lowercase={{ lowercase|default:"false" }}">120s</a>
-        <a href="?timer=0&remove_punctuation={{ remove_punctuation|default:"false" }}&remove_numbers={{ remove_numbers|default:"false" }}&lowercase={{ lowercase|default:"false" }}">Infinite</a>
+        <a href="?timer=15&remove_punctuation={{ remove_punctuation|yesno:"true,false" }}&remove_numbers={{ remove_numbers|yesno:"true,false" }}&lowercase={{ lowercase|yesno:"true,false" }}"
+           class="{% if timer == '15' %}active{% endif %}">15s</a>
+        <a href="?timer=30&remove_punctuation={{ remove_punctuation|yesno:"true,false" }}&remove_numbers={{ remove_numbers|yesno:"true,false" }}&lowercase={{ lowercase|yesno:"true,false" }}"
+           class="{% if timer == '30' %}active{% endif %}">30s</a>
+        <a href="?timer=60&remove_punctuation={{ remove_punctuation|yesno:"true,false" }}&remove_numbers={{ remove_numbers|yesno:"true,false" }}&lowercase={{ lowercase|yesno:"true,false" }}"
+           class="{% if timer == '60' %}active{% endif %}">60s</a>
+        <a href="?timer=120&remove_punctuation={{ remove_punctuation|yesno:"true,false" }}&remove_numbers={{ remove_numbers|yesno:"true,false" }}&lowercase={{ lowercase|yesno:"true,false" }}"
+           class="{% if timer == '120' %}active{% endif %}">120s</a>
+        <a href="?timer=0&remove_punctuation={{ remove_punctuation|yesno:"true,false" }}&remove_numbers={{ remove_numbers|yesno:"true,false" }}&lowercase={{ lowercase|yesno:"true,false" }}"
+           class="{% if timer == '0' %}active{% endif %}">Infinite</a>
     </div>
 
     <div class="cleaning-options">
-        <a href="?remove_punctuation=true&remove_numbers={{ remove_numbers|default:"false" }}&lowercase={{ lowercase|default:"false" }}&timer={{ timer|default:"60" }}"
+        <a href="?remove_punctuation={% if remove_punctuation %}false{% else %}true{% endif %}&remove_numbers={{ remove_numbers|yesno:"true,false" }}&lowercase={{ lowercase|yesno:"true,false" }}&timer={{ timer }}"
            class="{% if remove_punctuation %}active{% endif %}">Remove Punctuation</a>
-        
-        <a href="?remove_numbers=true&remove_punctuation={{ remove_punctuation|default:"false" }}&lowercase={{ lowercase|default:"false" }}&timer={{ timer|default:"60" }}"
+        <a href="?remove_numbers={% if remove_numbers %}false{% else %}true{% endif %}&remove_punctuation={{ remove_punctuation|yesno:"true,false" }}&lowercase={{ lowercase|yesno:"true,false" }}&timer={{ timer }}"
            class="{% if remove_numbers %}active{% endif %}">Remove Numbers</a>
-        
-        <a href="?lowercase=true&remove_punctuation={{ remove_punctuation|default:"false" }}&remove_numbers={{ remove_numbers|default:"false" }}&timer={{ timer|default:"60" }}"
+        <a href="?lowercase={% if lowercase %}false{% else %}true{% endif %}&remove_punctuation={{ remove_punctuation|yesno:"true,false" }}&remove_numbers={{ remove_numbers|yesno:"true,false" }}&timer={{ timer }}"
            class="{% if lowercase %}active{% endif %}">Lowercase</a>
     </div>
-    
+
     <div id="wpm_stats"></div>
     <div class="container">
         <div class="text-display" id="text-display">
@@ -42,7 +45,7 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            const referenceText = "{{ test_text|safe }}"; // Get text from views.py
+            const referenceText = "{{ test_text|safe }}";
             const textContainer = document.getElementById("text-container");
             const hiddenInput = document.getElementById("hidden-input");
             const caret = document.getElementById("caret");
@@ -51,26 +54,24 @@
             const textDisplay = document.getElementById("text-display");
             const pauseMessage = document.getElementById("pause-message");
 
-            let typedText = ""; // Track user input
-            let startTime = null; // Track start time of typing
-            let pauseStartTime = null; // Stores when the pause started
-            let totalPausedTime = 0; // Total accumulated pause duration
-            let isPaused = false; // Track pause state
+            let typedText = "";
+            let startTime = null;
+            let pauseStartTime = null;
+            let totalPausedTime = 0;
+            let isPaused = false;
             let hasStartedTyping = false;
 
-            // Allowed timers are passed via the "timer" query parameter (default is 60 seconds)
             const validTimeLimits = [15, 30, 60, 120];
-            let selectedTimeLimit = 0; // 0 => infinite if within array, else fallback 60
-
+            let selectedTimeLimit = 0;
             const urlParams = new URLSearchParams(window.location.search);
             const requestedLimit = parseInt(urlParams.get("timer"), 10) || 0;
             if (validTimeLimits.includes(requestedLimit)) {
                 selectedTimeLimit = requestedLimit;
             } else if (requestedLimit > 0) {
-                selectedTimeLimit = 60; 
+                selectedTimeLimit = 60;
             }
 
-            let timerInterval = null; // Interval to update stats
+            let timerInterval = null;
 
             function initText() {
                 textContainer.innerHTML = referenceText
@@ -84,14 +85,12 @@
                 const spans = textContainer.querySelectorAll("span");
                 const caretSpan = spans[typedText.length];
                 const containerRect = textContainer.getBoundingClientRect();
-
                 if (caretSpan) {
                     const spanRect = caretSpan.getBoundingClientRect();
                     caret.style.left = `${spanRect.left - containerRect.left}px`;
                 } else {
                     caret.style.left = `${textContainer.scrollWidth}px`;
                 }
-
                 const caretOffset = caret.offsetLeft;
                 const containerWidth = textDisplay.offsetWidth;
                 const scrollOffset = Math.max(0, caretOffset - containerWidth / 2);
@@ -120,10 +119,8 @@
             function updateStats() {
                 if (!startTime || hiddenInput.disabled) return;
                 if (isPaused) return;
-
                 const currentTime = Date.now();
                 const elapsedTime = (currentTime - startTime - totalPausedTime) / 1000;
-
                 let remainTime = 0;
                 if (selectedTimeLimit > 0) {
                     remainTime = selectedTimeLimit - elapsedTime;
@@ -134,7 +131,6 @@
                         return;
                     }
                 }
-
                 let correctChars = 0;
                 let errors = 0;
                 for (let i = 0; i < typedText.length; i++) {
@@ -144,21 +140,17 @@
                         errors++;
                     }
                 }
-
                 let accuracy = 0;
                 if (typedText.length > 0) {
                     accuracy = ((correctChars / typedText.length) * 100);
                     accuracy = accuracy < 100 ? accuracy.toFixed(1) : 100;
                 }
-
                 const wpm = elapsedTime > 0
                     ? Math.round(correctChars / 5 / (elapsedTime / 60))
                     : 0;
-
                 const timeLeftDisplay = (selectedTimeLimit > 0)
                     ? `<p>Time left: ${remainTime.toFixed(1)} seconds</p>`
                     : `<p>Elapsed time: ${elapsedTime.toFixed(1)} seconds</p>`;
-
                 result.innerHTML = `
                     ${timeLeftDisplay}
                     <p>Words per minute (WPM): ${wpm}</p>
@@ -166,21 +158,16 @@
                     <p>Errors: ${errors}</p>
                     <p>Accuracy: ${accuracy}%</p>
                 `;
-
-                wpmStatus.innerHTML = `
-                    <p>WPM: ${wpm}</p>
-                `;
+                wpmStatus.innerHTML = `<p>WPM: ${wpm}</p>`;
             }
 
             function finalizeStats(remainTime) {
                 const currentTime = Date.now();
                 const elapsedTime = (currentTime - startTime - totalPausedTime) / 1000;
-
                 let finalRemainTime = remainTime;
                 if (selectedTimeLimit > 0 && finalRemainTime < 0) {
                     finalRemainTime = 0;
                 }
-
                 let correctChars = 0;
                 let errors = 0;
                 for (let i = 0; i < typedText.length; i++) {
@@ -190,17 +177,14 @@
                         errors++;
                     }
                 }
-
                 let accuracy = 0;
                 if (typedText.length > 0) {
                     accuracy = ((correctChars / typedText.length) * 100);
                     accuracy = accuracy < 100 ? accuracy.toFixed(1) : 100;
                 }
-
                 const wpm = elapsedTime > 0
                     ? Math.round(correctChars / 5 / (elapsedTime / 60))
                     : 0;
-
                 if (selectedTimeLimit > 0) {
                     const finalTimeLeft = finalRemainTime.toFixed(1);
                     result.innerHTML = `
@@ -211,9 +195,7 @@
                         <p>Accuracy: ${accuracy}%</p>
                         <p><strong>Typing completed!</strong></p>
                     `;
-                    wpmStatus.innerHTML = `
-                        <p>WPM: ${wpm}</p>
-                    `;
+                    wpmStatus.innerHTML = `<p>WPM: ${wpm}</p>`;
                 } else {
                     result.innerHTML = `
                         <p>Elapsed time: ${elapsedTime.toFixed(1)} seconds</p>
@@ -223,9 +205,7 @@
                         <p>Accuracy: ${accuracy}%</p>
                         <p><strong>Typing completed!</strong></p>
                     `;
-                    wpmStatus.innerHTML = `
-                        <p>WPM: ${wpm}</p>
-                    `;
+                    wpmStatus.innerHTML = `<p>WPM: ${wpm}</p>`;
                 }
             }
 
@@ -242,15 +222,12 @@
                         }
                     }, intervalDelay);
                 }
-
                 typedText = hiddenInput.value;
                 if (typedText.length > referenceText.length) {
                     typedText = typedText.slice(0, referenceText.length);
                 }
-
                 updateTextDisplay();
                 updateStats();
-
                 if (typedText.length === referenceText.length) {
                     hiddenInput.disabled = true;
                     finalizeStats(selectedTimeLimit > 0 ? selectedTimeLimit - 99999 : 0);
@@ -264,9 +241,7 @@
                 <p>Errors: 0</p>
                 <p>Accuracy: 0%</p>
             `;
-            wpmStatus.innerHTML = `
-                <p>WPM: 0</p>
-            `;
+            wpmStatus.innerHTML = `<p>WPM: 0</p>`;
 
             function pauseTyping() {
                 if (isPaused) return;
