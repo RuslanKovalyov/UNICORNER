@@ -9,12 +9,24 @@
 </head>
 <body>
     <div class="timers">
-        <a href="?timer=15">15s</a>
-        <a href="?timer=30">30s</a>
-        <a href="?timer=60">60s</a>
-        <a href="?timer=120">120s</a>
-        <a href="?timer=0">Infinite</a>
+        <a href="?timer=15&remove_punctuation={{ remove_punctuation|default:"false" }}&remove_numbers={{ remove_numbers|default:"false" }}&lowercase={{ lowercase|default:"false" }}">15s</a>
+        <a href="?timer=30&remove_punctuation={{ remove_punctuation|default:"false" }}&remove_numbers={{ remove_numbers|default:"false" }}&lowercase={{ lowercase|default:"false" }}">30s</a>
+        <a href="?timer=60&remove_punctuation={{ remove_punctuation|default:"false" }}&remove_numbers={{ remove_numbers|default:"false" }}&lowercase={{ lowercase|default:"false" }}">60s</a>
+        <a href="?timer=120&remove_punctuation={{ remove_punctuation|default:"false" }}&remove_numbers={{ remove_numbers|default:"false" }}&lowercase={{ lowercase|default:"false" }}">120s</a>
+        <a href="?timer=0&remove_punctuation={{ remove_punctuation|default:"false" }}&remove_numbers={{ remove_numbers|default:"false" }}&lowercase={{ lowercase|default:"false" }}">Infinite</a>
     </div>
+
+    <div class="cleaning-options">
+        <a href="?remove_punctuation=true&remove_numbers={{ remove_numbers|default:"false" }}&lowercase={{ lowercase|default:"false" }}&timer={{ timer|default:"60" }}"
+           class="{% if remove_punctuation %}active{% endif %}">Remove Punctuation</a>
+        
+        <a href="?remove_numbers=true&remove_punctuation={{ remove_punctuation|default:"false" }}&lowercase={{ lowercase|default:"false" }}&timer={{ timer|default:"60" }}"
+           class="{% if remove_numbers %}active{% endif %}">Remove Numbers</a>
+        
+        <a href="?lowercase=true&remove_punctuation={{ remove_punctuation|default:"false" }}&remove_numbers={{ remove_numbers|default:"false" }}&timer={{ timer|default:"60" }}"
+           class="{% if lowercase %}active{% endif %}">Lowercase</a>
+    </div>
+    
     <div id="wpm_stats"></div>
     <div class="container">
         <div class="text-display" id="text-display">
@@ -46,8 +58,8 @@
             let isPaused = false; // Track pause state
             let hasStartedTyping = false;
 
-            //     If the user picks a time that is not in validTimeLimits, we default to 60.
-            const validTimeLimits = [15, 30, 60, 120]; // Allowed timers in seconds
+            // Allowed timers are passed via the "timer" query parameter (default is 60 seconds)
+            const validTimeLimits = [15, 30, 60, 120];
             let selectedTimeLimit = 0; // 0 => infinite if within array, else fallback 60
 
             const urlParams = new URLSearchParams(window.location.search);
@@ -55,13 +67,11 @@
             if (validTimeLimits.includes(requestedLimit)) {
                 selectedTimeLimit = requestedLimit;
             } else if (requestedLimit > 0) {
-                // Fallback if user picks something unexpected like 1s or 999
                 selectedTimeLimit = 60; 
             }
 
-            let timerInterval = null; // We'll use an interval to continuously update stats
+            let timerInterval = null; // Interval to update stats
 
-            // Initialize text display
             function initText() {
                 textContainer.innerHTML = referenceText
                     .split("")
@@ -70,7 +80,6 @@
                 positionCaret();
             }
 
-            // Position caret
             function positionCaret() {
                 const spans = textContainer.querySelectorAll("span");
                 const caretSpan = spans[typedText.length];
@@ -80,18 +89,15 @@
                     const spanRect = caretSpan.getBoundingClientRect();
                     caret.style.left = `${spanRect.left - containerRect.left}px`;
                 } else {
-                    // Move caret to the end of the text
                     caret.style.left = `${textContainer.scrollWidth}px`;
                 }
 
-                // Smoothly scroll text to keep caret centered
                 const caretOffset = caret.offsetLeft;
                 const containerWidth = textDisplay.offsetWidth;
                 const scrollOffset = Math.max(0, caretOffset - containerWidth / 2);
                 textDisplay.style.transform = `translateX(-${scrollOffset}px)`;
             }
 
-            // Update text display
             function updateTextDisplay() {
                 const spans = textContainer.querySelectorAll("span");
                 spans.forEach((span, index) => {
@@ -111,10 +117,9 @@
                 positionCaret();
             }
 
-            // Compute and display stats live
             function updateStats() {
-                if (!startTime || hiddenInput.disabled) return; // If not started or ended, do nothing
-                if (isPaused) return; // If paused, skip updating
+                if (!startTime || hiddenInput.disabled) return;
+                if (isPaused) return;
 
                 const currentTime = Date.now();
                 const elapsedTime = (currentTime - startTime - totalPausedTime) / 1000;
@@ -167,7 +172,6 @@
                 `;
             }
 
-            // Final stats at end of test
             function finalizeStats(remainTime) {
                 const currentTime = Date.now();
                 const elapsedTime = (currentTime - startTime - totalPausedTime) / 1000;
@@ -225,12 +229,10 @@
                 }
             }
 
-            // Start test on first key press
             hiddenInput.addEventListener("input", () => {
                 if (startTime === null) {
                     hasStartedTyping = true;
                     startTime = Date.now();
-                    // Interval to refresh stats ~10x/sec
                     const intervalDelay = 100;
                     timerInterval = setInterval(() => {
                         if (hiddenInput.disabled) {
@@ -247,7 +249,7 @@
                 }
 
                 updateTextDisplay();
-                updateStats(); // Recheck stats on each input
+                updateStats();
 
                 if (typedText.length === referenceText.length) {
                     hiddenInput.disabled = true;
@@ -255,7 +257,6 @@
                 }
             });
 
-            // Initialize statistics before typing
             result.innerHTML = `
                 <p>Elapsed time: 0.0 seconds</p>
                 <p>Words per minute (WPM): 0</p>
@@ -267,18 +268,16 @@
                 <p>WPM: 0</p>
             `;
 
-            // Pause typing (blur effect, stop timer)
             function pauseTyping() {
-                if (isPaused) return; 
+                if (isPaused) return;
                 caret.style.animation = "none";
                 textDisplay.style.filter = "blur(8px)";
                 pauseMessage.style.display = "block";
                 isPaused = true;
-                if (!hasStartedTyping) return; // ignore pause if no typing yet
+                if (!hasStartedTyping) return;
                 pauseStartTime = Date.now();
             }
 
-            // Resume typing (restore focus, adjust timer)
             function restoreTyping() {
                 hiddenInput.disabled = false;
                 hiddenInput.focus();
@@ -295,21 +294,18 @@
                 isPaused = false;
             }
 
-            // Resume typing on text click
             textDisplay.addEventListener("click", restoreTyping);
             pauseMessage.addEventListener("click", (e) => {
                 e.stopPropagation();
                 restoreTyping();
             });
 
-            // Pause typing when clicking outside the text
             document.addEventListener("click", (e) => {
                 if (!textDisplay.contains(e.target)) {
                     pauseTyping();
                 }
             });
 
-            // Prevent caret movement by arrow keys
             hiddenInput.addEventListener("keydown", (event) => {
                 if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(event.key)) {
                     event.preventDefault();
@@ -317,19 +313,16 @@
             });
 
             document.addEventListener("keydown", (event) => {
-                // SPACE key to resume
                 if (isPaused && event.key === " ") {
                     event.preventDefault();
                     restoreTyping();
                 }
-                // ESC to pause
                 if (!isPaused && event.key === "Escape") {
                     event.preventDefault();
                     pauseTyping();
                 }
             });
 
-            // Initialize
             initText();
             hiddenInput.focus();
         });
