@@ -11,8 +11,9 @@ def typing_test(request):
     remove_punctuation = request.GET.get("remove_punctuation", "false") == "true"
     remove_numbers = request.GET.get("remove_numbers", "false") == "true"
     lowercase = request.GET.get("lowercase", "false") == "true"
-    timer = request.GET.get("timer", "60")
+    timer = request.GET.get("timer", "60")  # timer is a string
 
+    # Select a random book
     book = Book.objects.order_by("?").first()
     if book:
         test_text = book.get_book()

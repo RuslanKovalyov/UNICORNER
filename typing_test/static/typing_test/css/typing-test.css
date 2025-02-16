@@ -33,6 +33,12 @@ body {
     background: #909090;
 }
 
+/* Active state for timer and cleaning option buttons */
+.timers a.active,
+.cleaning-options a.active {
+    background: #ff5733;
+}
+
 /* Punctuation cleaning options */
 .cleaning-options {
     text-align: center;
@@ -56,10 +62,6 @@ body {
     background: #707070;
 }
 
-.cleaning-options a.active {
-    background: #ff5733;
-}
-
 /* Text Display */
 .text-display {
     display: block;
@@ -76,13 +78,6 @@ body {
     top: 40%;
     left: 50%;
     transform: translate(-50%, -50%);
-}
-
-.text-display {
-    display: block;
-    font-family: monospace;
-    font-size: 28px;
-    transition: transform 1s ease-out;
 }
 
 .text {
@@ -149,7 +144,7 @@ body {
 }
 
 #pause-message {
-    position:fixed;
+    position: fixed;
     top: 40%;
     left: 50%;
     transform: translate(-50%, -50%);
