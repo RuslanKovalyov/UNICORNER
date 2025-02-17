@@ -76,24 +76,24 @@
         <a href="https://g.page/r/CVZlErJ4LstcEB0/review" target="_blank" tabindex="0" aria-label="Opens in a new tab">
             Google reviews<span class="sr-only">(opens in a new tab)</span>
         </a>
+        
+        {% if request.path == "/contacts" %}
+            <a style="text-decoration: underline;" href="{% url 'contacts' %}" tabindex="0" aria-current="page">Contact us</a>
+        {% else %}
+            <a href="{% url 'contacts' %}" tabindex="0" aria-current="page">Contact us</a>
+        {% endif %}
 
         {% if request.path == "/about" %}
             <a style="text-decoration: underline;" href="{% url 'about' %}" tabindex="0" aria-current="page">About</a>
         {% else %}
             <a href="{% url 'about' %}" tabindex="0" aria-current="page">About</a>
         {% endif %}
-
-        {% if request.path == "/contacts" %}
-            <a style="text-decoration: underline;" href="{% url 'contacts' %}" tabindex="0" aria-current="page">Contact us</a>
-        {% else %}
-            <a href="{% url 'contacts' %}" tabindex="0" aria-current="page">Contact us</a>
-        {% endif %}
         
-        <a href="{% url 'generate_qr_code' %}" tabindex="0">QR-Code-Generator</a>
+        {% comment %} <a href="{% url 'generate_qr_code' %}" tabindex="0">QR-Code-Generator</a> {% endcomment %}
 
-        <a href="{% url 'typing_test' %}" tabindex="0">Fast-Typing</a>
+        {% comment %} <a href="{% url 'typing_test' %}" tabindex="0">Fast-Typing</a> {% endcomment %}
 
-        <a href="{% url 'visual_translate' %}" tabindex="0">Visual-Translate</a>
+        {% comment %} <a href="{% url 'visual_translate' %}" tabindex="0">Visual-Translate</a> {% endcomment %}
     </span>
 
     <a class="login" href="/admin/" tabindex="0" aria-current="page">Log in</a>
@@ -105,11 +105,11 @@
         <a href="https://g.page/r/CVZlErJ4LstcEB0/review" target="_blank" tabindex="0" aria-label="Opens in a new tab">
             Google reviews<span class="sr-only">(opens in a new tab)</span>
         </a>
-        <a href="{% url 'about' %}" tabindex="0" aria-current="page">About</a>
         <a href="{% url 'contacts' %}" tabindex="0" aria-current="page">Contact us</a>
-        <a href="{% url 'generate_qr_code' %}" tabindex="0">QR Code Generator</a>
-        <a href="{% url 'typing_test' %}" tabindex="0">Fast Typing</a>
-        <a href="{% url 'visual_translate' %}" tabindex="0">Visual Translate</a>
+        <a href="{% url 'about' %}" tabindex="0" aria-current="page">About</a>
+        {% comment %} <a href="{% url 'generate_qr_code' %}" tabindex="0">QR Code Generator</a> {% endcomment %}
+        {% comment %} <a href="{% url 'typing_test' %}" tabindex="0">Fast Typing</a> {% endcomment %}
+        {% comment %} <a href="{% url 'visual_translate' %}" tabindex="0">Visual Translate</a> {% endcomment %}
 
     </span>
 </nav>
