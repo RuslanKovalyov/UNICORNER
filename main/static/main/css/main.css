@@ -7,7 +7,7 @@
     /* Background Colors */
     --color-bg-default: black;
     --color-bg-header: linear-gradient(0deg, rgba(255, 255, 0, 0.1), rgba(255, 255, 0, 0.05));
-    --color-bg-navbar: rgba(20, 20, 0, 0.95);
+    --color-bg-navbar: rgba(20, 20, 0, 0.2);
     --color-bg-sidebar: rgba(20, 20, 0, 0.95);
     --color-bg-footer: var(--color-primary);
     --color-bg-footer-credits: black;
@@ -451,7 +451,7 @@ footer .credits a {
 }
 
 .navbar {
-    background-color: var(--color-bg-navbar);
+    background: linear-gradient(0deg, var(--color-bg-navbar), rgba(0, 0, 0, 1));
     position: -webkit-sticky;
     position: sticky;
     position: -webkit-sticky; /* Fallback for older WebKit browsers */
