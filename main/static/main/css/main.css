@@ -79,7 +79,7 @@ body {
 main {
     background-color: var(--color-bg-default);
     margin: 0 auto;
-    padding: var(--padding-general) 0;
+    padding: 0 0 var(--padding-general) 0;
     max-width: var(--size-main);
 }
 
