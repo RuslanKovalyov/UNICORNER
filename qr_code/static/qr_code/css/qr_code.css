@@ -1,7 +1,8 @@
 /* General Styles */
-body {
+.qr_module {
+    width: 100%;
     font-family: Arial, sans-serif;
-    background-color: #333333;
+    background-color: transparent;
     color: #333;
     margin: 0;
     padding: 0;

@@ -166,5 +166,5 @@ def generate_qr_code(request):
     return render(
         request,
         "qr_code/qr_code_form.html",
-        {"form": form, "qr_image_base64": qr_image_base64},
+        {"form": form, "qr_image_base64": qr_image_base64, "title":"QR Code Generator"},
     )
