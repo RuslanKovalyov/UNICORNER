@@ -422,6 +422,21 @@ footer p {
     padding: 0;
 }
 
+footer .open-source {
+    /* gradient red to green */
+    background: linear-gradient(140deg, rgb(255, 255, 0), rgb(255, 0, 255));
+    color: black;
+    margin: 0;
+    padding: 0;
+}
+
+footer .open-source a {
+    color: black;
+    text-shadow: #0051ff88 1px 1px 10px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
 footer a {
     color: var(--color-link-secondary);
     text-decoration: none;
