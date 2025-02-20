@@ -133,3 +133,18 @@ body {
     border-radius: 10px;
     display: none;
 }
+
+@media screen and (max-width: 1000px) {
+    .button-group {
+        margin: 0px;
+        font-size: 12px;
+    }
+
+    .container {
+        top: 45%;
+    }
+
+    #wpm_stats {
+        top: 35%;
+    }
+}
