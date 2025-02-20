@@ -7,59 +7,31 @@ body {
 }
 
 /* Timer Links (Styled as Buttons) */
-.timers {
+.button-group {
     text-align: center;
     margin: 20px;
 }
 
-.timers a {
+.button-group a {
     display: inline-block;
     padding: 10px 15px;
     margin: 5px;
     text-decoration: none;
     font-size: 18px;
     font-weight: bold;
-    color: white;
-    background: #505050;
+    color: #aaa;
+    background: transparent;
     border-radius: 5px;
     transition: background 0.3s ease-in-out;
 }
 
-.timers a:hover {
-    background: #707070;
+.button-group a.active{
+    color: #99841c;
 }
 
-.timers a:active {
-    background: #909090;
-}
-
-/* Active state for timer and cleaning option buttons */
-.timers a.active,
-.cleaning-options a.active {
-    background: #ff5733;
-}
-
-/* Punctuation cleaning options */
-.cleaning-options {
-    text-align: center;
-    margin: 20px;
-}
-
-.cleaning-options a {
-    display: inline-block;
-    padding: 10px 15px;
-    margin: 5px;
-    text-decoration: none;
-    font-size: 18px;
-    font-weight: bold;
+.button-group a:hover {
+    background: #99841c;
     color: white;
-    background: #505050;
-    border-radius: 5px;
-    transition: background 0.3s ease-in-out;
-}
-
-.cleaning-options a:hover {
-    background: #707070;
 }
 
 /* Text Display */

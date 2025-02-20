@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="{% static 'typing_test/css/typing-test.css' %}">
 </head>
 <body>
-    <div class="timers">
+    <div class="button-group">
         <a href="?timer=15&remove_punctuation={{ remove_punctuation|yesno:"true,false" }}&remove_numbers={{ remove_numbers|yesno:"true,false" }}&lowercase={{ lowercase|yesno:"true,false" }}"
            class="{% if timer == '15' %}active{% endif %}">15s</a>
         <a href="?timer=30&remove_punctuation={{ remove_punctuation|yesno:"true,false" }}&remove_numbers={{ remove_numbers|yesno:"true,false" }}&lowercase={{ lowercase|yesno:"true,false" }}"
@@ -21,7 +21,7 @@
            class="{% if timer == '0' %}active{% endif %}">Infinite</a>
     </div>
 
-    <div class="cleaning-options">
+    <div class="button-group">
         <a href="?remove_punctuation={% if remove_punctuation %}false{% else %}true{% endif %}&remove_numbers={{ remove_numbers|yesno:"true,false" }}&lowercase={{ lowercase|yesno:"true,false" }}&timer={{ timer }}"
            class="{% if remove_punctuation %}active{% endif %}">Remove Punctuation</a>
         <a href="?remove_numbers={% if remove_numbers %}false{% else %}true{% endif %}&remove_punctuation={{ remove_punctuation|yesno:"true,false" }}&lowercase={{ lowercase|yesno:"true,false" }}&timer={{ timer }}"
