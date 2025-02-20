@@ -2,12 +2,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    {% include 'main/components/head-meta.html' %}
     <title>Typing Test</title>
     <link rel="stylesheet" href="{% static 'typing_test/css/typing-test.css' %}">
 </head>
 <body>
+    {% include 'main/components/navbar.html' %}
+
     <div class="button-group">
         <a href="?timer=15&remove_punctuation={{ remove_punctuation|yesno:"true,false" }}&remove_numbers={{ remove_numbers|yesno:"true,false" }}&lowercase={{ lowercase|yesno:"true,false" }}"
            class="{% if timer == '15' %}active{% endif %}">15s</a>

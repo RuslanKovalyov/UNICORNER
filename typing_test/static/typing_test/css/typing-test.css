@@ -6,6 +6,14 @@ body {
     scroll-behavior: smooth;
 }
 
+.navbar {
+    background: #252525;
+}
+
+.navbar a{
+    color: gray;
+}
+
 /* Timer Links (Styled as Buttons) */
 .button-group {
     text-align: center;
