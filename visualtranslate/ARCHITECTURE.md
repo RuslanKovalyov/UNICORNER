@@ -10,9 +10,9 @@ graph TD
     A[Word List] --> B[Semantic Analysis Module]
     B --> C[Association Extraction]
     C --> D[Prompt Generation Module]
-    D --> E[Image Generation Module<br/>Stable Diffusion, etc.]
-    E --> F[Pre-generated Image Assets<br/>& Metadata]
-    F --> G[Database Word, Semantic Markers,<br/>Associations, Image Paths]
+    D --> E[Image Generation Module Stable Diffusion, etc.]
+    E --> F[Pre-generated Image Assets & Metadata]
+    F --> G[Database Word, Semantic Markers, Associations, Image Paths]
     G --> H[Django App Models, Views, Templates]
     H --> I[Service Pages Static Templates]
 
