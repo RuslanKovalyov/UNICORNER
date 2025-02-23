@@ -136,22 +136,29 @@ body {
 
 .time_is_up {
     position: fixed;
+    padding: 20px;
+    margin: auto;
     top: 40%;
     left: 50%;
     transform: translate(-50%, -50%);
     background: rgba(0, 0, 0, 0.7);
-    padding: 20px 50px;
     border-radius: 10px;
-    color: tomato;
+    width: 90%;
 }
 
 @media screen and (max-width: 1000px) {
     .button-group a {
         padding: 10px 5px;
-        margin: 5px;
+        margin: auto;
+        text-align: center;
         font-size: 18px;
         font-weight: bold;
         border-radius: 5px;
+
+    }
+
+    .time_is_up {
+        top: 45%;
     }
 
     .container {

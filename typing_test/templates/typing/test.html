@@ -128,7 +128,7 @@
                     if (remainTime <= 0) {
                         hiddenInput.disabled = true;
                         finalizeStats(0);
-                        result.innerHTML += `<p class="time_is_up"><strong>Time is up!</strong></p>`;
+                        result.innerHTML += `<div class="button-group time_is_up"><a href="?timer=${selectedTimeLimit}&remove_punctuation={{ remove_punctuation|yesno:"true,false" }}&remove_numbers={{ remove_numbers|yesno:"true,false" }}&lowercase={{ lowercase|yesno:"true,false" }}">Time is up! Click here to try again.</a></div>`;
                         return;
                     }
                 }
