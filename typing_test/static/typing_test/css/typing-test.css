@@ -146,9 +146,12 @@ body {
 }
 
 @media screen and (max-width: 1000px) {
-    .button-group {
-        margin: 0px;
-        font-size: 12px;
+    .button-group a {
+        padding: 10px 5px;
+        margin: 5px;
+        font-size: 18px;
+        font-weight: bold;
+        border-radius: 5px;
     }
 
     .container {

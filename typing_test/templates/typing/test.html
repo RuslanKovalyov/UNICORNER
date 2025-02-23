@@ -18,8 +18,8 @@
            class="{% if timer == '60' %}active{% endif %}">60s</a>
         <a href="?timer=120&remove_punctuation={{ remove_punctuation|yesno:"true,false" }}&remove_numbers={{ remove_numbers|yesno:"true,false" }}&lowercase={{ lowercase|yesno:"true,false" }}"
            class="{% if timer == '120' %}active{% endif %}">120s</a>
-        {% comment %} <a href="?timer=0&remove_punctuation={{ remove_punctuation|yesno:"true,false" }}&remove_numbers={{ remove_numbers|yesno:"true,false" }}&lowercase={{ lowercase|yesno:"true,false" }}"
-           class="{% if timer == '0' %}active{% endif %}">Infinite</a> {% endcomment %}
+        <a href="?timer=0&remove_punctuation={{ remove_punctuation|yesno:"true,false" }}&remove_numbers={{ remove_numbers|yesno:"true,false" }}&lowercase={{ lowercase|yesno:"true,false" }}"
+           class="{% if timer == '0' %}active{% endif %}">Infinite</a>
     </div>
 
     <div class="button-group">
