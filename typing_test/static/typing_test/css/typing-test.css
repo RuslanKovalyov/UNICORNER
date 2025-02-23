@@ -134,6 +134,17 @@ body {
     display: none;
 }
 
+.time_is_up {
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.7);
+    padding: 20px 50px;
+    border-radius: 10px;
+    color: tomato;
+}
+
 @media screen and (max-width: 1000px) {
     .button-group {
         margin: 0px;
