@@ -1,19 +1,15 @@
 #!/usr/bin/env python3
 import subprocess
+import shlex
 import re
 import sys
-import os
-import requests
-
-# Global conversation history for maintaining context (similar to the OpenAI Chat API format)
-conversation_history = []
 
 def log(message):
     print("[LOG]", message)
 
 def request_sudo_password():
     """
-    Requests the root password via 'sudo -v' to cache superuser privileges.
+    Requests the root password using 'sudo -v' to cache superuser privileges.
     """
     try:
         subprocess.run("sudo -v", shell=True, check=True)
@@ -21,197 +17,131 @@ def request_sudo_password():
         print("Error: Failed to obtain superuser privileges. Exiting.")
         sys.exit(1)
 
-def initialize_conversation():
+def run_ollama(prompt):
     """
-    Initializes the conversation with a system message containing detailed instructions for the model.
-    The model must strictly use the following tags in its responses:
-      - {Thought}: for internal reasoning (not executed)
-      - {Command}: for self-contained bash commands to be executed
-      - {Console}: for the real console output (stdout, stderr, return code)
-    Instructions:
-      1. Output only bash commands (one per line or as a single multi-line block) with no extra text.
-      2. If the task requires verification (e.g., creating a directory), include a command to check the result (e.g., using ls).
-      3. After each command is executed, the script will capture its real console output prefixed with {Console}:.
-      4. Continue generating {Thought}: and {Command}: lines until the task is fully solved.
-      5. When the task is solved, output a final line exactly as RETURN_CONTROL (with no extra characters) to indicate control should be returned.
-      6. Always use environment variables (e.g., "$HOME") instead of hard-coded paths.
+    Sends the formatted prompt to the ollama model (phi4:14b-Q8_0)
+    and returns its response.
     """
-    system_message = (
-        "You are operating in a macOS console environment. Your goal is to solve tasks by generating valid, self-contained bash commands. "
-        "Your responses must follow these rules exactly:\n"
-        "1. Every response must consist solely of lines beginning with either {Thought}: or {Command}:.\n"
-        "   - {Thought}: lines are for your internal reasoning and analysis (do not execute these).\n"
-        "   - {Command}: lines contain a single self-contained bash command that will work correctly when executed independently. "
-        "     If the task requires a state change (e.g., creating a directory), include a verification step (e.g., using ls to confirm creation).\n"
-        "2. Do not output any extra text or tags besides {Thought}: and {Command}:. \n"
-        "3. After each command is executed, the script will capture its real console output (stdout, stderr, and return code) "
-        "prefixed with {Console}:. Incorporate that output into your subsequent reasoning.\n"
-        "4. Continue generating {Thought}: and {Command}: lines iteratively until the task is fully solved. Do not return control until the task is complete.\n"
-        "5. When the task is solved, output a final line exactly as RETURN_CONTROL (with no extra characters) to indicate that control should be returned.\n"
-        "Note: Always use environment variables (e.g., \"$HOME\") instead of hard-coded paths."
-    )
-    conversation_history.clear()
-    conversation_history.append({"role": "system", "content": system_message})
-    # Debug: Print the HOME variable value
-    log(f"HOME is set to: {os.environ.get('HOME', 'Not set')}")
-
-def send_to_model():
-    """
-    Sends the entire conversation history to the Ollama server via the /v1/chat/completions endpoint
-    and returns the model's response.
-    """
-    payload = {
-        "model": "phi4:14b-q8_0",
-        "messages": conversation_history
-    }
+    safe_prompt = shlex.quote(prompt)
+    command = f"echo {safe_prompt} | ollama run phi4:14b-Q8_0"
     try:
-        response = requests.post("http://localhost:11434/v1/chat/completions", json=payload)
-        response.raise_for_status()
-        data = response.json()
-        assistant_reply = data["choices"][0]["message"]["content"].strip()
-        conversation_history.append({"role": "assistant", "content": assistant_reply})
-        return assistant_reply
-    except requests.RequestException as e:
-        log(f"Error contacting the Ollama server: {e}")
+        result = subprocess.run(
+            command,
+            shell=True,
+            capture_output=True,
+            text=True,
+            check=True
+        )
+        output = result.stdout.strip()
+        if result.stderr:
+            log("Error (stderr): " + result.stderr.strip())
+        return output
+    except subprocess.CalledProcessError as e:
+        log("An error occurred while executing the command:")
+        log(e.stderr.strip())
         return None
 
-def extract_commands(response_text):
+def format_task_for_ai(user_input):
     """
-    Extracts commands from the model's response.
-    It looks for code blocks marked as ```bash ... ``` and returns each block as one command.
-    If no such blocks are found, it splits the response by lines (ignoring empty lines and the RETURN_CONTROL marker).
+    Formats the user's input so that the model outputs exactly one valid bash command.
     """
-    blocks = re.findall(r"```(?:bash)?\s*(.*?)\s*```", response_text, re.DOTALL)
-    if blocks:
-        commands = []
-        for block in blocks:
-            lines = block.strip().splitlines()
-            cleaned = [line for line in lines if line.strip() != "RETURN_CONTROL"]
-            command_block = "\n".join(cleaned).strip()
-            if command_block:
-                commands.append(command_block)
-        return commands
-    else:
-        commands = []
-        for line in response_text.splitlines():
-            line = line.strip()
-            if line and line != "RETURN_CONTROL":
-                commands.append(line)
-        return commands
-
-def run_command_realtime(bash_command):
-    """
-    Executes the given bash command and prints stdout and stderr in real time.
-    Returns the collected stdout and stderr as strings.
-    """
-    process = subprocess.Popen(
-        bash_command, shell=True,
-        stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True
+    formatted_prompt = (
+        f"Task description: {user_input}\n"
+        "Instruction: Output exactly one valid bash command that will execute the task described above. "
+        "Do not output any additional text, explanation, or markdown formatting. "
+        "The output should be a single line containing only the command."
     )
-    stdout_lines = []
-    stderr_lines = []
-    while True:
-        out_line = process.stdout.readline()
-        if out_line:
-            print(out_line, end='')  # Print immediately
-            stdout_lines.append(out_line)
-        if out_line == '' and process.poll() is not None:
-            break
-    # Read any remaining stderr output
-    err_output = process.stderr.read()
-    if err_output:
-        print(err_output, end='', file=sys.stderr)
-        stderr_lines.append(err_output)
-    output = "".join(stdout_lines)
-    errors = "".join(stderr_lines)
-    log(f"Command finished. STDOUT: {output!r} | STDERR: {errors!r}")
-    return output, errors
+    return formatted_prompt
+
+def generate_bash_command(ai_response):
+    """
+    Extracts the command from the model's response by removing markdown formatting if present.
+    """
+    if "```" in ai_response:
+        matches = re.findall(r"```(?:bash)?\s*(.*?)\s*```", ai_response, re.DOTALL)
+        if matches:
+            return matches[0].strip()
+        else:
+            return ai_response.replace("```", "").strip()
+    return ai_response.strip()
 
 def capture_console_output(bash_command):
     """
-    Expands environment variables in the command:
-      - First expands "~" using os.path.expanduser,
-      - Then expands variables using os.path.expandvars.
-    Then executes the command.
-    If the command starts with 'ssh ', it is run interactively (without capturing output),
-    otherwise it is run in real time.
+    Executes the given bash command and captures its output and errors.
     """
-    bash_command = os.path.expanduser(bash_command)
-    expanded_cmd = os.path.expandvars(bash_command)
-    log(f"Executing command with expanded variables: {expanded_cmd}")
-    if expanded_cmd.lstrip().startswith("ssh "):
-        subprocess.run(expanded_cmd, shell=True)
-        return "", ""
-    else:
-        return run_command_realtime(expanded_cmd)
-
-def append_console_output(console_output, console_errors):
-    """
-    Forms a message with the {Console}: tag containing the command output and errors,
-    and appends it to the conversation history.
-    """
-    content = "{Console}: " + console_output
-    if console_errors:
-        content += "\n{Console}: " + console_errors
-    conversation_history.append({"role": "user", "content": content})
-    log("Console output appended to conversation history.")
+    try:
+        result = subprocess.run(
+            bash_command,
+            shell=True,
+            capture_output=True,
+            text=True,
+            check=True
+        )
+        output = result.stdout.strip()
+        errors = result.stderr.strip()
+        return output, errors
+    except subprocess.CalledProcessError as e:
+        return e.stdout.strip(), e.stderr.strip()
 
 def handle_ai_errors(console_output, console_errors):
     """
-    Returns a final message: if there are errors, returns them; otherwise returns the command output.
+    Returns an error message if errors are detected; otherwise, returns the command output.
     """
     if console_errors:
-        return f"Errors encountered: {console_errors}\nPlease review the output and adjust the commands if necessary."
+        return f"Errors encountered: {console_errors}\nPlease check the task or the generated command."
     else:
         return console_output
 
 def main():
-    print("Welcome to the AI Agent for system management (Ollama Server on port 11434)!")
+    print("Welcome to the AI Agent for system management (ollama run phi4:14b-Q8_0)!")
     print("Type 'exit' to quit.")
     
+    # Request root password at startup
     request_sudo_password()
-    initialize_conversation()
-    
+
     while True:
+        # Step A: Get task description from the user
         user_input = input("\nEnter task description: ")
         if user_input.lower() in ['exit', 'quit']:
             print("Exiting program.")
             break
 
-        # Append the user task to the conversation history
-        conversation_history.append({"role": "user", "content": f"Task description: {user_input}"})
+        # Step B: Format the prompt for the model
+        formatted_prompt = format_task_for_ai(user_input)
+        print("\n[Step 1] Formatted prompt for AI:")
+        print(formatted_prompt)
         
-        # Iteratively request model commands until a line exactly equal to "RETURN_CONTROL" is detected
-        while True:
-            print("\n[Step] Sending request to model with context...")
-            model_reply = send_to_model()
-            if model_reply is None:
-                print("Failed to get a response from the model. Please try again.")
-                break
-            
-            print("\n[Model Response]:")
-            print(model_reply)
-            
-            # Check if any line in the response is exactly "RETURN_CONTROL" (ignoring whitespace)
-            lines = [line.strip() for line in model_reply.splitlines()]
-            if any(line == "RETURN_CONTROL" for line in lines):
-                print("\nTask solved. Control returned to the user.")
-                break
-            
-            cmds = extract_commands(model_reply)
-            if not cmds:
-                print("No commands were extracted from the model's response. Check the response format.")
-                break
-            
-            for i, cmd in enumerate(cmds, start=1):
-                print(f"\n[Step 3.{i}] Executing command:")
-                print(cmd)
-                out, err = capture_console_output(cmd)
-                print("\n[Step 4] Command output:")
-                result_message = handle_ai_errors(out, err)
-                print(result_message)
-                append_console_output(out, err)
-        print("\n[Step 5] Waiting for the next task...")
+        # Step C: Send the prompt to the model and get its response (expecting one command)
+        print("\n[Step 2] Sending request to the ollama model...")
+        ai_response = run_ollama(formatted_prompt)
+        if ai_response is None:
+            print("Failed to get a response from the model. Please try again.")
+            continue
+
+        print("\n[Step 3] Model response (bash command):")
+        print(ai_response)
+
+        # Extract the command from the model's response
+        bash_command = generate_bash_command(ai_response)
+        print("\n[Step 3.1] Extracted bash command for execution:")
+        print(bash_command)
+
+        # Step D: Execute the command and capture its output
+        print("\n[Step 4] Executing the generated bash command...")
+        console_output, console_errors = capture_console_output(bash_command)
+        print("\nConsole output:")
+        print(console_output)
+        if console_errors:
+            print("\nConsole errors:")
+            print(console_errors)
+
+        # Step E: Process errors and display final feedback
+        final_output = handle_ai_errors(console_output, console_errors)
+        print("\n[Step 5] Final result / AI feedback:")
+        print(final_output)
+
+        # Step F: Wait for next task
+        print("\nWaiting for the next task...")
 
 if __name__ == '__main__':
     main()
