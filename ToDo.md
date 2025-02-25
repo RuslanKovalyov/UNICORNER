@@ -34,5 +34,6 @@
 - [ ] UI and User Login
 
 ## Visual translate
+- [ ] 1. Create list of 10.000 frequently used words 
 - [ ] association slider
 - [ ] gen AI related to the word text examples
