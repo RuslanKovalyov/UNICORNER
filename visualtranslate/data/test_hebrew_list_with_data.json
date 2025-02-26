@@ -1,0 +1,137 @@
+[
+    {
+        "rank": 101,
+        "hebrew": "מים",
+        "meanings": [
+        {
+            "english": "water",
+            "transliteration": "mayim"
+        }
+        ]
+    },
+    {
+        "rank": 102,
+        "hebrew": "אור",
+        "meanings": [
+        {
+            "english": "light",
+            "transliteration": "or"
+        }
+        ]
+    },
+    {
+        "rank": 103,
+        "hebrew": "אדמה",
+        "meanings": [
+        {
+            "english": "earth",
+            "transliteration": "adamah"
+        }
+        ]
+    },
+    {
+        "rank": 104,
+        "hebrew": "אש",
+        "meanings": [
+        {
+            "english": "fire",
+            "transliteration": "esh"
+        }
+        ]
+    },
+    {
+        "rank": 105,
+        "hebrew": "רוח",
+        "meanings": [
+        {
+            "english": "wind; spirit",
+            "transliteration": "ruach"
+        }
+        ]
+    },
+    {
+        "rank": 106,
+        "hebrew": "שמיים",
+        "meanings": [
+        {
+            "english": "sky",
+            "transliteration": "shamayim"
+        }
+        ]
+    },
+    {
+        "rank": 107,
+        "hebrew": "עץ",
+        "meanings": [
+        {
+            "english": "tree",
+            "transliteration": "etz"
+        }
+        ]
+    },
+    {
+        "rank": 108,
+        "hebrew": "פרח",
+        "meanings": [
+        {
+            "english": "flower",
+            "transliteration": "perach"
+        }
+        ]
+    },
+    {
+        "rank": 109,
+        "hebrew": "ספר",
+        "meanings": [
+        {
+            "english": "book",
+            "transliteration": "sefer"
+        }
+        ]
+    },
+    {
+        "rank": 110,
+        "hebrew": "כוכב",
+        "meanings": [
+        {
+            "english": "star",
+            "transliteration": "kochav"
+        }
+        ]
+    },
+    {
+        "rank": 111,
+        "hebrew": "לב",
+        "meanings": [
+        {
+            "english": "heart",
+            "transliteration": "lev"
+        }
+        ]
+    },
+    {
+        "rank": 112,
+        "hebrew": "תקווה",
+        "meanings": [
+        {
+            "english": "hope",
+            "transliteration": "tikva"
+        }
+        ]
+    },
+    {
+        "rank": 113,
+        "hebrew": "שלום",
+        "meanings": [
+        {
+            "english": "peace",
+            "transliteration": "shalom"
+        },
+        {
+            "english": "hello",
+            "transliteration": "shalom"
+        }
+        ]
+    }
+]
+  
