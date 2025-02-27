@@ -17,6 +17,7 @@ graph TD
     H --> I[Service Pages Static Templates]
 
 ![image](https://github.com/user-attachments/assets/5974d144-f627-4313-bc70-170f3fe5c034)
+
 (Visualize the architecture whith https://mermaid.live)
 
 # Component Breakdown
