@@ -9,7 +9,7 @@ body {
 .container {
     max-width: 600px;
     margin: auto;
-    background: white;
+    background: transparent;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -67,4 +67,14 @@ button:hover {
     position: relative;
     margin: 20px auto;
     overflow: hidden;
+}
+
+@media screen and (max-width: 1000px) {
+    body {
+        padding: 0;
+    }
+
+    .container {
+        padding: 0;
+    }
 }
