@@ -1,0 +1,14 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "unicorner-cam-streamer"
+version = "0.1.0"
+description = "UNICORNER Coffee’s cross-platform CameraStreamer"
+readme = "README.md"
+requires-python = ">=3.7"
+authors = [{ name="Ruslan Kovalev", email="kovalyovruslan@gmail.com" }]
+dependencies = [
+  "opencv-python>=4.5"
+]

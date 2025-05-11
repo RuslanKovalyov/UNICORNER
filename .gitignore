@@ -5,8 +5,13 @@ SuperUser.md
 # collected static files of root dir
 /static
 
-#Mac OS
+# Mac OS
 .DS_Store
+
+# Camera/detection
+dist/
+build/
+*.onnx
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
