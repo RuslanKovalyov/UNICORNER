@@ -1,55 +1,50 @@
-# tests/test_camera_streamer.py
-import pytest
-import cv2
-import numpy as np
+import pytest, cv2, numpy as np
 from unicorner_cam_streamer.camera_streamer import CameraStreamer
 
 
-def test_open_and_release():
-    # Opening an invalid source should raise
-    cs = CameraStreamer(src=-1)
+# ───────── helpers ─────────────────────────────────────────────
+class _DummyCap:
+    """Fake cv2.VideoCapture for unit-tests (returns a black frame)."""
+    def __init__(self, src): self.src = src
+    def isOpened(self):      return True
+    def read(self):          return True, np.zeros((5, 5, 3), np.uint8)
+    def set(self, *args):    pass
+    def release(self):       pass
+
+
+# ───────── tests ───────────────────────────────────────────────
+def test_open_invalid():
+    cs = CameraStreamer(src=-99)
     with pytest.raises(RuntimeError):
         cs.open()
 
 
 def test_read_success(monkeypatch):
-    # Simulate VideoCapture that returns a valid frame
-    dummy_frame = np.zeros((10, 10, 3), dtype=np.uint8)
-
-    class FakeCap:
-        def __init__(self, src):
-            pass
-        def isOpened(self):
-            return True
-        def read(self):
-            return True, dummy_frame
-        def release(self):
-            pass
-
-    monkeypatch.setattr(cv2, 'VideoCapture', FakeCap)
-    cs = CameraStreamer(src=0)
+    monkeypatch.setattr(cv2, "VideoCapture", _DummyCap)
+    cs = CameraStreamer(src=0, width=100, height=100, cap_fps=30)
     cs.open()
-    frame = cs.read()
-    assert isinstance(frame, np.ndarray)
-    assert frame.shape == dummy_frame.shape
+    jpeg = cs.read()
+    assert jpeg.startswith(b"\xff\xd8")  # JPEG SOI
     cs.release()
 
 
-def test_read_failure(monkeypatch):
-    # Simulate VideoCapture that fails to read
-    class FakeCap:
-        def __init__(self, src):
-            pass
-        def isOpened(self):
-            return True
-        def read(self):
-            return False, None
-        def release(self):
-            pass
+def test_frames_generator(monkeypatch):
+    monkeypatch.setattr(cv2, "VideoCapture", _DummyCap)
+    cs = CameraStreamer(src=0, cap_fps=1, stream_fps=10)
+    cs.open()
+    gen = cs.frames()
+    chunk = next(gen)
+    assert b"--frame" in chunk and b"Content-Type" in chunk
+    cs.release()
 
-    monkeypatch.setattr(cv2, 'VideoCapture', FakeCap)
+
+def test_dynamic_setters(monkeypatch):
+    monkeypatch.setattr(cv2, "VideoCapture", _DummyCap)
     cs = CameraStreamer(src=0)
     cs.open()
-    with pytest.raises(RuntimeError):
-        cs.read()
+    cs.set_resolution(320, 240)
+    cs.set_capture_fps(15)
+    cs.set_stream_fps(5)
+    cs.set_source(1)  # switch to “another” fake cam
+    assert cs.read().startswith(b"\xff\xd8")
     cs.release()
