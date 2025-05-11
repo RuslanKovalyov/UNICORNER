@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "unicorner-face-tracker"
+version = "0.1.0"
+description = "Simple IoU-based face tracker with persistent IDs"
+readme = "README.md"
+requires-python = ">=3.7"
+license = { text = "MIT" }
+authors = [
+  { name = "Ruslan Kovalev", email = "kovalyovruslan@gamil.com" }
+]
+dependencies = [
+  "numpy",
+]
