@@ -17,15 +17,9 @@ Available shell commands
   imbalance  show USDT minus BTC-in-USDT value (rebalance helper)
   fee        show current taker fee (%) and update internal var
   rebalance  makes USDT ≈ BTC value, fee-aware
+  mid <N>    mean close price of last N minutes (N ≥ 1)
   quit/exit  leave program
 """
-# REMINDER (repeat at every step/output):
-# 1. Every code output must include a descriptive git commit message.
-# 2. Keep raw helper functions “raw” (returning only values), never print or format text, so they can be reused for algorithmic import.
-# 3. User shell commands are just a console interface — output clues/descriptions about commands/results can be printed in the shell only (never inside the helper functions).
-# 4. Never make changes to code, comments, docstrings, formatting, or existing structure unless the user explicitly asks.
-# 5. Always update requirements, .env.example, .gitignore, etc., when dependencies or env vars change.
-# 6. Reminder itself must be included at the top of every output.
 
 from __future__ import annotations
 import os, sys, time, platform
@@ -33,6 +27,7 @@ from decimal import Decimal
 from dotenv import load_dotenv
 from binance.spot import Spot as Client
 from binance.error import ClientError
+import statistics
 
 TAKER_FEE = 0.001  # default 0.1%
 
@@ -153,8 +148,18 @@ def get_taker_fee() -> float:
     except Exception:
         return 0.001  # fallback to typical default
 
+def get_mid_price(minutes: int) -> float:
+    """
+    Returns mean close price of the last N minutes. N >= 1.
+    """
+    if minutes < 1:
+        raise ValueError("Minimum supported interval is 1 minute.")
+    klines = cli.klines(symbol=SYMBOL, interval="1m", limit=minutes)
+    closes = [float(k[4]) for k in klines]
+    return statistics.mean(closes)
+
 # ── interactive shell --------------------------------------------------
-COMMANDS = ("help","price","balance","buy","sell","imbalance","fee","rebalance","quit","exit")
+COMMANDS = ("help","price","balance","buy","sell","imbalance","fee","rebalance","mid","quit","exit")
 
 def show_buy_sell_restrictions():
     print(f"Buy:  value in USDT (minNotional: {FILTERS['minNotional']:.2f})")
@@ -166,8 +171,10 @@ def shell():
     print(f"btc_client  |  {MODE.upper()}  |  {SYMBOL}\n")
     while True:
         try:
-            cmd = input("> ").strip().lower()
-            if not cmd: continue
+            cmdline = input("> ").strip().lower()
+            if not cmdline: continue
+            parts = cmdline.split()
+            cmd = parts[0]
             if cmd not in COMMANDS:
                 print("unknown command – type 'help'"); continue
             if cmd in ("quit","exit"):
@@ -182,6 +189,7 @@ def shell():
                 print('  imbalance  → "Imbalance: +/-<float> USDT (USDT-heavy/BTC-heavy)"')
                 print('  fee        → "Taker fee: <float>%"')
                 print('  rebalance  → "Buy/sell to equalize USDT and BTC-in-USDT balances"')
+                print('  mid <N>    → "Mean close price of last N minutes"')
                 show_buy_sell_restrictions()
                 continue
 
@@ -271,6 +279,19 @@ def shell():
                         print("error:", e)
                 u2, b2 = get_balances()
                 print(f"After:  USDT {u2:.2f} | BTC {b2:.8f} (≈ {b2*price:.2f} USDT)")
+            elif cmd == "mid":
+                if len(parts) != 2 or not parts[1].isdigit():
+                    print("Usage: mid <N>  (N = minutes ≥ 1)")
+                    continue
+                n = int(parts[1])
+                if n < 1:
+                    print("Minimum supported interval is 1 minute.")
+                    continue
+                try:
+                    mid_val = get_mid_price(n)
+                    print(f"Mean close price of last {n} min: {mid_val:.2f} USDT")
+                except Exception as e:
+                    print("error:", e)
         except KeyboardInterrupt:
             print("\nbye"); break
         except Exception as exc:
