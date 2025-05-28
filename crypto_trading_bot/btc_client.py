@@ -16,7 +16,7 @@ Available shell commands
 """
 from __future__ import annotations
 import os, sys, time, platform
-from dotenv import load_dotenv          # pip install python-dotenv
+from dotenv import load_dotenv
 from binance.spot import Spot as Client
 from binance.error import ClientError
 
@@ -62,7 +62,7 @@ class Safe(Client):
         try:
             return fn(**p)
         except ClientError as e:
-            if e.error_code == -1021:  # time skew
+            if e.error_code == -1021:
                 s._sync()
                 return fn(**p)
             raise
@@ -95,13 +95,19 @@ def shell():
             if cmd in ("quit","exit"):
                 print("bye"); break
             if cmd == "help":
-                print(" ".join(COMMANDS)); continue
+                print(" ".join(COMMANDS))
+                print("Command output format examples:")
+                print('  price   → "Current BTC price: <float> USDT"')
+                print('  balance → "USDT <float> | BTC <float>"')
+                continue
 
             cls()
             if cmd == "price":
-                print(get_price())
+                val = get_price()
+                print(f'Current BTC price: {val:.2f} USDT')
             elif cmd == "balance":
-                u,b = get_balances(); print(u, b)
+                u,b = get_balances()
+                print(f'USDT {u:.2f} | BTC {b:.8f}')
         except KeyboardInterrupt:
             print("\nbye"); break
         except Exception as exc:
