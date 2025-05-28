@@ -14,6 +14,7 @@ Available shell commands
   balance    two floats: <USDT> <BTC>
   buy        buy BTC with USDT (see restrictions)
   sell       sell BTC for USDT (see restrictions)
+  imbalance  show USDT minus BTC-in-USDT value (rebalance helper)
   quit/exit  leave program
 """
 from __future__ import annotations
@@ -120,8 +121,18 @@ def sell(btc: float) -> dict:
                       quantity=f"{qty:f}")
     return result
 
+def get_pair_imbalance() -> float:
+    """
+    Returns the difference between USDT balance and the USDT-equivalent value of BTC balance:
+      > 0 if USDT > BTC-in-USDT (more cash)
+      < 0 if BTC-in-USDT > USDT (more BTC value)
+    """
+    usdt, btc = get_balances()
+    price = get_price()
+    return usdt - btc * price
+
 # ── interactive shell --------------------------------------------------
-COMMANDS = ("help","price","balance","buy","sell","quit","exit")
+COMMANDS = ("help","price","balance","buy","sell","imbalance","quit","exit")
 
 def show_buy_sell_restrictions():
     print(f"Buy:  value in USDT (minNotional: {FILTERS['minNotional']:.2f})")
@@ -141,10 +152,11 @@ def shell():
             if cmd == "help":
                 print(" ".join(COMMANDS))
                 print("Command output format examples:")
-                print('  price   → "Current BTC price: <float> USDT"')
-                print('  balance → "USDT <float> | BTC <float>"')
-                print('  buy     → "Bought: <BTC> BTC for <USDT> USDT at price <fill price>"')
-                print('  sell    → "Sold: <BTC> BTC for <USDT> USDT at price <fill price>"')
+                print('  price      → "Current BTC price: <float> USDT"')
+                print('  balance    → "USDT <float> | BTC <float>"')
+                print('  buy        → "Bought: <BTC> BTC for <USDT> USDT at price <fill price>"')
+                print('  sell       → "Sold: <BTC> BTC for <USDT> USDT at price <fill price>"')
+                print('  imbalance  → "Imbalance: +/-<float> USDT (USDT-heavy/BTC-heavy)"')
                 show_buy_sell_restrictions()
                 continue
 
@@ -177,6 +189,11 @@ def shell():
                     print(f"Sold: {btc:.8f} BTC for {usdt_amt:.2f} USDT at price {price:.2f}")
                 except Exception as e:
                     print("error:", e)
+            elif cmd == "imbalance":
+                val = get_pair_imbalance()
+                sign = "+" if val >= 0 else "-"
+                print(f"Imbalance: {sign}{abs(val):.2f} USDT "
+                      f"({'USDT-heavy' if val>=0 else 'BTC-heavy'})")
         except KeyboardInterrupt:
             print("\nbye"); break
         except Exception as exc:
