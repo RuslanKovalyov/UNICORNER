@@ -15,9 +15,18 @@ Available shell commands
   buy        buy BTC with USDT (see restrictions)
   sell       sell BTC for USDT (see restrictions)
   imbalance  show USDT minus BTC-in-USDT value (rebalance helper)
-  fee        show current taker fee (%)
+  fee        show current taker fee (%) and update internal var
+  rebalance  makes USDT ≈ BTC value, fee-aware
   quit/exit  leave program
 """
+# REMINDER (repeat at every step/output):
+# 1. Every code output must include a descriptive git commit message.
+# 2. Keep raw helper functions “raw” (returning only values), never print or format text, so they can be reused for algorithmic import.
+# 3. User shell commands are just a console interface — output clues/descriptions about commands/results can be printed in the shell only (never inside the helper functions).
+# 4. Never make changes to code, comments, docstrings, formatting, or existing structure unless the user explicitly asks.
+# 5. Always update requirements, .env.example, .gitignore, etc., when dependencies or env vars change.
+# 6. Reminder itself must be included at the top of every output.
+
 from __future__ import annotations
 import os, sys, time, platform
 from decimal import Decimal
@@ -25,7 +34,8 @@ from dotenv import load_dotenv
 from binance.spot import Spot as Client
 from binance.error import ClientError
 
-# ─────────────────────────────────────────────────────
+TAKER_FEE = 0.001  # default 0.1%
+
 CLEAR = "cls" if platform.system() == "Windows" else "clear"
 cls = lambda: os.system(CLEAR)
 
@@ -144,13 +154,14 @@ def get_taker_fee() -> float:
         return 0.001  # fallback to typical default
 
 # ── interactive shell --------------------------------------------------
-COMMANDS = ("help","price","balance","buy","sell","imbalance","fee","quit","exit")
+COMMANDS = ("help","price","balance","buy","sell","imbalance","fee","rebalance","quit","exit")
 
 def show_buy_sell_restrictions():
     print(f"Buy:  value in USDT (minNotional: {FILTERS['minNotional']:.2f})")
     print(f"Sell: amount in BTC (minQty: {FILTERS['minQty']}, stepSize: {FILTERS['stepSize']})")
 
 def shell():
+    global TAKER_FEE
     cls()
     print(f"btc_client  |  {MODE.upper()}  |  {SYMBOL}\n")
     while True:
@@ -170,6 +181,7 @@ def shell():
                 print('  sell       → "Sold: <BTC> BTC for <USDT> USDT at price <fill price>"')
                 print('  imbalance  → "Imbalance: +/-<float> USDT (USDT-heavy/BTC-heavy)"')
                 print('  fee        → "Taker fee: <float>%"')
+                print('  rebalance  → "Buy/sell to equalize USDT and BTC-in-USDT balances"')
                 show_buy_sell_restrictions()
                 continue
 
@@ -209,7 +221,56 @@ def shell():
                       f"({'USDT-heavy' if val>=0 else 'BTC-heavy'})")
             elif cmd == "fee":
                 fee = get_taker_fee()
-                print(f"Taker fee: {fee*100:.3f}%")
+                if fee > 0:
+                    TAKER_FEE = fee
+                    print(f"Taker fee: {fee*100:.3f}% (updated)")
+                else:
+                    print(f"Taker fee: {TAKER_FEE*100:.3f}% (default, update failed)")
+            elif cmd == "rebalance":
+                usdt, btc = get_balances()
+                price = get_price()
+                btc_val = btc * price
+                diff = usdt - btc_val
+                print(f"Before: USDT {usdt:.2f} | BTC {btc:.8f} (≈ {btc_val:.2f} USDT)")
+                if abs(diff) < FILTERS["minNotional"]:
+                    print("Imbalance below min notional, nothing to do.")
+                    continue
+                # Target: both sides = (usdt + btc_val)/2 (minus fee)
+                target_val = (usdt + btc_val)/2
+                if diff > 0:
+                    # Buy BTC with excess USDT
+                    usdt_to_spend = diff/2  # spend to reach equality
+                    usdt_to_spend = usdt_to_spend / (1 + TAKER_FEE)
+                    if usdt_to_spend < FILTERS["minNotional"]:
+                        print("Required buy below min notional.")
+                        continue
+                    try:
+                        res = buy(usdt_to_spend)
+                        fills = res.get("fills", [])
+                        btc_amt = sum(float(f["qty"]) for f in fills)
+                        fill_price = float(fills[0]["price"]) if fills else price
+                        print(f"Bought: {btc_amt:.8f} BTC for {usdt_to_spend:.2f} USDT at price {fill_price:.2f}")
+                    except Exception as e:
+                        print("error:", e)
+                else:
+                    # Sell BTC to reach equality
+                    btc_to_sell = (-diff/2) / price
+                    btc_to_sell = btc_to_sell / (1 + TAKER_FEE)
+                    step = FILTERS["stepSize"]
+                    btc_to_sell = float((Decimal(str(btc_to_sell)) // step) * step)
+                    if btc_to_sell < float(FILTERS["minQty"]):
+                        print("Required sell below min qty.")
+                        continue
+                    try:
+                        res = sell(btc_to_sell)
+                        fills = res.get("fills", [])
+                        usdt_amt = sum(float(f["qty"])*float(f["price"]) for f in fills)
+                        fill_price = float(fills[0]["price"]) if fills else price
+                        print(f"Sold: {btc_to_sell:.8f} BTC for {usdt_amt:.2f} USDT at price {fill_price:.2f}")
+                    except Exception as e:
+                        print("error:", e)
+                u2, b2 = get_balances()
+                print(f"After:  USDT {u2:.2f} | BTC {b2:.8f} (≈ {b2*price:.2f} USDT)")
         except KeyboardInterrupt:
             print("\nbye"); break
         except Exception as exc:
