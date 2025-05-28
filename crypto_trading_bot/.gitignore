@@ -1,0 +1,12 @@
+# secrets & environment
+.env
+# python artefacts
+__pycache__/
+*.py[cod]
+# virtual-envs
+.venv/
+
+
+#ignore sketches/notebooks and Private Scripts  
+sketches/
+rocker.py
