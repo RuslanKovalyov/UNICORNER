@@ -15,6 +15,7 @@ Available shell commands
   buy        buy BTC with USDT (see restrictions)
   sell       sell BTC for USDT (see restrictions)
   imbalance  show USDT minus BTC-in-USDT value (rebalance helper)
+  fee        show current taker fee (%)
   quit/exit  leave program
 """
 from __future__ import annotations
@@ -131,8 +132,19 @@ def get_pair_imbalance() -> float:
     price = get_price()
     return usdt - btc * price
 
+def get_taker_fee() -> float:
+    """
+    Return current taker fee for SYMBOL (e.g. 0.001 for 0.1%)
+    """
+    try:
+        # Try user-level fee (Spot: takerCommission, in basis points)
+        acc = cli.call(cli.account)
+        return float(acc.get("takerCommission", 0)) / 10000
+    except Exception:
+        return 0.001  # fallback to typical default
+
 # ── interactive shell --------------------------------------------------
-COMMANDS = ("help","price","balance","buy","sell","imbalance","quit","exit")
+COMMANDS = ("help","price","balance","buy","sell","imbalance","fee","quit","exit")
 
 def show_buy_sell_restrictions():
     print(f"Buy:  value in USDT (minNotional: {FILTERS['minNotional']:.2f})")
@@ -157,6 +169,7 @@ def shell():
                 print('  buy        → "Bought: <BTC> BTC for <USDT> USDT at price <fill price>"')
                 print('  sell       → "Sold: <BTC> BTC for <USDT> USDT at price <fill price>"')
                 print('  imbalance  → "Imbalance: +/-<float> USDT (USDT-heavy/BTC-heavy)"')
+                print('  fee        → "Taker fee: <float>%"')
                 show_buy_sell_restrictions()
                 continue
 
@@ -194,6 +207,9 @@ def shell():
                 sign = "+" if val >= 0 else "-"
                 print(f"Imbalance: {sign}{abs(val):.2f} USDT "
                       f"({'USDT-heavy' if val>=0 else 'BTC-heavy'})")
+            elif cmd == "fee":
+                fee = get_taker_fee()
+                print(f"Taker fee: {fee*100:.3f}%")
         except KeyboardInterrupt:
             print("\nbye"); break
         except Exception as exc:
