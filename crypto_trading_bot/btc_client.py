@@ -109,6 +109,7 @@ def buy(usdt: float) -> dict:
     min_notnl = FILTERS["minNotional"]
     if usdt < min_notnl:
         raise ValueError(f"Order value too low, minNotional is {min_notnl:.2f} USDT")
+    # max notional for BUY is not strictly enforced by Binance, but could be added here if desired
     result = cli.call(cli.new_order,
                       symbol=SYMBOL, side="BUY", type="MARKET",
                       quoteOrderQty=round(float(usdt), 2))
@@ -119,9 +120,13 @@ def sell(btc: float) -> dict:
     btc = Decimal(str(btc))
     if btc < FILTERS["minQty"]:
         raise ValueError(f"Order size too low, minQty is {FILTERS['minQty']}")
+    if btc > FILTERS["maxQty"]:
+        raise ValueError(f"Order size too high, maxQty is {FILTERS['maxQty']}")
     # round down to stepSize
     step = FILTERS["stepSize"]
     qty = (btc // step) * step
+    if qty < FILTERS["minQty"]:
+        raise ValueError(f"Order size too low after rounding, minQty is {FILTERS['minQty']}")
     result = cli.call(cli.new_order,
                       symbol=SYMBOL, side="SELL", type="MARKET",
                       quantity=f"{qty:f}")
@@ -150,7 +155,7 @@ def get_taker_fee() -> float:
 
 def get_mid_price(minutes: int) -> float:
     """
-    Returns mean close price of the last N minutes. N >= 1.
+    Returns mean close price of the last N minutes. N ≥ 1.
     """
     if minutes < 1:
         raise ValueError("Minimum supported interval is 1 minute.")
@@ -163,7 +168,7 @@ COMMANDS = ("help","price","balance","buy","sell","imbalance","fee","rebalance",
 
 def show_buy_sell_restrictions():
     print(f"Buy:  value in USDT (minNotional: {FILTERS['minNotional']:.2f})")
-    print(f"Sell: amount in BTC (minQty: {FILTERS['minQty']}, stepSize: {FILTERS['stepSize']})")
+    print(f"Sell: amount in BTC (minQty: {FILTERS['minQty']}, maxQty: {FILTERS['maxQty']}, stepSize: {FILTERS['stepSize']})")
 
 def shell():
     global TAKER_FEE
@@ -268,6 +273,9 @@ def shell():
                     btc_to_sell = float((Decimal(str(btc_to_sell)) // step) * step)
                     if btc_to_sell < float(FILTERS["minQty"]):
                         print("Required sell below min qty.")
+                        continue
+                    if btc_to_sell > float(FILTERS["maxQty"]):
+                        print("Required sell above max qty.")
                         continue
                     try:
                         res = sell(btc_to_sell)
