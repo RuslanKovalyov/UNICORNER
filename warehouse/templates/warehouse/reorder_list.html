@@ -1,0 +1,160 @@
+{% extends 'warehouse/base.html' %}
+
+{% block title %}Reorder List - Warehouse{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>
+                <i class="fas fa-exclamation-triangle me-2 text-warning"></i>Reorder List
+            </h1>
+            <div>
+                <a href="{% url 'warehouse:stock_list' %}?status=low" class="btn btn-outline-warning me-2">
+                    <i class="fas fa-list me-1"></i>View All Low Stock
+                </a>
+                <button onclick="window.print()" class="btn btn-outline-primary">
+                    <i class="fas fa-print me-1"></i>Print List
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if stocks %}
+<!-- Summary -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="alert alert-warning">
+            <i class="fas fa-info-circle me-2"></i>
+            <strong>{{ stocks|length }} items</strong> need to be reordered across <strong>{{ suppliers_with_reorders|length }} suppliers</strong>.
+        </div>
+    </div>
+</div>
+
+<!-- Grouped by Supplier -->
+{% for supplier, supplier_stocks in suppliers_with_reorders.items %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-light">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <h5 class="mb-0">
+                            <i class="fas fa-truck me-2"></i>{{ supplier.name }}
+                        </h5>
+                        <small class="text-muted">{{ supplier_stocks|length }} items to reorder</small>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        {% if supplier.contact_person %}
+                        <div><strong>Contact:</strong> {{ supplier.contact_person }}</div>
+                        {% endif %}
+                        {% if supplier.email %}
+                        <div><strong>Email:</strong> <a href="mailto:{{ supplier.email }}">{{ supplier.email }}</a></div>
+                        {% endif %}
+                        {% if supplier.phone %}
+                        <div><strong>Phone:</strong> <a href="tel:{{ supplier.phone }}">{{ supplier.phone }}</a></div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Item Name</th>
+                            <th>Category</th>
+                            <th>Current Stock</th>
+                            <th>Minimum Stock</th>
+                            <th>Suggested Order</th>
+                            <th>Unit Price</th>
+                            <th>Est. Cost</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for stock in supplier_stocks %}
+                        <tr class="{% if stock.current_quantity == 0 %}table-danger{% else %}table-warning{% endif %}">
+                            <td>
+                                <strong>{{ stock.name }}</strong>
+                                {% if stock.description %}
+                                <br><small class="text-muted">{{ stock.description|truncatechars:40 }}</small>
+                                {% endif %}
+                            </td>
+                            <td>{{ stock.category.name }}</td>
+                            <td>
+                                {{ stock.current_quantity }} {{ stock.get_unit_display }}
+                                {% if stock.current_quantity == 0 %}
+                                <br><span class="badge bg-danger">OUT OF STOCK</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ stock.minimum_quantity }} {{ stock.get_unit_display }}</td>
+                            <td>
+                                {% with suggested=stock.minimum_quantity|add:stock.minimum_quantity %}
+                                <strong>{{ suggested }} {{ stock.get_unit_display }}</strong>
+                                <br><small class="text-muted">Suggested: 2x minimum</small>
+                                {% endwith %}
+                            </td>
+                            <td>₪{{ stock.unit_price }}</td>
+                            <td>
+                                {% with suggested=stock.minimum_quantity|add:stock.minimum_quantity %}
+                                {% widthratio suggested 1 stock.unit_price as estimated_cost %}
+                                <strong>₪{{ estimated_cost|floatformat:2 }}</strong>
+                                {% endwith %}
+                            </td>
+                            <td>
+                                <a href="/admin/warehouse/stock/{{ stock.id }}/change/" class="btn btn-sm btn-outline-primary" title="Edit Stock">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot class="table-light">
+                        <tr>
+                            <td colspan="6"><strong>Supplier Total:</strong></td>
+                            <td>
+                                <strong>
+                                    ₪{% for stock in supplier_stocks %}
+                                        {% with suggested=stock.minimum_quantity|add:stock.minimum_quantity %}
+                                        {% widthratio suggested 1 stock.unit_price as cost %}
+                                        {% if forloop.first %}{{ cost|floatformat:2 }}{% else %}{{ cost|add:forloop.parentloop.counter0|floatformat:2 }}{% endif %}
+                                        {% endwith %}
+                                    {% endfor %}
+                                </strong>
+                            </td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+<!-- Print Styles -->
+<style media="print">
+    .btn, .navbar, .breadcrumb { display: none !important; }
+    .card { border: 1px solid #ddd !important; page-break-inside: avoid; }
+    .table { font-size: 12px; }
+</style>
+
+{% else %}
+<div class="row">
+    <div class="col-12">
+        <div class="alert alert-success text-center">
+            <i class="fas fa-check-circle me-2"></i>
+            Great! No items currently need reordering. All stock levels are above minimum thresholds.
+        </div>
+        
+        <div class="text-center mt-4">
+            <a href="{% url 'warehouse:stock_list' %}" class="btn btn-primary">
+                <i class="fas fa-boxes me-1"></i>View All Stock Items
+            </a>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,195 @@
+{% extends 'warehouse/base.html' %}
+
+{% block title %}Warehouse Dashboard{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h1 class="mb-4">
+            <i class="fas fa-tachometer-alt me-2"></i>Warehouse Dashboard
+        </h1>
+    </div>
+</div>
+
+<!-- Summary Cards -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card text-white bg-primary">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4 class="card-title">{{ stats.total_stocks }}</h4>
+                        <p class="card-text">Total Stock Items</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-boxes fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card text-white bg-warning">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4 class="card-title">{{ stats.low_stock_items }}</h4>
+                        <p class="card-text">Low Stock Items</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-exclamation-triangle fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+            {% if stats.has_reorder_items %}
+            <div class="card-footer">
+                <a href="{% url 'warehouse:reorder_list' %}" class="text-white text-decoration-none">
+                    View Reorder List <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card text-white bg-danger">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4 class="card-title">{{ stats.out_of_stock }}</h4>
+                        <p class="card-text">Out of Stock</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-times-circle fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card text-white bg-success">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4 class="card-title">₪{{ stats.total_value|floatformat:2 }}</h4>
+                        <p class="card-text">Total Inventory Value</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-dollar-sign fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Suppliers Section -->
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="fas fa-truck me-2"></i>Suppliers
+                </h5>
+                <a href="{% url 'warehouse:supplier_list' %}" class="btn btn-sm btn-outline-primary">View All</a>
+            </div>
+            <div class="card-body">
+                {% if suppliers %}
+                    <div class="list-group list-group-flush">
+                        {% for supplier in suppliers|slice:":5" %}
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1">{{ supplier.name }}</h6>
+                                <small class="text-muted">{{ supplier.contact_person }}</small>
+                            </div>
+                            <div class="text-end">
+                                <span class="badge bg-primary">{{ supplier.stock_count }} items</span>
+                                <br>
+                                <a href="{% url 'warehouse:supplier_detail' supplier.id %}" class="btn btn-sm btn-outline-secondary mt-1">
+                                    View Items
+                                </a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-muted">No suppliers found. <a href="/admin/warehouse/supplier/add/">Add a supplier</a></p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- Categories Section -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-tags me-2"></i>Categories
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if categories %}
+                    <div class="list-group list-group-flush">
+                        {% for category in categories %}
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>{{ category.name }}</span>
+                            <span class="badge bg-secondary">{{ category.stock_count }} items</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-muted">No categories found. <a href="/admin/warehouse/category/add/">Add a category</a></p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-bolt me-2"></i>Quick Actions
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3 mb-2">
+                        <a href="/admin/warehouse/supplier/add/" class="btn btn-outline-primary w-100">
+                            <i class="fas fa-plus me-1"></i>Add Supplier
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <a href="/admin/warehouse/stock/add/" class="btn btn-outline-success w-100">
+                            <i class="fas fa-plus me-1"></i>Add Stock Item
+                        </a>
+                    </div>
+                    {% if stats.has_reorder_items %}
+                    <div class="col-md-3 mb-2">
+                        <a href="{% url 'warehouse:reorder_list' %}" class="btn btn-outline-warning w-100">
+                            <i class="fas fa-list me-1"></i>Reorder List
+                            <span class="badge bg-warning text-dark ms-1">{{ stats.low_stock_items }}</span>
+                        </a>
+                    </div>
+                    {% else %}
+                    <div class="col-md-3 mb-2">
+                        <button class="btn btn-outline-secondary w-100" disabled>
+                            <i class="fas fa-check me-1"></i>All Stocked
+                        </button>
+                    </div>
+                    {% endif %}
+                    <div class="col-md-3 mb-2">
+                        <a href="/admin/warehouse/" class="btn btn-outline-info w-100">
+                            <i class="fas fa-cog me-1"></i>Admin Panel
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

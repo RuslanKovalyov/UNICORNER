@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'qr_code.apps.QrCodeConfig',
     'typing_test.apps.TypingTestConfig',
     'visualtranslate.apps.VisualtranslateConfig',
+    'warehouse.apps.WarehouseConfig',
 ]
 
 MIDDLEWARE = [
@@ -40,6 +41,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'warehouse.auth.WarehouseAuthenticationMiddleware',
 ]
 
 ROOT_URLCONF = 'unicorner.urls'

@@ -1,0 +1,153 @@
+{% extends 'warehouse/base.html' %}
+
+{% block title %}All Stocks - Warehouse{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>
+                <i class="fas fa-boxes me-2"></i>All Stock Items
+            </h1>
+            <a href="/admin/warehouse/stock/add/" class="btn btn-primary">
+                <i class="fas fa-plus me-1"></i>Add Stock Item
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Filters -->
+<div class="filter-section">
+    <form method="get" class="row g-3">
+        <div class="col-md-2">
+            <label class="form-label">Search</label>
+            <input type="text" class="form-control" name="search" value="{{ current_search }}" placeholder="Search...">
+        </div>
+        
+        <div class="col-md-3">
+            <label class="form-label">Supplier</label>
+            <select name="supplier" class="form-select">
+                <option value="">All Suppliers</option>
+                {% for supplier in suppliers %}
+                <option value="{{ supplier.id }}" {% if current_supplier == supplier.id|stringformat:"s" %}selected{% endif %}>
+                    {{ supplier.name }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div class="col-md-2">
+            <label class="form-label">Category</label>
+            <select name="category" class="form-select">
+                <option value="">All Categories</option>
+                {% for category in categories %}
+                <option value="{{ category.name }}" {% if current_category == category.name %}selected{% endif %}>
+                    {{ category.name }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div class="col-md-2">
+            <label class="form-label">Status</label>
+            <select name="status" class="form-select">
+                <option value="">All Items</option>
+                <option value="in_stock" {% if current_status == 'in_stock' %}selected{% endif %}>In Stock</option>
+                <option value="low" {% if current_status == 'low' %}selected{% endif %}>Low Stock</option>
+                <option value="out" {% if current_status == 'out' %}selected{% endif %}>Out of Stock</option>
+            </select>
+        </div>
+        
+        <div class="col-md-3">
+            <label class="form-label">&nbsp;</label>
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-search me-1"></i>Filter
+                </button>
+                <a href="{% url 'warehouse:stock_list' %}" class="btn btn-outline-secondary">
+                    <i class="fas fa-times me-1"></i>Clear
+                </a>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Stock Items -->
+{% if stocks %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Stock Items ({{ stocks|length }})</h5>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Item Name</th>
+                            <th>Supplier</th>
+                            <th>Category</th>
+                            <th>Current Stock</th>
+                            <th>Min. Stock</th>
+                            <th>Unit Price</th>
+                            <th>Total Value</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for stock in stocks %}
+                        <tr class="{% if stock.current_quantity == 0 %}out-of-stock{% elif stock.needs_reorder %}low-stock{% else %}in-stock{% endif %}">
+                            <td>
+                                <strong>{{ stock.name }}</strong>
+                                {% if stock.description %}
+                                <br><small class="text-muted">{{ stock.description|truncatechars:50 }}</small>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{% url 'warehouse:supplier_detail' stock.supplier.id %}">
+                                    {{ stock.supplier.name }}
+                                </a>
+                            </td>
+                            <td>{{ stock.category.name }}</td>
+                            <td>{{ stock.current_quantity }} {{ stock.get_unit_display }}</td>
+                            <td>{{ stock.minimum_quantity }} {{ stock.get_unit_display }}</td>
+                            <td>₪{{ stock.unit_price }}</td>
+                            <td>₪{{ stock.total_value|floatformat:2 }}</td>
+                            <td>
+                                {% if stock.current_quantity == 0 %}
+                                    <span class="badge bg-danger">Out of Stock</span>
+                                {% elif stock.needs_reorder %}
+                                    <span class="badge bg-warning">Low Stock</span>
+                                {% else %}
+                                    <span class="badge bg-success">In Stock</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="/admin/warehouse/stock/{{ stock.id }}/change/" class="btn btn-sm btn-outline-primary" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="row">
+    <div class="col-12">
+        <div class="alert alert-info text-center">
+            <i class="fas fa-info-circle me-2"></i>
+            No stock items found matching your criteria.
+            {% if not suppliers %}
+                <a href="/admin/warehouse/supplier/add/" class="alert-link">Add a supplier</a> first, then
+            {% endif %}
+            <a href="/admin/warehouse/stock/add/" class="alert-link">add stock items</a>.
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

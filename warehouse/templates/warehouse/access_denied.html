@@ -1,0 +1,78 @@
+{% extends 'warehouse/base.html' %}
+
+{% block title %}Access Denied - Warehouse{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card border-danger">
+            <div class="card-header bg-danger text-white text-center">
+                <h4 class="mb-0">
+                    <i class="fas fa-exclamation-triangle me-2"></i>Access Denied
+                </h4>
+            </div>
+            <div class="card-body text-center">
+                <i class="fas fa-lock fa-4x text-danger mb-3"></i>
+                <h5>Warehouse Access Restricted</h5>
+                <p class="text-muted">
+                    You don't have permission to access the warehouse management system. 
+                    This area is restricted to managers and administrators only.
+                </p>
+                
+                <div class="mt-4">
+                    <h6>Need Access?</h6>
+                    <p class="small text-muted">
+                        Contact your administrator to request warehouse access. 
+                        They can grant you manager privileges from the admin panel.
+                    </p>
+                </div>
+                
+                <div class="mt-4">
+                    <a href="/" class="btn btn-primary me-2">
+                        <i class="fas fa-home me-1"></i>Return to Main Site
+                    </a>
+                    <a href="/admin/login/" class="btn btn-outline-secondary">
+                        <i class="fas fa-sign-in-alt me-1"></i>Admin Login
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Security Information -->
+<div class="row justify-content-center mt-4">
+    <div class="col-md-8">
+        <div class="card bg-light">
+            <div class="card-body">
+                <h6 class="card-title">
+                    <i class="fas fa-info-circle me-2"></i>Access Levels
+                </h6>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="text-center">
+                            <i class="fas fa-user fa-2x text-muted mb-2"></i>
+                            <h6>Regular User</h6>
+                            <small class="text-muted">Main website access only</small>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-center">
+                            <i class="fas fa-user-tie fa-2x text-warning mb-2"></i>
+                            <h6>Manager (Staff)</h6>
+                            <small class="text-muted">Warehouse access granted</small>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-center">
+                            <i class="fas fa-user-shield fa-2x text-success mb-2"></i>
+                            <h6>Administrator</h6>
+                            <small class="text-muted">Full system access</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

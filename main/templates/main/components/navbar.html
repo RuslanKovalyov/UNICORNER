@@ -89,14 +89,31 @@
             <a href="{% url 'about' %}" tabindex="0" aria-current="page">About</a>
         {% endif %}
         
+        {% comment %} Staff/Admin only warehouse access {% endcomment %}
+        {% if user.is_authenticated and user.is_staff %}
+            {% if request.path|slice:":11" == "/warehouse/" %}
+                <a style="text-decoration: underline;" href="{% url 'warehouse:dashboard' %}" tabindex="0" aria-current="page">
+                    <i class="fas fa-warehouse me-1"></i>Warehouse
+                </a>
+            {% else %}
+                <a href="{% url 'warehouse:dashboard' %}" tabindex="0" style="color: #ffd700;">
+                    <i class="fas fa-warehouse me-1"></i>Warehouse
+                </a>
+            {% endif %}
+        {% endif %}
+        
         {% comment %} <a href="{% url 'generate_qr_code' %}" tabindex="0">QR-Code-Generator</a> {% endcomment %}
 
         {% comment %} <a href="{% url 'typing_test' %}" tabindex="0">Fast-Typing</a> {% endcomment %}
 
         {% comment %} <a href="{% url 'visual_translate' %}" tabindex="0">Visual-Translate</a> {% endcomment %}
     </span>
-
-    <a class="login" href="/admin/" tabindex="0" aria-current="page">Log in</a>
+    
+    {% if user.is_authenticated %}
+        <a class="login" href="/admin/" tabindex="0" aria-current="page">{{ user.username }}</a>
+    {% else %}
+        <a class="login" href="/admin/" tabindex="0" aria-current="page">Log in</a>
+    {% endif %}
 
     <span class="sidebar english" id="mySidebar" aria-hidden="true" role="navigation">
         <a href="javascript:void(0)" class="closebtn hebrew" onclick="closeNav()" tabindex="0" aria-label="Close sidebar">&times;</a>
@@ -107,6 +124,13 @@
         </a>
         <a href="{% url 'contacts' %}" tabindex="0" aria-current="page">Contact us</a>
         <a href="{% url 'about' %}" tabindex="0" aria-current="page">About</a>
+        
+        {% comment %} Staff/Admin only warehouse access in mobile menu {% endcomment %}
+        {% if user.is_authenticated and user.is_staff %}
+            <a href="{% url 'warehouse:dashboard' %}" tabindex="0" style="color: #ffd700;">
+                <i class="fas fa-warehouse me-1"></i>Warehouse Management
+            </a>
+        {% endif %}
         {% comment %} <a href="{% url 'generate_qr_code' %}" tabindex="0">QR Code Generator</a> {% endcomment %}
         {% comment %} <a href="{% url 'typing_test' %}" tabindex="0">Fast Typing</a> {% endcomment %}
         {% comment %} <a href="{% url 'visual_translate' %}" tabindex="0">Visual Translate</a> {% endcomment %}
