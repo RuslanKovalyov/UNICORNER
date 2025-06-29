@@ -81,7 +81,7 @@
     <form method="get" class="row g-3">
         <div class="col-md-3">
             <label class="form-label">Search</label>
-            <input type="text" class="form-control" name="search" value="{{ current_search }}" placeholder="Search items...">
+            <input type="text" class="form-control" name="search" value="{{ current_search|default:'' }}" placeholder="Search items...">
         </div>
         
         <div class="col-md-3">
