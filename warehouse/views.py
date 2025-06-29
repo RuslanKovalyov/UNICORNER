@@ -1,8 +1,12 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Q, Sum, Count, F
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib import messages
+from django.urls import reverse
+from django.http import JsonResponse
 from .models import Supplier, Category, Stock
+from .forms import StockQuantityFormSet
 from .auth import staff_required
 
 
@@ -101,7 +105,7 @@ def supplier_detail(request, supplier_id):
 
 @staff_required
 def stock_list(request):
-    """List all stocks with filtering options"""
+    """List all stocks with filtering options and inline editing"""
     stocks = Stock.objects.filter(is_active=True).select_related('supplier', 'category')
     
     # Get filter parameters
@@ -133,12 +137,79 @@ def stock_list(request):
     
     stocks = stocks.order_by('supplier__name', 'category__name', 'name')
     
+    # Handle POST request for inline editing
+    if request.method == 'POST':
+        # Check if this is an AJAX request for individual stock update
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest' and request.POST.get('action') == 'save_single':
+            try:
+                stock_id = request.POST.get('stock_id')
+                new_quantity = request.POST.get('quantity')
+                
+                # Validate inputs
+                if not stock_id or new_quantity is None:
+                    return JsonResponse({'success': False, 'error': 'Missing required data'})
+                
+                # Get the stock object
+                stock = Stock.objects.get(id=stock_id, is_active=True)
+                
+                # Update the quantity
+                stock.current_quantity = float(new_quantity)
+                stock.save()
+                
+                return JsonResponse({'success': True, 'message': 'Stock updated successfully'})
+                
+            except Stock.DoesNotExist:
+                return JsonResponse({'success': False, 'error': 'Stock item not found'})
+            except ValueError:
+                return JsonResponse({'success': False, 'error': 'Invalid quantity value'})
+            except Exception as e:
+                return JsonResponse({'success': False, 'error': str(e)})
+        
+        # Handle regular form submission (save all)
+        else:
+            formset = StockQuantityFormSet(request.POST, queryset=stocks)
+            if formset.is_valid():
+                updated_count = 0
+                for form in formset:
+                    if form.has_changed():
+                        form.save()
+                        updated_count += 1
+                
+                if updated_count > 0:
+                    messages.success(request, f'Successfully updated {updated_count} stock quantities.')
+                else:
+                    messages.info(request, 'No changes were made.')
+                
+                # Rebuild the URL with current filters to maintain state after redirect
+                base_url = reverse('warehouse:stock_list')
+                params = []
+                if supplier_filter:
+                    params.append(f'supplier={supplier_filter}')
+                if category_filter:
+                    params.append(f'category={category_filter}')
+                if search_query:
+                    params.append(f'search={search_query}')
+                if stock_status:
+                    params.append(f'status={stock_status}')
+                
+                if params:
+                    redirect_url = f"{base_url}?{'&'.join(params)}"
+                else:
+                    redirect_url = base_url
+                
+                return redirect(redirect_url)
+            else:
+                messages.error(request, 'There were errors in the form. Please check your input.')
+    else:
+        formset = StockQuantityFormSet(queryset=stocks)
+    
     # Get filter options
     suppliers = Supplier.objects.filter(is_active=True, stocks__is_active=True).distinct()
     categories = Category.objects.filter(stocks__is_active=True).distinct()
     
     context = {
         'stocks': stocks,
+        'formset': formset,
         'suppliers': suppliers,
         'categories': categories,
         'current_supplier': supplier_filter,

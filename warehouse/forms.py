@@ -1,4 +1,5 @@
 from django import forms
+from django.forms import modelformset_factory
 from .models import Category, Stock
 
 
@@ -35,3 +36,27 @@ class StockForm(forms.ModelForm):
         # Make category field show all categories in a nice way
         self.fields['category'].queryset = Category.objects.all().order_by('name')
         self.fields['category'].empty_label = "Select a category"
+
+
+class StockQuantityForm(forms.ModelForm):
+    """Form for inline editing of stock quantities"""
+    class Meta:
+        model = Stock
+        fields = ['current_quantity']
+        widgets = {
+            'current_quantity': forms.NumberInput(attrs={
+                'class': 'form-control form-control-sm stock-quantity-input',
+                'style': 'width: 80px; text-align: center;',
+                'step': '1',
+                'min': '0'
+            })
+        }
+
+
+# Create a formset for bulk editing stock quantities
+StockQuantityFormSet = modelformset_factory(
+    Stock, 
+    form=StockQuantityForm, 
+    extra=0,
+    can_delete=False
+)

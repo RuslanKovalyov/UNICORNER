@@ -36,6 +36,74 @@
             padding: 1rem;
             margin-bottom: 1rem;
         }
+        /* Fixed width for status badges to prevent table jumping */
+        .badge {
+            min-width: 90px;
+            display: inline-block;
+            text-align: center;
+        }
+        /* Stable table layout */
+        .table-responsive .table {
+            table-layout: auto;
+        }
+        .table-responsive .table th,
+        .table-responsive .table td {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding: 0.5rem 0.3rem;
+        }
+        /* Center align quantity inputs */
+        .stock-quantity-input {
+            text-align: center !important;
+        }
+        /* Center content in Current Stock column */
+        .table td:nth-child(4) {
+            text-align: center;
+        }
+        
+        /* Remove any CSS that might hide spinners and force them to show */
+        input[type="number"].stock-quantity-input {
+            -webkit-appearance: none;
+            -moz-appearance: textfield;
+            appearance: none;
+        }
+        
+        input[type="number"].stock-quantity-input::-webkit-outer-spin-button,
+        input[type="number"].stock-quantity-input::-webkit-inner-spin-button {
+            -webkit-appearance: auto !important;
+            opacity: 1 !important;
+            height: 20px !important;
+            width: 15px !important;
+            margin: 0 !important;
+            cursor: pointer !important;
+        }
+        
+        /* Override Bootstrap's hiding of spinners */
+        .form-control::-webkit-outer-spin-button,
+        .form-control::-webkit-inner-spin-button {
+            -webkit-appearance: auto !important;
+            opacity: 1 !important;
+        }
+        
+        /* For Firefox */
+        input[type="number"].stock-quantity-input {
+            -moz-appearance: auto !important;
+        }
+        
+        /* Mobile adjustments */
+        @media (max-width: 767px) {
+            .table-responsive .table {
+                font-size: 0.85rem;
+            }
+            .stock-quantity-input {
+                width: 60px !important;
+            }
+            .badge {
+                min-width: 70px;
+                font-size: 0.7rem;
+            }
+        }
     </style>
 </head>
 <body>
