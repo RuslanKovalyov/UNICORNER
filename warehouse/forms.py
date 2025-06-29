@@ -46,7 +46,7 @@ class StockQuantityForm(forms.ModelForm):
         widgets = {
             'current_quantity': forms.NumberInput(attrs={
                 'class': 'form-control form-control-sm stock-quantity-input',
-                'style': 'width: 80px; text-align: center;',
+                'style': 'width: 90px; text-align: center;',
                 'step': '1',
                 'min': '0'
             })

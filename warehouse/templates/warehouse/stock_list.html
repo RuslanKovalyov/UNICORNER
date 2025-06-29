@@ -103,9 +103,9 @@
                         <thead class="table-light">
                             <tr>
                                 <th>Item Name</th>
+                                <th>Current Stock</th>
                                 <th>Supplier</th>
                                 <th>Category</th>
-                                <th>Current Stock</th>
                                 <th>Min. Stock</th>
                                 <th>Unit Price</th>
                                 <th>Total Value</th>
@@ -125,12 +125,6 @@
                                     <strong>{{ stock.name }}</strong>
                                 </td>
                                 <td>
-                                    <a href="{% url 'warehouse:supplier_detail' stock.supplier.id %}">
-                                        {{ stock.supplier.name }}
-                                    </a>
-                                </td>
-                                <td>{{ stock.category.name }}</td>
-                                <td>
                                     {{ form.current_quantity }}
                                     {% if form.current_quantity.errors %}
                                         <div class="text-danger small">
@@ -138,6 +132,12 @@
                                         </div>
                                     {% endif %}
                                 </td>
+                                <td>
+                                    <a href="{% url 'warehouse:supplier_detail' stock.supplier.id %}">
+                                        {{ stock.supplier.name }}
+                                    </a>
+                                </td>
+                                <td>{{ stock.category.name }}</td>
                                 <td class="min-quantity">{{ stock.minimum_quantity }} {{ stock.get_unit_display }}</td>
                                 <td class="unit-price">₪{{ stock.unit_price }}</td>
                                 <td class="total-value">₪{{ stock.total_value|floatformat:2 }}</td>

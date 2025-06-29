@@ -57,26 +57,27 @@
         .stock-quantity-input {
             text-align: center !important;
         }
-        /* Center content in Current Stock column */
-        .table td:nth-child(4) {
+        /* Center content in Current Stock column (now column 2) */
+        .table td:nth-child(2) {
             text-align: center;
         }
         
         /* Remove any CSS that might hide spinners and force them to show */
         input[type="number"].stock-quantity-input {
-            -webkit-appearance: none;
-            -moz-appearance: textfield;
-            appearance: none;
+            -webkit-appearance: auto !important;
+            -moz-appearance: auto !important;
+            appearance: auto !important;
         }
         
         input[type="number"].stock-quantity-input::-webkit-outer-spin-button,
         input[type="number"].stock-quantity-input::-webkit-inner-spin-button {
             -webkit-appearance: auto !important;
             opacity: 1 !important;
-            height: 20px !important;
-            width: 15px !important;
             margin: 0 !important;
             cursor: pointer !important;
+            position: relative !important;
+            right: 0 !important;
+            top: 0 !important;
         }
         
         /* Override Bootstrap's hiding of spinners */
@@ -89,6 +90,23 @@
         /* For Firefox */
         input[type="number"].stock-quantity-input {
             -moz-appearance: auto !important;
+        }
+        
+        /* Mobile adjustments - simpler approach */
+        @media (max-width: 767px) {
+            .stock-quantity-input {
+                width: 70px !important;
+                font-size: 0.85rem;
+            }
+            
+            /* Try to show spinners on mobile */
+            input[type="number"].stock-quantity-input::-webkit-outer-spin-button,
+            input[type="number"].stock-quantity-input::-webkit-inner-spin-button {
+                -webkit-appearance: auto !important;
+                opacity: 1 !important;
+                height: 22px !important;
+                width: 16px !important;
+            }
         }
         
         /* Mobile adjustments */
