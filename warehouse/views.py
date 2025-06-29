@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from django.db.models import Q, Sum, Count
+from django.db.models import Q, Sum, Count, F
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.admin.views.decorators import staff_member_required
 from .models import Supplier, Category, Stock
@@ -21,8 +21,10 @@ def warehouse_dashboard(request):
     total_stocks = Stock.objects.filter(is_active=True).count()
     low_stock_items = Stock.objects.filter(is_active=True, needs_reorder=True).count()
     out_of_stock = Stock.objects.filter(is_active=True, current_quantity=0).count()
+    
+    # Calculate total inventory value correctly: sum of (quantity * price) for each item
     total_value = Stock.objects.filter(is_active=True).aggregate(
-        total=Sum('current_quantity') * Sum('unit_price')
+        total=Sum(F('current_quantity') * F('unit_price'))
     )['total'] or 0
     
     context = {
