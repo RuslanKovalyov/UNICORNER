@@ -228,16 +228,35 @@ def reorder_list(request):
         needs_reorder=True
     ).select_related('supplier', 'category').order_by('supplier__name', 'name')
     
-    # Group by supplier for easier ordering
+    # Group by supplier for easier ordering and calculate totals
     suppliers_with_reorders = {}
+    grand_total = 0
+    
     for stock in stocks:
         supplier = stock.supplier
         if supplier not in suppliers_with_reorders:
-            suppliers_with_reorders[supplier] = []
-        suppliers_with_reorders[supplier].append(stock)
+            suppliers_with_reorders[supplier] = {
+                'stocks': [],
+                'total_cost': 0,
+                'total_items': 0
+            }
+        
+        # Calculate suggested order quantity (2x minimum)
+        suggested_quantity = stock.minimum_quantity * 2
+        estimated_cost = suggested_quantity * stock.unit_price
+        
+        # Add calculated fields to stock object
+        stock.suggested_quantity = suggested_quantity
+        stock.estimated_cost = estimated_cost
+        
+        suppliers_with_reorders[supplier]['stocks'].append(stock)
+        suppliers_with_reorders[supplier]['total_cost'] += estimated_cost
+        suppliers_with_reorders[supplier]['total_items'] += 1
+        grand_total += estimated_cost
     
     context = {
         'stocks': stocks,
         'suppliers_with_reorders': suppliers_with_reorders,
+        'grand_total': grand_total,
     }
     return render(request, 'warehouse/reorder_list.html', context)

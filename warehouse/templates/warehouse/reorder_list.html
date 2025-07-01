@@ -33,7 +33,7 @@
 </div>
 
 <!-- Grouped by Supplier -->
-{% for supplier, supplier_stocks in suppliers_with_reorders.items %}
+{% for supplier, supplier_data in suppliers_with_reorders.items %}
 <div class="row mb-4">
     <div class="col-12">
         <div class="card">
@@ -43,7 +43,7 @@
                         <h5 class="mb-0">
                             <i class="fas fa-truck me-2"></i>{{ supplier.name }}
                         </h5>
-                        <small class="text-muted">{{ supplier_stocks|length }} items to reorder</small>
+                        <small class="text-muted">{{ supplier_data.stocks|length }} items to reorder</small>
                     </div>
                     <div class="col-md-6 text-end">
                         {% if supplier.contact_person %}
@@ -74,7 +74,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for stock in supplier_stocks %}
+                        {% for stock in supplier_data.stocks %}
                         <tr class="{% if stock.current_quantity == 0 %}table-danger{% else %}table-warning{% endif %}">
                             <td>
                                 <strong>{{ stock.name }}</strong>
@@ -91,17 +91,12 @@
                             </td>
                             <td>{{ stock.minimum_quantity }} {{ stock.get_unit_display }}</td>
                             <td>
-                                {% with suggested=stock.minimum_quantity|add:stock.minimum_quantity %}
-                                <strong>{{ suggested }} {{ stock.get_unit_display }}</strong>
+                                <strong>{{ stock.suggested_quantity }} {{ stock.get_unit_display }}</strong>
                                 <br><small class="text-muted">Suggested: 2x minimum</small>
-                                {% endwith %}
                             </td>
                             <td>₪{{ stock.unit_price }}</td>
                             <td>
-                                {% with suggested=stock.minimum_quantity|add:stock.minimum_quantity %}
-                                {% widthratio suggested 1 stock.unit_price as estimated_cost %}
-                                <strong>₪{{ estimated_cost|floatformat:2 }}</strong>
-                                {% endwith %}
+                                <strong>₪{{ stock.estimated_cost|floatformat:2 }}</strong>
                             </td>
                             <td>
                                 <a href="/admin/warehouse/stock/{{ stock.id }}/change/" class="btn btn-sm btn-outline-primary" title="Edit Stock">
@@ -115,14 +110,7 @@
                         <tr>
                             <td colspan="6"><strong>Supplier Total:</strong></td>
                             <td>
-                                <strong>
-                                    ₪{% for stock in supplier_stocks %}
-                                        {% with suggested=stock.minimum_quantity|add:stock.minimum_quantity %}
-                                        {% widthratio suggested 1 stock.unit_price as cost %}
-                                        {% if forloop.first %}{{ cost|floatformat:2 }}{% else %}{{ cost|add:forloop.parentloop.counter0|floatformat:2 }}{% endif %}
-                                        {% endwith %}
-                                    {% endfor %}
-                                </strong>
+                                <strong>₪{{ supplier_data.total_cost|floatformat:2 }}</strong>
                             </td>
                             <td></td>
                         </tr>
@@ -133,6 +121,20 @@
     </div>
 </div>
 {% endfor %}
+
+<!-- Grand Total Summary -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card border-primary">
+            <div class="card-body text-center">
+                <h4 class="text-primary mb-0">
+                    <i class="fas fa-calculator me-2"></i>Grand Total Estimate: <strong>₪{{ grand_total|floatformat:2 }}</strong>
+                </h4>
+                <small class="text-muted">Total estimated cost for all reorder suggestions</small>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- Print Styles -->
 <style media="print">
