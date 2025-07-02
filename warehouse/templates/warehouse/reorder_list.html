@@ -46,6 +46,11 @@
                         <small class="text-muted">{{ supplier_data.stocks|length }} items to reorder</small>
                     </div>
                     <div class="col-md-6 text-end">
+                        <div class="mb-2">
+                            <button class="btn btn-success btn-sm" onclick="generateOrderList('{{ supplier.id }}', '{{ supplier.name|escapejs }}')">
+                                <i class="fas fa-clipboard-list me-1"></i>Generate Order List
+                            </button>
+                        </div>
                         {% if supplier.contact_person %}
                         <div><strong>Contact:</strong> {{ supplier.contact_person }}</div>
                         {% endif %}
@@ -159,4 +164,111 @@
     </div>
 </div>
 {% endif %}
+
+<!-- Order List Modal -->
+<div class="modal fade" id="orderListModal" tabindex="-1" aria-labelledby="orderListModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="orderListModalLabel">
+                    <i class="fas fa-clipboard-list me-2"></i>Order List for <span id="supplierNameInModal"></span>
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    Simple order list ready for copy-paste into WhatsApp or messaging apps. Easy to edit quantities manually.
+                </div>
+                <div class="mb-3">
+                    <label for="orderTextArea" class="form-label">Simple Order List:</label>
+                    <textarea id="orderTextArea" class="form-control" rows="15" readonly style="font-family: monospace; font-size: 16px;"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="copyToClipboard()">
+                    <i class="fas fa-copy me-1"></i>Copy to Clipboard
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Store supplier data for generating order lists
+const supplierOrderData = {};
+
+{% for supplier, supplier_data in suppliers_with_reorders.items %}
+supplierOrderData['{{ supplier.id }}'] = {
+    name: '{{ supplier.name|escapejs }}',
+    items: [
+        {% for stock in supplier_data.stocks %}
+        {
+            name: '{{ stock.name|escapejs }}',
+            quantity: {{ stock.suggested_quantity }},
+            unit: '{{ stock.get_unit_display|escapejs }}'
+        }{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    ]
+};
+{% endfor %}
+
+function generateOrderList(supplierId, supplierName) {
+    const data = supplierOrderData[supplierId];
+    if (!data) {
+        alert('No data found for this supplier');
+        return;
+    }
+    
+    // Generate simple list - quantity on one line, name on next line, then empty line
+    let orderText = '';
+    
+    data.items.forEach((item, index) => {
+        orderText += `${item.quantity}--\n`;  // Quantity and dashes on first line
+        orderText += `${item.name}\n`;        // Item name on second line
+        orderText += '\n';                    // Empty line after each item
+    });
+    
+    // Update modal content
+    document.getElementById('supplierNameInModal').textContent = supplierName;
+    document.getElementById('orderTextArea').value = orderText;
+    
+    // Show modal
+    const modal = new bootstrap.Modal(document.getElementById('orderListModal'));
+    modal.show();
+}
+
+function copyToClipboard() {
+    const textarea = document.getElementById('orderTextArea');
+    textarea.select();
+    textarea.setSelectionRange(0, 99999); // For mobile devices
+    
+    try {
+        document.execCommand('copy');
+        
+        // Show success feedback
+        const copyBtn = document.querySelector('[onclick="copyToClipboard()"]');
+        const originalText = copyBtn.innerHTML;
+        copyBtn.innerHTML = '<i class="fas fa-check me-1"></i>Copied!';
+        copyBtn.classList.remove('btn-primary');
+        copyBtn.classList.add('btn-success');
+        
+        setTimeout(() => {
+            copyBtn.innerHTML = originalText;
+            copyBtn.classList.remove('btn-success');
+            copyBtn.classList.add('btn-primary');
+        }, 2000);
+        
+    } catch (err) {
+        // Fallback for browsers that don't support execCommand
+        navigator.clipboard.writeText(textarea.value).then(() => {
+            alert('Order list copied to clipboard!');
+        }).catch(() => {
+            alert('Failed to copy. Please select the text and copy manually.');
+        });
+    }
+}
+</script>
+
 {% endblock %}
