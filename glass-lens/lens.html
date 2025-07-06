@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>UNICORNER – Liquid-Glass Lens Demo</title>
+<style>
+/* ---------- Basic page UI ---------- */
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,Helvetica,sans-serif;line-height:1.5;background:#fff;color:#222}
+header{background:#1e1e1e;padding:16px 32px;color:#fff;display:flex;justify-content:space-between;align-items:center}
+nav a{color:#fff;margin-left:24px;text-decoration:none;font-size:15px}
+.hero{padding:80px 32px;text-align:center;background:#fafafa}
+.hero h1{font-size:48px;margin-bottom:12px}
+.hero p{font-size:18px;max-width:560px;margin:0 auto 24px}
+.cta-btn{background:#ff5757;color:#fff;border:0;padding:12px 28px;border-radius:6px;font-size:16px;cursor:pointer}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:24px;padding:64px 32px}
+.card{border:1px solid #e0e0e0;border-radius:8px;padding:24px;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.04);text-align:center}
+.card h3{margin-bottom:12px;color:#333}
+footer{background:#1e1e1e;color:#aaa;text-align:center;padding:24px;font-size:14px}
+
+/* ---------- Liquid lens wrapper ---------- */
+.lens-shell{
+  position:fixed;           /* stick to viewport */
+  width:150px;height:150px;
+  border-radius:50%;
+  pointer-events:none;
+  border:2px solid rgba(0,0,0,.18);
+  box-shadow:0 0 25px rgba(0,0,0,.28);
+  backdrop-filter:blur(2px);    /* subtle blur of background */
+  filter:blur(.8px);            /* slight glass haziness */
+  overflow:hidden;
+  transform-origin:center center;
+  visibility:hidden;            /* shown after snapshot */
+  z-index:2147483647;            /* above everything */
+}
+.lens-shell canvas{width:100%;height:100%}
+</style>
+</head>
+<body>
+
+<!-- ---------- UI content ---------- -->
+<header>
+  <div style="font-size:20px;font-weight:600">UNICORNER Coffee</div>
+  <nav>
+    <a href="#">Home</a><a href="#">Menu</a><a href="#">Projects</a><a href="#">Contact</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <h1>Where Code Meets Coffee</h1>
+  <p>High-speed Wi-Fi, world-class beans, and an ecosystem for developers to create, connect, and caffeinate.</p>
+  <button class="cta-btn">Join the Community</button>
+</section>
+
+<section class="grid">
+  <div class="card"><h3>2.5 Gb/s Internet</h3><p>Lightning-fast fibre so your builds never block on a download.</p></div>
+  <div class="card"><h3>Open-Source Hub</h3><p>Whiteboards, Git mirrors, and live hack nights every week.</p></div>
+  <div class="card"><h3>Specialty Roasts</h3><p>Sourced beans, precision extraction, latte art worth posting.</p></div>
+  <div class="card"><h3>Startup Matchmaking</h3><p>Find co-founders, mentors and beta users over a flat white.</p></div>
+</section>
+
+<footer>&copy; 2025 UNICORNER Coffee. All rights reserved.</footer>
+
+<!-- ---------- Lens elements ---------- -->
+<div id="lensShell" class="lens-shell">
+  <canvas id="lensCanvas" width="150" height="150"></canvas>
+</div>
+
+<!-- ---------- Libraries ---------- -->
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+<script>
+/* snapshot variables */
+let snapCanvas, snapCtx, SNAP_W, SNAP_H;
+
+/* lens variables */
+const shell = document.getElementById('lensShell');
+const lens  = document.getElementById('lensCanvas');
+const lctx  = lens.getContext('2d');
+const SIZE=150, R=SIZE/2;
+const ZC=1.35, ZE=1.0;
+const REF_START=0.85, REF_K=0.35;
+
+/* liquid motion state */
+let targetX=innerWidth/2, targetY=innerHeight/2;
+let lx=targetX, ly=targetY, prevX=lx, prevY=ly;
+
+/* ---------- take page snapshot once ---------- */
+window.onload = () => {
+  /* hide shell so it isn't in the screenshot */
+  shell.style.visibility='hidden';
+  html2canvas(document.body,{backgroundColor:null,scale:1}).then(canvas=>{
+    snapCanvas=canvas;
+    snapCtx = snapCanvas.getContext('2d');
+    SNAP_W  = canvas.width;
+    SNAP_H  = canvas.height;
+    shell.style.visibility='visible';
+    requestAnimationFrame(animate);
+  });
+};
+
+/* ---------- lens rendering ---------- */
+function drawLens(cx,cy){
+  const img=lctx.createImageData(SIZE,SIZE);
+  const d=img.data;
+
+  for(let py=0;py<SIZE;py++){
+    for(let px=0;px<SIZE;px++){
+      const dx=px-R, dy=py-R, dist=Math.hypot(dx,dy);
+      const n=dist/R; if(n>1)continue;
+
+      const zoom = ZC-(ZC-ZE)*Math.pow(n,2.6);
+      let sx=cx+dx/zoom, sy=cy+dy/zoom;
+
+      if(n>REF_START){
+        const f=(n-REF_START)/(1-REF_START);
+        sx=cx-dx*f*REF_K; sy=cy-dy*f*REF_K;
+      }
+
+      const ix=sx|0, iy=sy|0;
+      if(ix>=0&&ix<SNAP_W&&iy>=0&&iy<SNAP_H){
+        const src=snapCtx.getImageData(ix,iy,1,1).data;
+        const i=(py*SIZE+px)*4;
+        d[i]=src[0];d[i+1]=src[1];d[i+2]=src[2];d[i+3]=255;
+      }
+    }
+  }
+  lctx.putImageData(img,0,0);
+}
+
+/* ---------- animation loop ---------- */
+function animate(){
+  lx += (targetX-lx)*0.22;
+  ly += (targetY-ly)*0.22;
+
+  const vx=lx-prevX, vy=ly-prevY;
+  prevX=lx; prevY=ly;
+  const spd=Math.hypot(vx,vy);
+  const stretch=Math.min(spd*0.025,0.35);
+  const angle=Math.atan2(vy,vx)*180/Math.PI;
+
+  shell.style.left = (lx-R)+'px';
+  shell.style.top  = (ly-R)+'px';
+  shell.style.transform=`rotate(${angle}deg) scale(${1+stretch},${1-stretch*0.5})`;
+  lens.style.transform=`rotate(${-angle}deg)`;   // counter-rotate text
+
+  drawLens(lx,ly);
+  requestAnimationFrame(animate);
+}
+
+/* ---------- pointer tracking ---------- */
+addEventListener('mousemove',e=>{targetX=e.clientX;targetY=e.clientY});
+addEventListener('touchmove',e=>{
+  if(e.touches.length){targetX=e.touches[0].clientX;targetY=e.touches[0].clientY;}
+});
+</script>
+</body>
+</html>
