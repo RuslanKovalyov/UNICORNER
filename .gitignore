@@ -1,6 +1,17 @@
 # admin stuff
 SuperUser.md
 
+# Closesource stuff
+crypto_trading_bot/templates/
+crypto_trading_bot/rocker-console-v.py
+crypto_trading_bot/simple_trigger_buy-or-sale.py
+
+customer_detection/
+
+visualtranslate/data/
+visualtranslate/generator/
+
+
 # server stuff
 # collected static files of root dir
 /static
