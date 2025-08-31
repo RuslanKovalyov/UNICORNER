@@ -413,11 +413,9 @@
 </head>
 <body class="system">
     <div class="search-header">
-        <h1>Search</h1>
-        
         <form method="get" class="search-form">
             <div class="search-input-container">
-                <input type="text" name="q" value="{{ query }}" placeholder="Enter your search query..." autofocus id="searchInput">
+                <input type="text" name="q" value="{{ query }}" placeholder="Search your query safe, without tracking" autofocus id="searchInput">
                 <button type="button" class="clear-btn" id="clearBtn" onclick="clearSearch()">✕</button>
                 <button type="button" class="mic-btn" id="micBtn" onclick="toggleVoiceSearch()" title="Voice search">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
