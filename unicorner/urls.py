@@ -14,6 +14,7 @@ urlpatterns = [
     path("typing-test", include('typing_test.urls')),
     path("visual-translate", include('visualtranslate.urls')),
     path("warehouse/", include('warehouse.urls')),
+    path("barista-ai/", include('barista_ai.urls')),
 ]
 
 if settings.DEBUG:

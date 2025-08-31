@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     'typing_test.apps.TypingTestConfig',
     'visualtranslate.apps.VisualtranslateConfig',
     'warehouse.apps.WarehouseConfig',
+    'barista_ai.apps.BaristaAiConfig',
 ]
 
 MIDDLEWARE = [

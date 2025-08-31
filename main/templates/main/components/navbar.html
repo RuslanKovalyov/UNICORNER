@@ -89,6 +89,11 @@
             <a href="{% url 'about' %}" tabindex="0" aria-current="page">About</a>
         {% endif %}
         
+        {% comment %} Barista AI Assistant - Direct link to external AI {% endcomment %}
+        <a href="https://ai.unicorner.coffee" target="_blank" tabindex="0" aria-label="Opens in a new tab">
+            Barista AI<span class="sr-only">(opens in a new tab)</span>
+        </a>
+        
         {% comment %} Staff/Admin only warehouse access {% endcomment %}
         {% if user.is_authenticated and user.is_staff %}
             {% if request.path|slice:":11" == "/warehouse/" %}
@@ -124,6 +129,11 @@
         </a>
         <a href="{% url 'contacts' %}" tabindex="0" aria-current="page">Contact us</a>
         <a href="{% url 'about' %}" tabindex="0" aria-current="page">About</a>
+        
+        {% comment %} Barista AI Assistant in mobile menu - Direct link {% endcomment %}
+        <a href="https://ai.unicorner.coffee" target="_blank" tabindex="0" aria-label="Opens in a new tab">
+            Barista AI<span class="sr-only">(opens in a new tab)</span>
+        </a>
         
         {% comment %} Staff/Admin only warehouse access in mobile menu {% endcomment %}
         {% if user.is_authenticated and user.is_staff %}

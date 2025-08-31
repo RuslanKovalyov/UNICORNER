@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    {% include 'main/components/head-meta.html' %}
+    <title>Barista AI - Chat Assistant</title>
+    <style>
+        /* Full-screen iframe for AI interface */
+        .ai-container {
+            height: calc(100vh - 60px);
+            min-height: 600px;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .ai-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+        
+        /* Hide main site elements for cleaner AI experience */
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        
+        /* Loading overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .loading-content {
+            text-align: center;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #007bff;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Hide loading when iframe loads */
+        .loaded .loading-overlay {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    {% include 'main/components/header.html' %}
+    {% include 'main/components/navbar.html' %}
+
+    <!-- Loading overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="spinner"></div>
+            <h5>Loading Barista AI...</h5>
+            <p style="color: #666;">Connecting to your intelligent assistant</p>
+        </div>
+    </div>
+
+    <!-- AI Interface Container -->
+    <div class="ai-container">
+        <iframe 
+            id="aiFrame"
+            class="ai-iframe"
+            src="{{ ai_server_url }}"
+            title="Barista AI Assistant"
+            allow="microphone; camera; clipboard-read; clipboard-write">
+        </iframe>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const iframe = document.getElementById('aiFrame');
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            
+            // Hide loading when iframe loads
+            iframe.onload = function() {
+                setTimeout(() => {
+                    document.body.classList.add('loaded');
+                }, 500);
+            };
+            
+            // Handle errors
+            iframe.onerror = function() {
+                loadingOverlay.innerHTML = `
+                    <div class="loading-content">
+                        <h5 style="color: #dc3545;">Connection Error</h5>
+                        <p>Unable to connect to Barista AI</p>
+                        <button onclick="location.reload()" style="
+                            background: #007bff; 
+                            color: white; 
+                            border: none; 
+                            padding: 10px 20px; 
+                            border-radius: 5px; 
+                            cursor: pointer;">
+                            Try Again
+                        </button>
+                    </div>
+                `;
+            };
+            
+            // Fallback timeout
+            setTimeout(() => {
+                if (!document.body.classList.contains('loaded')) {
+                    document.body.classList.add('loaded');
+                }
+            }, 10000);
+        });
+    </script>
+</body>
+</html>
