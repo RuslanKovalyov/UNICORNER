@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'visualtranslate.apps.VisualtranslateConfig',
     'warehouse.apps.WarehouseConfig',
     'barista_ai.apps.BaristaAiConfig',
+    'search.apps.SearchConfig',
 ]
 
 MIDDLEWARE = [
@@ -73,8 +74,15 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+    },
+    'search_db': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'search' / 'database' / 'search.sqlite3',
     }
 }
+
+# Database routing for search app independence
+DATABASE_ROUTERS = ['search.database.config.SearchDatabaseRouter']
 
 
 # Password validation

@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Search</title>
+    <style>
+        /* Default (Night) Theme */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        
+        /* Night Theme */
+        body.night {
+            background-color: black;
+            color: white;
+        }
+        
+        /* Day Theme */
+        body.day {
+            background-color: white;
+            color: black;
+        }
+        
+        /* System Theme - uses CSS media query */
+        body.system {
+            background-color: black;
+            color: white;
+        }
+        
+        @media (prefers-color-scheme: light) {
+            body.system {
+                background-color: white;
+                color: black;
+            }
+        }
+        
+        .search-header {
+            padding: 20px;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            transition: background-color 0.3s, border-color 0.3s;
+            position: relative;
+        }
+        
+        body.night .search-header {
+            background-color: black;
+            border-bottom: 1px solid #333;
+        }
+        
+        body.day .search-header {
+            background-color: white;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        body.system .search-header {
+            background-color: black;
+            border-bottom: 1px solid #333;
+        }
+        
+        @media (prefers-color-scheme: light) {
+            body.system .search-header {
+                background-color: white;
+                border-bottom: 1px solid #ddd;
+            }
+        }
+        
+        .search-header h1 {
+            margin: 0 0 15px 0;
+            font-size: 24px;
+        }
+        
+        .theme-toggle {
+            display: inline-block;
+        }
+        
+        .settings-container {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .settings-btn {
+            background: none !important;
+            border: none;
+            color: inherit;
+            font-size: 16px;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 0;
+            transition: all 0.3s;
+            height: 42px;
+            min-width: 42px;
+            outline: none;
+            opacity: 0.9;
+        }
+        
+        .settings-btn:focus {
+            border-width: 2px;
+        }
+        
+        body.night .settings-btn {
+            border-color: #555;
+        }
+        
+        body.day .settings-btn {
+            border-color: #ccc;
+        }
+        
+        body.system .settings-btn {
+            border-color: #555;
+        }
+        
+        @media (prefers-color-scheme: light) {
+            body.system .settings-btn {
+                border-color: #ccc;
+            }
+        }
+        
+        .settings-btn:hover {
+            opacity: 1;
+            background-color: rgba(128,128,128,0.15);
+        }
+        
+        .settings-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            min-width: 120px;
+            border-radius: 4px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            z-index: 1000;
+            display: none;
+            margin-top: 5px;
+        }
+        
+        body.night .settings-dropdown {
+            background-color: #222;
+            border: 1px solid #444;
+        }
+        
+        body.day .settings-dropdown {
+            background-color: white;
+            border: 1px solid #ddd;
+        }
+        
+        body.system .settings-dropdown {
+            background-color: #222;
+            border: 1px solid #444;
+        }
+        
+        @media (prefers-color-scheme: light) {
+            body.system .settings-dropdown {
+                background-color: white;
+                border: 1px solid #ddd;
+            }
+        }
+        
+        .theme-option {
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            font-size: 14px;
+            border-bottom: 1px solid;
+            background: transparent;
+        }
+        
+        body.night .theme-option {
+            border-color: #333;
+        }
+        
+        body.day .theme-option {
+            border-color: #eee;
+        }
+        
+        body.system .theme-option {
+            border-color: #333;
+        }
+        
+        @media (prefers-color-scheme: light) {
+            body.system .theme-option {
+                border-color: #eee;
+            }
+        }
+        
+        .theme-option:last-child {
+            border-bottom: none;
+        }
+        
+        .theme-option:hover {
+            background-color: rgba(128,128,128,0.3);
+        }
+        
+        .theme-option.active {
+            font-weight: bold;
+        }
+        
+        .theme-option.active::after {
+            content: " ✓";
+            float: right;
+        }
+        
+        .search-form {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2px;
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            padding-right: 60px;
+        }
+        
+        .search-input-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            flex: 1;
+            max-width: 500px;
+        }
+        
+        input[type="text"] {
+            padding: 10px 125px 10px 10px;
+            font-size: 16px;
+            width: 100%;
+            max-width: 500px;
+            min-width: 200px;
+            border: 1px solid;
+            transition: all 0.3s;
+            outline: none;
+        }
+        
+        input[type="text"]:focus {
+            border-width: 2px;
+        }
+        
+        .clear-btn {
+            position: absolute;
+            right: 80px;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            transition: opacity 0.3s;
+            outline: none;
+            opacity: 0;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: inherit;
+            background: none !important;
+        }
+        
+        .clear-btn.active {
+            opacity: 1;
+            pointer-events: auto;
+            background: none !important;
+        }
+        
+        .clear-btn.active:hover {
+            opacity: 1;
+            background: none !important;
+        }
+        
+        .mic-btn {
+            position: absolute;
+            right: 42px;
+            background: none !important;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            transition: all 0.3s;
+            outline: none;
+            opacity: 0.7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 100%;
+            top: 0;
+        }
+        
+        .mic-btn:hover {
+            opacity: 1;
+            background-color: rgba(128,128,128,0.15);
+        }
+        
+        .mic-btn.recording {
+            opacity: 1;
+            color: #dc3545;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .search-btn {
+            position: absolute;
+            right: 0;
+            background: none !important;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            transition: all 0.3s;
+            outline: none;
+            opacity: 0.7;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 42px;
+            height: 100%;
+            top: 0;
+        }
+        
+        .search-btn.active {
+            opacity: 1;
+            pointer-events: auto;
+            background-color: rgba(184,134,11,0.15) !important;
+        }
+        
+        .search-btn.active:hover {
+            background-color: rgba(184,134,11,0.25) !important;
+        }
+        
+        body.night input[type="text"] {
+            background-color: #222;
+            color: white;
+            border-color: #333;
+        }
+        
+        body.day input[type="text"] {
+            background-color: #f9f9f9;
+            color: black;
+            border-color: #ddd;
+        }
+        
+        body.system input[type="text"] {
+            background-color: #222;
+            color: white;
+            border-color: #333;
+        }
+        
+        @media (prefers-color-scheme: light) {
+            body.system input[type="text"] {
+                background-color: #f9f9f9;
+                color: black;
+                border-color: #ddd;
+            }
+        }
+        
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: 1px solid;
+            cursor: pointer;
+            transition: all 0.3s;
+            outline: none;
+        }
+        
+        button:focus {
+            border-width: 2px;
+        }
+        
+        body.night button {
+            background-color: #333;
+            color: white;
+            border-color: #555;
+        }
+        
+        body.day button {
+            background-color: #f0f0f0;
+            color: black;
+            border-color: #ccc;
+        }
+        
+        body.system button {
+            background-color: #333;
+            color: white;
+            border-color: #555;
+        }
+        
+        @media (prefers-color-scheme: light) {
+            body.system button {
+                background-color: #f0f0f0;
+                color: black;
+                border-color: #ccc;
+            }
+        }
+        
+        .privacy-message {
+            font-size: 12px;
+            opacity: 0.7;
+            margin: 0;
+        }
+        
+        .results-area {
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body class="system">
+    <div class="search-header">
+        <form method="get" class="search-form">
+            <div class="search-input-container">
+                <input type="text" name="q" value="{{ query }}" placeholder="Search your query safe, without tracking" autofocus id="searchInput">
+                <button type="button" class="clear-btn" id="clearBtn" onclick="clearSearch()">✕</button>
+                <button type="button" class="mic-btn" id="micBtn" onclick="toggleVoiceSearch()" title="Voice search">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 1a4 4 0 0 0-4 4v6a4 4 0 0 0 8 0V5a4 4 0 0 0-4-4z"></path>
+                        <path d="M19 10v1a7 7 0 0 1-14 0v-1"></path>
+                        <line x1="12" y1="19" x2="12" y2="23"></line>
+                        <line x1="8" y1="23" x2="16" y2="23"></line>
+                    </svg>
+                </button>
+                <button type="submit" class="search-btn" id="searchBtn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="theme-toggle">
+                <div class="settings-container">
+                    <button class="settings-btn" type="button" onclick="toggleSettings()">⚙️</button>
+                    <div class="settings-dropdown" id="settingsDropdown">
+                        <div class="theme-option" onclick="setTheme('system')" data-theme="system">
+                            System
+                        </div>
+                        <div class="theme-option" onclick="setTheme('day')" data-theme="day">
+                            Day
+                        </div>
+                        <div class="theme-option" onclick="setTheme('night')" data-theme="night">
+                            Night
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        
+        <div class="privacy-message">
+            No trackers, no ads, no data collection
+        </div>
+    </div>
+    
+    <div class="results-area">
+        {% if query %}
+            <p>You searched for: "{{ query }}"</p>
+            <p>Check the Python console for the search query output.</p>
+            <!-- Future search results will appear here -->
+        {% endif %}
+    </div>
+    
+    <script>
+        // Clear search functionality
+        function clearSearch() {
+            const searchInput = document.getElementById('searchInput');
+            searchInput.value = '';
+            searchInput.focus();
+            handleSearchInput();
+        }
+        
+        // Search input functionality
+        function handleSearchInput() {
+            const searchInput = document.getElementById('searchInput');
+            const searchBtn = document.getElementById('searchBtn');
+            const clearBtn = document.getElementById('clearBtn');
+            
+            if (searchInput.value.trim().length > 0) {
+                searchBtn.classList.add('active');
+                clearBtn.classList.add('active');
+            } else {
+                searchBtn.classList.remove('active');
+                clearBtn.classList.remove('active');
+            }
+        }
+        
+        // Theme management
+        function setTheme(theme) {
+            document.body.className = theme;
+            localStorage.setItem('searchTheme', theme);
+            updateActiveTheme(theme);
+            closeSettings();
+        }
+        
+        function updateActiveTheme(theme) {
+            // Remove active class from all options
+            document.querySelectorAll('.theme-option').forEach(option => {
+                option.classList.remove('active');
+            });
+            
+            // Add active class to selected theme
+            document.querySelector(`[data-theme="${theme}"]`).classList.add('active');
+        }
+        
+        function toggleSettings() {
+            const dropdown = document.getElementById('settingsDropdown');
+            const isVisible = dropdown.style.display === 'block';
+            dropdown.style.display = isVisible ? 'none' : 'block';
+        }
+        
+        function closeSettings() {
+            document.getElementById('settingsDropdown').style.display = 'none';
+        }
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const container = document.querySelector('.settings-container');
+            if (!container.contains(event.target)) {
+                closeSettings();
+            }
+        });
+        
+        // Voice search functionality
+        let recognition;
+        let isRecording = false;
+        
+        function initVoiceSearch() {
+            if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                recognition = new SpeechRecognition();
+                
+                recognition.continuous = false;
+                recognition.interimResults = false;
+                recognition.lang = 'en-US';
+                
+                recognition.onstart = function() {
+                    isRecording = true;
+                    const micBtn = document.getElementById('micBtn');
+                    micBtn.classList.add('recording');
+                    micBtn.title = 'Listening... Click to stop';
+                };
+                
+                recognition.onresult = function(event) {
+                    const transcript = event.results[0][0].transcript;
+                    const searchInput = document.getElementById('searchInput');
+                    searchInput.value = transcript;
+                    handleSearchInput();
+                    searchInput.focus();
+                };
+                
+                recognition.onerror = function(event) {
+                    console.log('Speech recognition error:', event.error);
+                    stopRecording();
+                };
+                
+                recognition.onend = function() {
+                    stopRecording();
+                };
+            }
+        }
+        
+        function toggleVoiceSearch() {
+            if (!recognition) {
+                alert('Voice search is not supported in this browser. Please try Chrome, Edge, or Safari.');
+                return;
+            }
+            
+            if (isRecording) {
+                recognition.stop();
+            } else {
+                recognition.start();
+            }
+        }
+        
+        function stopRecording() {
+            isRecording = false;
+            const micBtn = document.getElementById('micBtn');
+            micBtn.classList.remove('recording');
+            micBtn.title = 'Voice search';
+        }
+        
+        // Load saved theme on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('searchTheme') || 'system';
+            document.body.className = savedTheme;
+            updateActiveTheme(savedTheme);
+            
+            // Initialize voice search
+            initVoiceSearch();
+            
+            // Ensure dropdown is initially hidden
+            document.getElementById('settingsDropdown').style.display = 'none';
+            
+            // Add search input listener
+            const searchInput = document.getElementById('searchInput');
+            searchInput.addEventListener('input', handleSearchInput);
+            
+            // Fix cursor position - move to end if there's existing text
+            if (searchInput.value.length > 0) {
+                // Move cursor to end of existing text
+                searchInput.setSelectionRange(searchInput.value.length, searchInput.value.length);
+            }
+            
+            // Check initial state
+            handleSearchInput();
+        });
+    </script>
+</body>
+</html>
